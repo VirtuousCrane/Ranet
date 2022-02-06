@@ -11,12 +11,11 @@ class RadioInterface(object):
         print("Turning off the radio")
         
     def next_channel(self):
-        print("Switching to next possible channel")
+        print("Switching to next possible radio channel")
     
     def previous_channel(self):
-        print("Switching to previous possible channel")
+        print("Switching to previous possible radio channel")
 
-    def display_current_radio_channel(self):
-        print("Display current radio channel info")
-
-
+    def display_current_channel(self):
+        print("Display info of current radio channel")
+        
