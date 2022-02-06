@@ -1,6 +1,5 @@
 
 
-
 class RadioInterface(object):
     def __init__(self):
         pass
@@ -16,4 +15,8 @@ class RadioInterface(object):
     
     def previous_channel(self):
         print("Switching to previous possible channel")
+
+    def display_current_radio_channel(self):
+        print("Display current radio channel info")
+
 
