@@ -3,31 +3,31 @@ from PySide6.QtWidgets import *
 from PySide6.QtGui import *
 from PySide6.QtCore import *
 
-# Color For Testing Layout and etc
-class Color(QWidget):
-    def __init__(self, color):
+class ChannelWave(QWidget):
+    def __init__(self):
         QWidget.__init__(self, None)
-        self.setAutoFillBackground(True)
+        self.channel_wave_layout = QVBoxLayout()
 
-        palette = self.palette()
-        palette.setColor(QPalette.Window, QColor(color))
-        self.setPalette(palette)
+        wave_container = QLabel()
+        wave_container.setText("Wave Image")
+        wave_container.setStyleSheet("background-color: red;")
+        wave_container.setFixedSize(360,80)
 
-# class ChannelWave(QWidget):
-#     def __init__(self):
-#         QWidget.__init__(self, None)
-#         self.channel_wave_layout = QVBoxLayout()
-#         # self.channel_wave_layout.SetFixedSize(360,100)
+        channel_name = QLabel()
+        channel_name.setAlignment(Qt.AlignCenter)
+        channel_name.setStyleSheet("background-color: green;")
+        channel_name.setFixedSize(360, 24)
+        channel_name.setText("Channel Name")
 
-#         self.channel_layout = QVBoxLayout()
-#         # self.channel_layout.SetFixedSize(360, 80)
+        self.channel_num = QLineEdit(wave_container)
+        self.channel_num.setAlignment(Qt.AlignCenter)
+        self.channel_num.setFixedSize(116,32)
+        self.channel_num.setStyleSheet("font-size: 24px;")
+        self.channel_num.setText("128.48")
 
-#         self.testing = QLabel(self)
-#         self.testing.setText("Testing")
 
-#         self.channel_layout.addWidget(self.testing)
-
-#         self.channel_wave_layout.addLayout(self.channel_layout)
+        self.channel_wave_layout.addWidget(wave_container)
+        self.channel_wave_layout.addWidget(channel_name)
 
 class CreateMenuBar(QMainWindow):
     def __init__(self):
@@ -72,47 +72,31 @@ class CreateMenuBar(QMainWindow):
 
         self.menu_bar.addMenu(record_menu)
         
-
 class MainGuiWindow(QMainWindow):
     def __init__(self):
         QMainWindow.__init__(self, None)
         self.setWindowTitle("Ranet")
-        self.setGeometry(0,0,360, 220)
+        # self.setFixedSize(360, 220)
+        self.setGeometry(0,0,360,220)
 
         self.create_menu_bar = CreateMenuBar()
         self.setMenuBar(self.create_menu_bar.menu_bar)
 
-# Other Widget
+# QWidget
 
-        main_layout = QVBoxLayout()
+        central_widget = QWidget()
+        self.setCentralWidget(central_widget)
+        main_layout = QVBoxLayout(central_widget)
+        main_layout.setContentsMargins(0,0,0,0)
+        main_layout.setSpacing(0)
+        main_layout.setAlignment(Qt.AlignTop)
 
 # Channel and Wave
 
-        channel_wave_layout = QVBoxLayout()
+        self.create_channel_wave = ChannelWave()
+        main_layout.addLayout(self.create_channel_wave.channel_wave_layout)
+        self.create_channel_wave.channel_num.setGeometry(122, 24, 116, 32)
 
-        wave_container = QLabel(self)
-        wave_container.setText("Wave Image")
-        wave_container.setStyleSheet("background-color: red;")
-        wave_container.setGeometry(0, 40, 360, 80)
-
-        channel_name = QLabel(self)
-        channel_name.setAlignment(Qt.AlignCenter)
-        channel_name.setStyleSheet("background-color: green;")
-        channel_name.setGeometry(0, 120, 360, 24)
-        channel_name.setText("Channel Name")
-
-        channel_num = QLineEdit(self)
-        channel_num.setAlignment(Qt.AlignCenter)
-        channel_num.setGeometry(122, 64, 116, 32)
-        channel_num.setStyleSheet("font-size: 24px;")
-        channel_num.setText("128.48")
-
-
-        channel_wave_layout.addWidget(wave_container)
-        channel_wave_layout.addWidget(channel_name)
-        channel_wave_layout.addWidget(channel_num)
-
-        main_layout.addLayout(channel_wave_layout)
 
 
 
