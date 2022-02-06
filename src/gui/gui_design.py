@@ -3,6 +3,10 @@ from PySide6.QtWidgets import *
 from PySide6.QtGui import *
 from PySide6.QtCore import *
 
+class ChannelWave(QWidget):
+    def __init__(self):
+        QWidget.__init__(self, None)
+        
         
 
 class MainGuiWindow(QMainWindow):
@@ -11,6 +15,7 @@ class MainGuiWindow(QMainWindow):
         self.setWindowTitle("Ranet")
         self.setFixedSize(360, 220)
 
+#Menu Bar
         menu_bar = self.menuBar()
         # FileMenu Section
         file_menu = QMenu("&File", self)
@@ -50,6 +55,9 @@ class MainGuiWindow(QMainWindow):
         record_menu.addAction(self.go_to_folder_action)
 
         menu_bar.addMenu(record_menu)
+
+# Other Widget
+        main_layout = QVBoxLayout()
         
 
 
