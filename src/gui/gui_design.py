@@ -6,17 +6,12 @@ from PySide6.QtCore import *
 class ChannelWave(QWidget):
     def __init__(self):
         QWidget.__init__(self, None)
-        
-        
+        channel_layout = QVBoxLayout()
 
-class MainGuiWindow(QMainWindow):
+class CreateMenuBar(QMainWindow):
     def __init__(self):
         QMainWindow.__init__(self, None)
-        self.setWindowTitle("Ranet")
-        self.setFixedSize(360, 220)
-
-#Menu Bar
-        menu_bar = self.menuBar()
+        self.menu_bar = self.menuBar()
         # FileMenu Section
         file_menu = QMenu("&File", self)
         ### FileMenu Action List
@@ -32,7 +27,7 @@ class MainGuiWindow(QMainWindow):
         file_menu.addAction(self.previous_action)
         file_menu.addAction(self.favorite_action)
 
-        menu_bar.addMenu(file_menu)
+        self.menu_bar.addMenu(file_menu)
 
         # EditMenu Section
         edit_menu = QMenu("&Edit", self)
@@ -41,7 +36,7 @@ class MainGuiWindow(QMainWindow):
 
         edit_menu.addAction(self.theme_action)
 
-        menu_bar.addMenu(edit_menu)
+        self.menu_bar.addMenu(edit_menu)
 
         # RecordMenu Section
         record_menu = QMenu("&Record", self)
@@ -54,10 +49,25 @@ class MainGuiWindow(QMainWindow):
         record_menu.addAction(self.stop_recording_action)
         record_menu.addAction(self.go_to_folder_action)
 
-        menu_bar.addMenu(record_menu)
+        self.menu_bar.addMenu(record_menu)
+        
+
+class MainGuiWindow(QMainWindow):
+    def __init__(self):
+        QMainWindow.__init__(self, None)
+        self.setWindowTitle("Ranet")
+        self.setFixedSize(360, 220)
+
+        self.create_menu_bar = CreateMenuBar()
+        self.setMenuBar(self.create_menu_bar.menu_bar)
 
 # Other Widget
+
         main_layout = QVBoxLayout()
+        
+
+        self.setLayout(main_layout)
+        
         
 
 
