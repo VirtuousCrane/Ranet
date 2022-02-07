@@ -54,6 +54,7 @@ class CreateChannelWave(QWidget):
     def __init__(self):
         QWidget.__init__(self, None)
         self.channel_wave_layout = QVBoxLayout()
+        self.channel_handler = ControlChannelHandler()
 
 # Wave Image Container
         wave_container = QLabel()
@@ -73,7 +74,8 @@ class CreateChannelWave(QWidget):
         self.channel_num.setAlignment(Qt.AlignCenter)
         self.channel_num.setFixedSize(116,32)
         self.channel_num.setStyleSheet("font-size: 24px; background-color: #eee")
-        self.channel_num.setText("128.48")
+        self.current_channel = self.channel_handler.current_channel
+        self.channel_num.setText(self.current_channel)
 
         self.channel_wave_layout.addWidget(wave_container)
         self.channel_wave_layout.addWidget(channel_name)
@@ -164,6 +166,25 @@ class MainGuiWindow(QMainWindow):
         self.setLayout(main_layout)
         self.show()
 
+# Testing For GUI_API (WIP)
+class ControlClickHandler(QWidget):
+    def __init__(self):
+        QWidget.__init__(self, None)
+        self.current_playing = True
+    def SetCurrentStatus(self):
+        print("WIP")
+    def GetCurrentStatus(self):
+        print("WIP")
+
+class ControlChannelHandler(QWidget):
+    def __init__(self):
+        QWidget.__init__(self, None)
+        self.current_channel = "0"
+    def SetCurrentChannel(self, new_channel_num):
+        self.channel_num.setText(new_channel_num)
+    def GetCurrentChannel(self):
+        return self.current_channel
+
 # CSS
 CSS = """
     QSlider::handle:horizontal {
@@ -171,14 +192,17 @@ CSS = """
         border: 1px solid black;
         width: 24px;
         height: 8 px;
-        border-radius: 4px
+        border-radius: 4px;
     }
     QSlider::groove:horizontal {
         border: 1px solid black;
         height: 10px;
         background: #eee;
         margin: 0px;
-        border-radius: 4px
+        border-radius: 4px;
+    }
+    QPushButton::hover{
+        background: lightgray;
     }
 """
 
