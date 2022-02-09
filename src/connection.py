@@ -5,7 +5,12 @@ import platform
 import subprocess
 
 class ConnectionStatus(Enum):
-	"""An Enum representing each state of connection status"""
+	"""
+	An Enum representing each state of connection status\n
+
+	ConnectionStatus.OK  = The Connection connected successfully\n
+	ConnectionStatus.ERR = There was an error with the connection\n
+	"""
 	ERR = 0
 	OK = 1
 

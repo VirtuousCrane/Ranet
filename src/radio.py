@@ -13,25 +13,6 @@ class RadioStation:
 class RadioPlayer:
 	"""
 	A class used to play the internet radio
-
-	Methods
-	-------
-	play()
-		Spawns a thread and calls play_stream() to play the radio.
-	play_stream()
-		The backend implementation of play(). Plays the radio stream.
-	stop()
-		Kills the thread, resets the thread flags, and stop the stream.
-	set_station(station : RadioStation)
-		Stops the stream and set a new station
-	change_station(station : RadioStation)
-		Stops the stream, sets a new station, and plays the stream
-	get_station_name()
-		Returns the name of the station
-	get_station_url()
-		Returns the stream link of the station
-	get_station_media_type
-		Returns the media type of the station
 	"""
 
 	def __init__(self, station: RadioStation = None, volume: int = 100):
