@@ -1,10 +1,12 @@
 from radio import *
 import time
+from radio_track import RadioTracker
 
 class RadioInterface(object):
     def __init__(self):
-        self.radio_station = RadioStation("bbcradio1","http://stream.live.vc.bbcmedia.co.uk/bbc_radio_one", "MPEG 1 Audio, Layer 3 (MP3)")
-        self.radio_player = RadioPlayer(self.radio_station, 50)
+        self.radio_tracker = RadioTracker()
+        self.radio_player = RadioPlayer(self.radio_tracker.get_current_station())
+        
         
     def switch_on(self):
         print("Playing radio")
@@ -16,13 +18,17 @@ class RadioInterface(object):
         
     def next_channel(self):
         print("Switching to next possible radio channel")
+        self.radio_tracker.increment_index()
+        self.radio_player.change_station(self.radio_tracker.get_current_station())
     
     def previous_channel(self):
         print("Switching to previous possible radio channel")
-
+        self.radio_tracker.decrement_index()
+        self.radio_player.change_station(self.radio_tracker.get_current_station())
+        
     def display_current_channel(self):
         print("Display info of current radio channel")
-        print(f"Current station: {self.radio_player.get_station_name(), self.radio_player.get_station_url(),self.radio_player.get_station_media_type()} ")
+        print("Current radio info: ", self.radio_player.get_station_name(), self.radio_player.get_station_url(), self.radio_player.get_station_media_type())
 
 
 class RadioCMDApp(object):
