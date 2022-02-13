@@ -1,77 +1,35 @@
 import sys
-from src.radio import *
 from src.connection import *
 from PySide6.QtWidgets import *
 from PySide6.QtCore import *
+from src.radio import Radio
+from src.gui.gui_design import MainGuiWindow, CSS
 
-class TestUI(QWidget):
-	"""For testing purposes only. DELETE ME"""
-	def __init__(self, player):
-		QWidget.__init__(self, None)
+class RadioApp(object):
+	def __init__(self):
+		# Intiailizing the QtWidgets
+		self.app = QApplication(sys.argv)
+		self.app.setStyleSheet(CSS)
+		self.gui = MainGuiWindow()
 
-		self.player = player
-		self.volume = player.volume
-		vbox = QVBoxLayout()
-
-		dec = QPushButton("Decrease Volume", self)
-		dec.clicked.connect(self.decrease)
-		vbox.addWidget(dec)
-
-		play = QPushButton("Play", self)
-		play.clicked.connect(self.play)
-		vbox.addWidget(play)
-
-		stop = QPushButton("Stop", self)
-		stop.clicked.connect(self.stop)
-		vbox.addWidget(stop)
-
-		moe = QPushButton("Switch to LISTEN.moe", self)
-		moe.clicked.connect(self.moe_moe_kyun)
-		vbox.addWidget(moe)
-
-		self.setLayout(vbox)
-		self.show()
-
-	def __del__(self):
-		self.player.stop()
-
-	def decrease(self):
-		self.volume -= 10
-		self.player.set_volume(self.volume)
-
-	def play(self):
-		self.player.play()
-
-	def stop(self):
-		self.player.stop()
-
-	def moe_moe_kyun(self):
-		listen_moe = RadioStation(
-			"LISTEN.moe",
-			"https://listen.moe/stream",
-			"Vorbis"
-		)
-		self.player.change_station(listen_moe)
+		# Intiialize the radio
+		self.radio = Radio(self.gui)
+		
+		# Linking the radio model with the GUI callbacks
+		self.gui.set_play_button_callback(self.radio.toggle)
+		self.gui.set_previous_button_callback(self.radio.previous_channel)
+		self.gui.set_next_button_callback(self.radio.next_channel)
+		
+		
+	def start(self):
+		self.gui.show()
+		self.app.exec()
+	
 
 def main():
-	station = RadioStation(
-		"Saitama Chappy",
-		"https://musicbird.leanstream.co/JCB019-MP3",
-		"mp3"
-	)
-
-	player = RadioPlayer(station)
-	app = QApplication(sys.argv)
-	w = TestUI(player)
-	sys.exit(app.exec_())
-
-	# If this line is not used, the music will keep playing
-	# even after we close the GUI window.
-	del player
+	radio_app = RadioApp()
+	radio_app.start()
 
 if __name__ == "__main__":
-	if not connection_ping("listen.moe") == ConnectionStatus.OK:
-		print("ERR")
-		sys.exit(0)
-	print("OK")
+	print("Starting program in main.py")
 	main()
