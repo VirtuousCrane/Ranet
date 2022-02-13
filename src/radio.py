@@ -2,6 +2,7 @@ from typing import *
 from dataclasses import dataclass
 import vlc
 import threading
+import xml.etree.ElementTree as ET
 
 @dataclass
 class RadioStation:
@@ -145,4 +146,66 @@ class RadioPlayer:
 			The volume of the audio
 		"""
 		self.volume = volume
+
+class RadioTracker(object):
+    # This class will handle list radio stations
+    
+    RADIO_STATIONS_XML_FILE_PATH = "assets/gnome-internet-radio-locator.xml"
+
+    def __init__(self):
+        self.radio_stations_list = []
+        self.current_index = 0
+
+        self.__initialize_radio_stations_list()
+    
+    
+    def __initialize_radio_stations_list(self):
+        # This method will generate the radio stations from XML file and populate the radio stations list
+        tree = ET.parse(self.RADIO_STATIONS_XML_FILE_PATH)
+
+        for station in tree.findall('station'):
+            station_name = station.get("name")
+            station_url = station.find("stream").get("uri")  # IDK why but the "url" is listed as "uri"
+            station_type = station.find("stream").get("codec") # The "codec" seems to be the station type
+            
+            radio_station = RadioStation(station_name, station_url, station_type)
+            self.radio_stations_list.append(radio_station)
+
+    def increment_index(self):
+        self.current_index += 1
+        self.current_index = self.current_index % len(self.radio_stations_list)
+
+    def decrement_index(self):
+        self.current_index -= 1
+        self.current_index = self.current_index % len(self.radio_stations_list)
+
+    def get_current_station(self): 
+        return self.radio_stations_list[self.current_index]
+
+class Radio(object):
+    def __init__(self):
+        self.radio_tracker = RadioTracker()
+        self.radio_player = RadioPlayer(self.radio_tracker.get_current_station())
+        
+    def switch_on(self):
+        print("Playing radio")
+        self.radio_player.play()
+
+    def switch_off(self):
+        print("Turning off the radio")
+        self.radio_player.stop()
+        
+    def next_channel(self):
+        print("Switching to next possible radio channel")
+        self.radio_tracker.increment_index()
+        self.radio_player.change_station(self.radio_tracker.get_current_station())
+    
+    def previous_channel(self):
+        print("Switching to previous possible radio channel")
+        self.radio_tracker.decrement_index()
+        self.radio_player.change_station(self.radio_tracker.get_current_station())
+        
+    def display_current_channel(self):
+        print("Display info of current radio channel")
+        print(f"Name: {self.radio_player.get_station_name()} Url: {self.radio_player.get_station_url()} Media type:{self.radio_player.get_station_media_type()}")
 

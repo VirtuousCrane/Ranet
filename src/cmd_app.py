@@ -1,33 +1,5 @@
-from radio import *
-from radio_track import RadioTracker
 
-class Radio(object):
-    def __init__(self):
-        self.radio_tracker = RadioTracker()
-        self.radio_player = RadioPlayer(self.radio_tracker.get_current_station())
-        
-    def switch_on(self):
-        print("Playing radio")
-        self.radio_player.play()
-
-    def switch_off(self):
-        print("Turning off the radio")
-        self.radio_player.stop()
-        
-    def next_channel(self):
-        print("Switching to next possible radio channel")
-        self.radio_tracker.increment_index()
-        self.radio_player.change_station(self.radio_tracker.get_current_station())
-    
-    def previous_channel(self):
-        print("Switching to previous possible radio channel")
-        self.radio_tracker.decrement_index()
-        self.radio_player.change_station(self.radio_tracker.get_current_station())
-        
-    def display_current_channel(self):
-        print("Display info of current radio channel")
-        print(f"Name: {self.radio_player.get_station_name()} Url: {self.radio_player.get_station_url()} Media type:{self.radio_player.get_station_media_type()}")
-
+from radio import Radio
 
 class RadioCMDApp(object):
     def __init__(self):
