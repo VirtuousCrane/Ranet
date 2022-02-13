@@ -70,8 +70,4 @@ def main():
 	del player
 
 if __name__ == "__main__":
-	if not connection_ping("listen.moe") == ConnectionStatus.OK:
-		print("ERR")
-		sys.exit(0)
-	print("OK")
 	main()

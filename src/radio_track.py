@@ -1,23 +1,6 @@
 import xml.etree.ElementTree as ET
-from inspect import getmembers, isclass, isfunction
 from radio import RadioStation
 
-tree = ET.parse("assets/gnome-internet-radio-locator.xml")
-root = tree.getroot()
-
-# Get "version" attribute?
-my_version = root.get('version')
-print("Version is " + my_version)
-
-# 
-print("tree is " + str(type(tree)))
-print("root is " + str(type(root)))
-
-# Get all station info
-for element in tree.findall('station'):
-    print(element.get("name"), element.find("stream").get("uri"))
-
-print("end of program")
 
 class RadioTracker(object):
     # This class will handle list radio stations
@@ -55,19 +38,8 @@ class RadioTracker(object):
         return self.radio_stations_list[self.current_index]
 
 
-        
-        
-        
-    
-
-        
 
 
-radio_tracker = RadioTracker()
-print(radio_tracker.get_current_station().name)
-radio_tracker.increment_index()
-print(radio_tracker.get_current_station().name)
-radio_tracker.increment_index()
-print(radio_tracker.get_current_station().name)
-radio_tracker.decrement_index()
-print(radio_tracker.get_current_station().name)
+
+        
+        
