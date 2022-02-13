@@ -187,12 +187,12 @@ class Radio(object):
         self.radio_tracker = RadioTracker()
         self.radio_player = RadioPlayer(self.radio_tracker.get_current_station())
         
-    def switch_on(self):
+    def play(self):
         print("Playing radio")
         self.radio_player.play()
 
-    def switch_off(self):
-        print("Turning off the radio")
+    def stop(self):
+        print("Stopping the radio")
         self.radio_player.stop()
         
     def next_channel(self):

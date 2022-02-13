@@ -26,11 +26,11 @@ class RadioCMDApp(object):
             
             if(userInput == 0):
                 print("Exitting program")
-                self.radio.switch_off()
+                self.radio.stop()
             elif(userInput == 1):
-                self.radio.switch_on()
+                self.radio.play()
             elif(userInput == 2):
-                self.radio.switch_off()
+                self.radio.stop()
             elif(userInput == 3):
                 self.radio.next_channel()
             elif(userInput == 4):
