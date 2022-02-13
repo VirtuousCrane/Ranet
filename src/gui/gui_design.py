@@ -100,7 +100,7 @@ class CreateControlBar(QWidget):
         previous_button = QPushButton("Previous", self)
         previous_button.setFixedSize(44,44)
         previous_button.setStyleSheet("border-radius: 22; border: 2px solid black")
-        previous_button.clicked.connect(self.control_clicked_handler.previousButtonClick)
+        previous_button.clicked.connect(self.control_clicked_handler.previous_button_click)
 
         self.control_button_layout.addWidget(previous_button)
 
@@ -108,7 +108,7 @@ class CreateControlBar(QWidget):
         play_button = QPushButton("Play", self)
         play_button.setFixedSize(50,50)
         play_button.setStyleSheet("border-radius: 25; border: 2px solid black;")
-        play_button.clicked.connect(self.control_clicked_handler.PlayPauseButtonClicked)
+        play_button.clicked.connect(self.control_clicked_handler.play_pause_button_click)
 
         self.control_button_layout.addWidget(play_button)
     
@@ -116,7 +116,7 @@ class CreateControlBar(QWidget):
         next_button = QPushButton("Next", self)
         next_button.setFixedSize(44,44)
         next_button.setStyleSheet("border-radius: 22; border: 2px solid black;")
-        next_button.clicked.connect(self.control_clicked_handler.nextButtonClick)
+        next_button.clicked.connect(self.control_clicked_handler.next_button_click)
 
         self.control_button_layout.addWidget(next_button)
 
@@ -160,32 +160,36 @@ class MainGuiWindow(QMainWindow):
         self.setLayout(main_layout)
         self.show()
 
-# Testing For GUI_API (WIP)
 class ControlClickHandler(QWidget):
     def __init__(self):
         QWidget.__init__(self, None)
     # Set Default Status as True (Currently Playing)
-        self.currently_playing = True
+        self.currently_playing = False
 
     # Toggle Status When Play or Pause Button is Clicked || callback function
-    def PlayPauseButtonClicked(self):
-        if self.currently_playing == True:
+    def set_play_button_callback(self, in_func):
+        if self.currently_playing:
             self.currently_playing = False
             print(self.currently_playing)
         else: 
             self.currently_playing =True
             print(self.currently_playing)
+        self.play_button.clicked.connect(in_func)
 
     # Return Status whether the radio should be playing or pause
-    def GetCurrentStatus(self):
+    def get_current_status(self):
         return self.currently_playing
 
     # CallBack Function when the previous button is clicked
-    def previousButtonClick(self):
+    def set_previous_button_callback(self, in_func):
+        self.previous_button.clicked.connect(in_func)
+        # Test
         print("Previous button Click")
 
     # CallBack Function when the next button is clicked
-    def nextButtonClick(self):
+    def set_next_button_callback(self, in_func):
+        self.next_button.clicked.connect(in_func)
+        # Test
         print("Next button Click")
 
 class ControlChannelHandler(QWidget):
@@ -196,16 +200,16 @@ class ControlChannelHandler(QWidget):
     # Initialize default channel name
         self.current_channel_name = "Channel Name"
 
-    def SetCurrentChannel(self, new_channel_num):
+    def set_current_channel(self, new_channel_num):
         self.channel_num.setText(new_channel_num)
 
-    def GetCurrentChannel(self):
+    def get_current_channel(self):
         return self.current_channel_num
 
-    def SetCurrentChannelName(self, new_channel_name):
+    def set_current_channel_name(self, new_channel_name):
         self.channel_name.setText(new_channel_name)
 
-    def GetCurrentChannelName(self):
+    def get_current_channel_name(self):
         return self.current_channel_name
 
 # CSS
