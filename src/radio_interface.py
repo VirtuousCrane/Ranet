@@ -1,12 +1,10 @@
 from radio import *
-import time
 from radio_track import RadioTracker
 
-class RadioInterface(object):
+class Radio(object):
     def __init__(self):
         self.radio_tracker = RadioTracker()
         self.radio_player = RadioPlayer(self.radio_tracker.get_current_station())
-        
         
     def switch_on(self):
         print("Playing radio")
@@ -28,12 +26,12 @@ class RadioInterface(object):
         
     def display_current_channel(self):
         print("Display info of current radio channel")
-        print("Current radio info: ", self.radio_player.get_station_name(), self.radio_player.get_station_url(), self.radio_player.get_station_media_type())
+        print(f"Name: {self.radio_player.get_station_name()} Url: {self.radio_player.get_station_url()} Media type:{self.radio_player.get_station_media_type()}")
 
 
 class RadioCMDApp(object):
     def __init__(self):
-        self.radio = RadioInterface()
+        self.radio = Radio()
         
     def start(self):
         userInput = -1
