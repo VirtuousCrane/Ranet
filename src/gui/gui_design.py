@@ -54,7 +54,6 @@ class CreateChannelWave(QWidget):
     def __init__(self):
         QWidget.__init__(self, None)
         self.channel_wave_layout = QVBoxLayout()
-        self.channel_handler = ControlChannelHandler()
 
 # Wave Image Container
         wave_container = QLabel()
@@ -63,23 +62,19 @@ class CreateChannelWave(QWidget):
         wave_container.setFixedSize(360,80)
 
 # Channel Name Container
-        channel_name = QLabel()
-        channel_name.setAlignment(Qt.AlignCenter)
-        channel_name.setStyleSheet("border: 1px solid black;")
-        channel_name.setFixedSize(360, 24)
-        self.current_channel_name = self.channel_handler.current_channel_name
-        channel_name.setText(self.current_channel_name)
+        self.channel_name = QLabel()
+        self.channel_name.setAlignment(Qt.AlignCenter)
+        self.channel_name.setStyleSheet("border: 1px solid black;")
+        self.channel_name.setFixedSize(360, 24)
         
 # Channel Number Container
         self.channel_num = QLineEdit(wave_container)
         self.channel_num.setAlignment(Qt.AlignCenter)
         self.channel_num.setFixedSize(116,32)
         self.channel_num.setStyleSheet("font-size: 24px; background-color: #eee")
-        self.current_channel_num = self.channel_handler.current_channel_num
-        self.channel_num.setText(self.current_channel_num)
 
         self.channel_wave_layout.addWidget(wave_container)
-        self.channel_wave_layout.addWidget(channel_name)
+        self.channel_wave_layout.addWidget(self.channel_name)
         
 class CreateControlBar(QWidget):
     def __init__(self):
@@ -195,22 +190,17 @@ class ControlClickHandler(QWidget):
 class ControlChannelHandler(QWidget):
     def __init__(self):
         QWidget.__init__(self, None)
-    # Initialize default channel number
-        self.current_channel_num = "0"
-    # Initialize default channel name
-        self.current_channel_name = "Channel Name"
+        self.create_channel_wave = CreateChannelWave()
 
-    def set_current_channel(self, new_channel_num):
+    # set channel number
+    def set_current_channel_num(self, new_channel_num):
         self.channel_num.setText(new_channel_num)
+        self.create_channel_wave.channel_num.setText(self.current_channel_num)
 
-    def get_current_channel(self):
-        return self.current_channel_num
-
+    # set channel name
     def set_current_channel_name(self, new_channel_name):
         self.channel_name.setText(new_channel_name)
-
-    def get_current_channel_name(self):
-        return self.current_channel_name
+        self.create_channel_wave.channel_name.setText(self.current_channel_name)
 
 # CSS
 CSS = """
