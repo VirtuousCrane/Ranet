@@ -16,7 +16,7 @@ class RadioApp(object):
 		self.radio = Radio(self.gui)
 		
 		# Linking the radio model with the GUI callbacks
-		self.gui.set_play_button_callback(self.radio.play)
+		self.gui.set_play_button_callback(self.radio.toggle)
 		self.gui.set_previous_button_callback(self.radio.previous_channel)
 		self.gui.set_next_button_callback(self.radio.next_channel)
 		

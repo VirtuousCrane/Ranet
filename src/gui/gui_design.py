@@ -122,10 +122,10 @@ class CreateControlBar(QWidget):
 		self.control_layout.addLayout(self.control_button_layout)
 
 # Sound Volume Control
-		self.volume_value = QSlider(Qt.Horizontal)
-		self.volume_value.setFixedSize(154, 20)
+		self.volume_slider = QSlider(Qt.Horizontal)
+		self.volume_slider.setFixedSize(154, 20)
 
-		self.control_layout.addWidget(self.volume_value)
+		self.control_layout.addWidget(self.volume_slider)
 		
 	def playButtonClick(self):
 		print("Play button Click")
@@ -144,6 +144,9 @@ class CreateControlBar(QWidget):
 
 	def set_next_button_callback(self,in_func):
 		self.next_button.clicked.connect(in_func)
+
+	def set_volume_slider_callback(self,in_func):
+		self.volume_slider.valueChanged.connect(in_func)
 
 
 class MainGuiWindow(QMainWindow):
@@ -188,8 +191,13 @@ class MainGuiWindow(QMainWindow):
 	def set_next_button_callback(self, in_func):
 		self.create_control.set_next_button_callback(in_func)
 
+	def set_volume_slider_callback(self, in_func):
+		self.create_control.set_volume_slider_callback(in_func)
+
 	def set_channel_name(self, in_name):
 		self.create_channel_wave.set_channel_name(in_name)
+
+	
 
 # CSS
 CSS = """

@@ -147,6 +147,12 @@ class RadioPlayer:
 		"""
 		self.volume = volume
 
+	def toggle(self):
+		if self.is_playing:
+			self.stop()
+		else:
+			self.play()
+
 class RadioTracker(object):
     # This class will handle list radio stations
 	RADIO_STATIONS_XML_FILE_PATH = "assets/gnome-internet-radio-locator.xml"
@@ -195,6 +201,11 @@ class Radio(object):
 	def stop(self):
 		print("Stopping the radio")
 		self.radio_player.stop()
+		self.update_gui()
+
+	def toggle(self):
+		print("Toggle radio, play if stop, stop if play")
+		self.radio_player.toggle()
 		self.update_gui()
         
 	def next_channel(self):
