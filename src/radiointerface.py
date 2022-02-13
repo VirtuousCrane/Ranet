@@ -67,10 +67,5 @@ class RadioCMDApp(object):
                 self.radio.display_current_channel()
             else:
                 print("Option not available/not implemented")
-            
-app = RadioCMDApp()
-app.start()
-
-print("End of program")
 
         

@@ -3,12 +3,14 @@ from src.radio import *
 from src.connection import *
 from PySide6.QtWidgets import *
 from PySide6.QtCore import *
-from src.radio_interface
+from src.gui.gui_design import MainGuiWindow
+from src.radio_track import RadioTracker
 
 
 class RadioApp(object):
 	def __init__(self):
-		self.radio = src.radio_interface.Radio()
+		self.gui = MainGuiWindow()
+		self.radio_track = RadioTracker()
 		
 	def start(self):
 		pass
@@ -20,5 +22,5 @@ def main():
 
 if __name__ == "__main__":
 	print("Starting program")
-	print(sys.path)
+	
 	main()
