@@ -178,7 +178,7 @@ class MainGuiWindow(QMainWindow):
 		self.setLayout(main_layout)
 		self.show()
 
-# Function for setting button callback
+# Function for the model to use or hookup callback
 	def set_play_button_callback(self, in_func):
 		self.create_control.set_play_button_callback(in_func)
 		
@@ -187,6 +187,9 @@ class MainGuiWindow(QMainWindow):
 
 	def set_next_button_callback(self, in_func):
 		self.create_control.set_next_button_callback(in_func)
+
+	def set_channel_name(self, in_name):
+		self.create_channel_wave.set_channel_name(in_name)
 
 # CSS
 CSS = """

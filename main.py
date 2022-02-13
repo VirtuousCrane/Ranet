@@ -13,7 +13,7 @@ class RadioApp(object):
 		self.gui = MainGuiWindow()
 
 		# Intiialize the radio
-		self.radio = Radio()
+		self.radio = Radio(self.gui)
 		
 		# Linking the radio model with the GUI callbacks
 		self.gui.set_play_button_callback(self.radio.play)

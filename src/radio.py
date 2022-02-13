@@ -190,21 +190,31 @@ class Radio(object):
 	def play(self):
 		print("Playing radio")
 		self.radio_player.play()
+		self.update_gui()
 
 	def stop(self):
 		print("Stopping the radio")
 		self.radio_player.stop()
+		self.update_gui()
         
 	def next_channel(self):
 		print("Switching to next possible radio channel")
 		self.radio_tracker.increment_index()
 		self.radio_player.change_station(self.radio_tracker.get_current_station())
+		self.update_gui()
 
 	def previous_channel(self):
 		print("Switching to previous possible radio channel")
 		self.radio_tracker.decrement_index()
 		self.radio_player.change_station(self.radio_tracker.get_current_station())
+		self.update_gui()
 
 	def display_current_channel(self):
 		print("Display info of current radio channel")
 		print(f"Name: {self.radio_player.get_station_name()} Url: {self.radio_player.get_station_url()} Media type:{self.radio_player.get_station_media_type()}")
+
+	def update_gui(self):
+		if self.gui is None:
+			print("GUI is none, cannot update GUI")
+		else:
+			self.gui.set_channel_name(self.radio_player.get_station_name())
