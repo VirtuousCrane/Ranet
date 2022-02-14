@@ -75,6 +75,10 @@ class CreateChannelWave(QWidget):
 
         self.channel_wave_layout.addWidget(wave_container)
         self.channel_wave_layout.addWidget(self.channel_name)
+
+# Set channel name
+    def set_channel_name(self, in_name):
+        self.channel_name.setText(in_name)
         
 class CreateControlBar(QWidget):
     def __init__(self):
@@ -92,36 +96,48 @@ class CreateControlBar(QWidget):
 
 # Buttons Play, Next, Previous
     # Previous Button
-        previous_button = QPushButton("Previous", self)
-        previous_button.setFixedSize(44,44)
-        previous_button.setStyleSheet("border-radius: 22; border: 2px solid black")
-        previous_button.clicked.connect(self.control_clicked_handler.previous_button_click)
+        self.previous_button = QPushButton("Previous", self)
+        self.previous_button.setFixedSize(44,44)
+        self.previous_button.setStyleSheet("border-radius: 22; border: 2px solid black")
+        self.previous_button.clicked.connect(self.control_clicked_handler.previous_button_click)
 
-        self.control_button_layout.addWidget(previous_button)
+        self.control_button_layout.addWidget(self.previous_button)
 
     # Play Button
-        play_button = QPushButton("Play", self)
-        play_button.setFixedSize(50,50)
-        play_button.setStyleSheet("border-radius: 25; border: 2px solid black;")
-        play_button.clicked.connect(self.control_clicked_handler.play_pause_button_click)
+        self.play_button = QPushButton("Play", self)
+        self.play_button.setFixedSize(50,50)
+        self.play_button.setStyleSheet("border-radius: 25; border: 2px solid black;")
+        self.play_button.clicked.connect(self.control_clicked_handler.play_pause_button_click)
 
-        self.control_button_layout.addWidget(play_button)
+        self.control_button_layout.addWidget(self.play_button)
     
     # Next Button
-        next_button = QPushButton("Next", self)
-        next_button.setFixedSize(44,44)
-        next_button.setStyleSheet("border-radius: 22; border: 2px solid black;")
-        next_button.clicked.connect(self.control_clicked_handler.next_button_click)
+        self.next_button = QPushButton("Next", self)
+        self.next_button.setFixedSize(44,44)
+        self.next_button.setStyleSheet("border-radius: 22; border: 2px solid black;")
+        self.next_button.clicked.connect(self.control_clicked_handler.next_button_click)
 
-        self.control_button_layout.addWidget(next_button)
+        self.control_button_layout.addWidget(self.next_button)
 
         self.control_layout.addLayout(self.control_button_layout)
 
 # Sound Volume Control
-        self.volume_value = QSlider(Qt.Horizontal)
-        self.volume_value.setFixedSize(154, 20)
+        self.volume_slider = QSlider(Qt.Horizontal)
+        self.volume_slider.setFixedSize(154, 20)
 
-        self.control_layout.addWidget(self.volume_value)
+        self.control_layout.addWidget(self.volume_slider)
+
+    def set_play_button_callback(self, in_func):
+        self.play_button.clicked.connect(in_func)
+
+    def set_previous_button_callback(self, in_func):
+        self.previous_button.clicked.connect(in_func)
+
+    def set_next_button_callback(self, in_func):
+        self.next_button.clicked.connect(in_func)
+    
+    def set_volume_slider_callback(self, in_func):
+        self.volume_slider.valueChanged.connect(in_func)
 
 class MainGuiWindow(QMainWindow):
     def __init__(self):
@@ -155,6 +171,22 @@ class MainGuiWindow(QMainWindow):
         self.setLayout(main_layout)
         self.show()
 
+# Function for the model to use or hookup callback
+    def set_play_button_callback(self, in_func):
+        self.create_control.set_play_button_callback(in_func)
+
+    def set_previous_button_callback(self, in_func):
+        self.create_control.set_previous_button_callback(in_func)
+
+    def set_next_button_callback(self, in_func):
+        self.create_control.set_next_button_callback(in_func)
+    
+    def set_volume_slider_callback(self, in_func):
+        self.create_control.set_volume_slider_callback(in_func)
+
+    def set_channel_name(self, in_name):
+        self.create_channel_wave.set_channel_name(in_name)
+
 class ControlClickHandler(QWidget):
     def __init__(self):
         QWidget.__init__(self, None)
@@ -162,28 +194,21 @@ class ControlClickHandler(QWidget):
         self.currently_playing = False
 
     # Toggle Status When Play or Pause Button is Clicked || callback function
-    def set_play_button_callback(self, in_func):
+    def play_pause_button_click(self):
         if self.currently_playing:
             self.currently_playing = False
             print(self.currently_playing)
         else: 
             self.currently_playing =True
             print(self.currently_playing)
-        self.play_button.clicked.connect(in_func)
-
-    # Return Status whether the radio should be playing or pause
-    def get_current_status(self):
-        return self.currently_playing
 
     # CallBack Function when the previous button is clicked
-    def set_previous_button_callback(self, in_func):
-        self.previous_button.clicked.connect(in_func)
+    def previous_button_click(self):
         # Test
         print("Previous button Click")
 
     # CallBack Function when the next button is clicked
-    def set_next_button_callback(self, in_func):
-        self.next_button.clicked.connect(in_func)
+    def next_button_click(self):
         # Test
         print("Next button Click")
 
