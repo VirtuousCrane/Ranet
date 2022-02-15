@@ -229,3 +229,6 @@ class Radio(object):
 			print("GUI is none, cannot update GUI")
 		else:
 			self.gui.set_channel_name(self.radio_player.get_station_name())
+
+	def get_radio_player(self):
+		return self.radio_player

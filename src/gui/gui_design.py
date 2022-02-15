@@ -159,13 +159,15 @@ class CreateControlBar(QWidget):
 		self.volume_slider.valueChanged.connect(in_func)
 
 class MainGuiWindow(QMainWindow):
-	def __init__(self):
+	def __init__(self, radio_player=None):
 		QMainWindow.__init__(self, None)
 		self.setWindowTitle("Ranet")
 		self.setGeometry(0,0,360,220)
 
 		self.create_menu_bar = CreateMenuBar()
 		self.setMenuBar(self.create_menu_bar.menu_bar)
+
+		self.radio_player = radio_player
 
 	# QWidget
 		central_widget = QWidget()
@@ -205,6 +207,12 @@ class MainGuiWindow(QMainWindow):
 
 	def set_channel_name(self, in_name):
 		self.create_channel_wave.set_channel_name(in_name)
+
+	def set_radio_player(self, radio_player):
+		self.radio_player = radio_player
+
+	def closeEvent(self, e):
+		self.radio_player.stop()
 
 class ControlClickHandler(object):
 	_instance = None
