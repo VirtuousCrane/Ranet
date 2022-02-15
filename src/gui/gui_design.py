@@ -8,10 +8,10 @@ class CreateMenuBar(QMainWindow):
 		QMainWindow.__init__(self, None)
 		self.menu_bar = self.menuBar()
 
-# FileMenu Section
+		# FileMenu Section
 		file_menu = QMenu("&File", self)
 
-	### FileMenu Action List
+		## FileMenu Action List
 		self.play_action = QAction("&Play", self)
 		self.pause_action = QAction("&Pause", self)
 		self.next_action = QAction("&Next", self)
@@ -26,20 +26,18 @@ class CreateMenuBar(QMainWindow):
 
 		self.menu_bar.addMenu(file_menu)
 
-# EditMenu Section
+		# EditMenu Section
 		edit_menu = QMenu("&Edit", self)
 
-	### EditMenu Action List
+		## EditMenu Action List
 		self.theme_action = QAction("&Theme", self)
-
 		edit_menu.addAction(self.theme_action)
-
 		self.menu_bar.addMenu(edit_menu)
 
-# RecordMenu Section
+		# RecordMenu Section
 		record_menu = QMenu("&Record", self)
 
-	### RecordMenu Action List
+		## RecordMenu Action List
 		self.start_recording_action = QAction("&Start Recording", self)
 		self.stop_recording_action = QAction("&Stop Recording", self)
 		self.go_to_folder_action = QAction("&Go To Folder", self)
@@ -55,20 +53,20 @@ class CreateChannelWave(QWidget):
 		QWidget.__init__(self, None)
 		self.channel_wave_layout = QVBoxLayout()
 
-# Wave Image Container
+		# Wave Image Container
 		wave_container = QLabel()
 		wave_container.setText("Wave Image")
 		wave_container.setStyleSheet("border: 1px solid black;")
 		wave_container.setFixedSize(360,80)
 
-# Channel Name Container
+		# Channel Name Container
 		self.channel_name = QLabel()
 		self.channel_name.setAlignment(Qt.AlignCenter)
 		self.channel_name.setStyleSheet("border: 1px solid black;")
 		self.channel_name.setFixedSize(360, 24)
 		self.channel_name.setText("Channel Name")
-		
-# Channel Number Container
+
+		# Channel Number Container
 		self.channel_num = QLineEdit(wave_container)
 		self.channel_num.setAlignment(Qt.AlignCenter)
 		self.channel_num.setFixedSize(116,32)
@@ -77,11 +75,19 @@ class CreateChannelWave(QWidget):
 
 		self.channel_wave_layout.addWidget(wave_container)
 		self.channel_wave_layout.addWidget(self.channel_name)
-	
-# Set channel name
-	def set_channel_name(self, in_name):
+
+	# Set channel name
+	def set_channel_name(self, in_name: str):
+		"""
+		Sets the channel name label in the GUI
+
+		Parameters
+		----------
+		in_name : str
+			The new channel name
+		"""
 		self.channel_name.setText(in_name)
-		
+
 class CreateControlBar(QWidget):
 	def __init__(self):
 		QWidget.__init__(self, None)
@@ -94,58 +100,93 @@ class CreateControlBar(QWidget):
 		self.control_button_layout.setContentsMargins(0,8,0,0)
 		self.control_button_layout.setSpacing(8)
 
-# Buttons Play, Next, Previous
-	# Previous Button
+		# Buttons Play, Next, Previous
+		## Previous Button
 		self.previous_button = QPushButton("Previous", self)
 		self.previous_button.setFixedSize(44,44)
 		self.previous_button.setStyleSheet("border-radius: 22; border: 2px solid black")
-		self.previous_button.clicked.connect(self.previousButtonClick)
+		self.previous_button.clicked.connect(self.previous_button_callback)
 
 		self.control_button_layout.addWidget(self.previous_button)
 
-	# Play Button
+		## Play Button
 		self.play_button = QPushButton("Play", self)
 		self.play_button.setFixedSize(50,50)
 		self.play_button.setStyleSheet("border-radius: 25; border: 2px solid black;")
-		self.play_button.clicked.connect(self.playButtonClick)
+		self.play_button.clicked.connect(self.play_button_callback)
 
 		self.control_button_layout.addWidget(self.play_button)
-	
-	# Next Button
+
+		## Next Button
 		self.next_button = QPushButton("Next", self)
 		self.next_button.setFixedSize(44,44)
 		self.next_button.setStyleSheet("border-radius: 22; border: 2px solid black;")
-		self.next_button.clicked.connect(self.nextButtonClick)
+		self.next_button.clicked.connect(self.next_button_callback)
 
 		self.control_button_layout.addWidget(self.next_button)
 
 		self.control_layout.addLayout(self.control_button_layout)
 
-# Sound Volume Control
+		# Sound Volume Control
 		self.volume_slider = QSlider(Qt.Horizontal)
 		self.volume_slider.setFixedSize(154, 20)
 
 		self.control_layout.addWidget(self.volume_slider)
-		
-	def playButtonClick(self):
+
+	def play_button_callback(self):
+		"""The callback of the play button"""
 		print("Play button Click")
-	
-	def previousButtonClick(self):
+
+	def previous_button_callback(self):
+		"""The callback of the previous button"""
 		print("Previous button Click")
 
-	def nextButtonClick(self):
+	def next_button_callback(self):
+		"""The callback of the next button"""
 		print("Next button Click")
 
-	def set_play_button_callback(self, in_func):
+	def set_play_button_callback(self, in_func: Callable):
+		"""
+		Sets the callback of the play button
+
+		Parameters
+		----------
+		in_func : Callable
+			The new play button callback
+		"""
 		self.play_button.clicked.connect(in_func)
 
-	def set_previous_button_callback(self,in_func):
+	def set_previous_button_callback(self, in_func: Callable):
+		"""
+		Sets the callback of the previous button
+
+		Parameters
+		----------
+		in_func : Callable
+			The new previous button callback
+		"""
 		self.previous_button.clicked.connect(in_func)
 
-	def set_next_button_callback(self,in_func):
+	def set_next_button_callback(self, in_func: Callable):
+		"""
+		Sets the callback of the next button
+
+		Parameters
+		----------
+		in_func : Callable
+			The new next button callback
+		"""
 		self.next_button.clicked.connect(in_func)
 
-	def set_volume_slider_callback(self,in_func):
+	def set_volume_slider_callback(self, in_func: Callable):
+		"""
+		Sets the callback of the volume slider
+
+		Parameters
+		----------
+		in_func : Callable
+			The new volume slider callback
+		"""
 		self.volume_slider.valueChanged.connect(in_func)
 
 
