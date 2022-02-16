@@ -1,4 +1,3 @@
-
 from radio import Radio
 
 class RadioCMDApp(object):

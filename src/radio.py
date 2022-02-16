@@ -45,17 +45,17 @@ class RadioPlayer:
 			self.player.set_media(self.media)
 
 	def play(self):
-		"""Spawns a thread, calls play_stream() to play the radio"""
+		"""Spawns a thread, calls __play_stream() to play the radio"""
 
 		assert self.station is not None, "No station specified"
 
 		if not self.thread_spawned:
-			self.radio_thread = threading.Thread(target=self.play_stream)
+			self.radio_thread = threading.Thread(target=self.__play_stream)
 			self.radio_thread.start()
 			self.thread_spawned = True
 			self.thread_finished = False
 
-	def play_stream(self):
+	def __play_stream(self):
 		"""Plays the radio"""
 
 		assert self.station is not None, "No station specified"
@@ -91,7 +91,7 @@ class RadioPlayer:
 		self.thread_spawned = False
 		self.thread_finished = False
 
-	def set_station(self, station: RadioStation):
+	def __set_station(self, station: RadioStation):
 		"""
 		Stops the current stream and sets a new station
 
@@ -118,7 +118,7 @@ class RadioPlayer:
 			The station to change to
 		"""
 
-		self.set_station(station)
+		self.__set_station(station)
 		self.play()
 
 	def get_station_name(self) -> str:
