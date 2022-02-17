@@ -39,4 +39,7 @@ class RadioCMDApp(object):
             else:
                 print("Option not available/not implemented")
 
+
+app = RadioCMDApp()
+app.start()
         

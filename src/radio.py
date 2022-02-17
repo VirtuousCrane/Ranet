@@ -83,8 +83,9 @@ class RadioPlayer:
 
 		# Signals the thread to stop working
 		self.is_playing = False
-		while(not self.thread_finished):
-			pass
+
+		# while(not self.thread_finished):   # Why? Do we really need this? There is radio_thread.join() the radio thread has to be done  
+		# 	pass                             # Removing this fixes the moving to channel crashing problem
 
 		# Joins thread and reset the thread flags
 		self.radio_thread.join()
