@@ -15,10 +15,22 @@ class RadioChannelListGuiWindow(QWidget):
     def channel_scroll_bar(self):
         self.channel_list = QListWidget(self)
         self.channel_list.setGeometry(20,20,140,160)
+        self.channel_list.itemClicked.connect(self.channel_clicked_return_channel)
+        self.channel_list.itemClicked.connect(self.close)
 
-        # Test Item
+        # ___Test Item___
         for i in range(10):
             self.channel_list.addItem(QListWidgetItem("channel " +  str(i)))
+        # _______________
 
         scroll_bar = QScrollBar(self)
         self.channel_list.setVerticalScrollBar(scroll_bar)
+
+    def add_channel_list(self, in_func):
+        self.channel_list.addItem(QListWidgetItem(in_func))
+
+    def channel_clicked_return_channel(self):
+        # __Test__
+        print(str(self.channel_list.currentItem().text())) 
+        # ________
+        return (str(self.channel_list.currentItem().text())) 
