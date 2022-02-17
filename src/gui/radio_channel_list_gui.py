@@ -18,8 +18,6 @@ class RadioChannelListGuiWindow(QWidget):
 
         # Test Item
         for i in range(10):
-
-        # channel_1 = QListWidgetItem("channel 1")
             self.channel_list.addItem(QListWidgetItem("channel " +  str(i)))
 
         scroll_bar = QScrollBar(self)
