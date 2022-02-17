@@ -1,4 +1,5 @@
 import sys
+from typing import *
 from PySide6.QtWidgets import *
 from PySide6.QtGui import *
 from PySide6.QtCore import *
@@ -7,6 +8,8 @@ class CreateMenuBar(QMainWindow):
 	def __init__(self):
 		QMainWindow.__init__(self, None)
 		self.menu_bar = self.menuBar()
+
+		self.control_clicked_handler = ControlClickHandler()
 
 		# FileMenu Section
 		file_menu = QMenu("&File", self)
