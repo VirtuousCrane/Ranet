@@ -4,6 +4,7 @@ from PySide6.QtWidgets import *
 from PySide6.QtCore import *
 from src.radio import Radio
 from src.gui.gui_design import MainGuiWindow, CSS
+from src.testcode import MyRadio
 
 class RadioApp(object):
 	def __init__(self):
@@ -13,7 +14,7 @@ class RadioApp(object):
 		self.gui = MainGuiWindow()
 
 		# Intiialize the radio
-		self.radio = Radio(self.gui)
+		self.radio = MyRadio(self.gui)
 		self.gui.set_radio_player(self.radio.get_radio_player())
 		
 		# Linking the radio model with the GUI callbacks
