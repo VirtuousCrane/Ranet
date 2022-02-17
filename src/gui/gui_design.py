@@ -143,6 +143,11 @@ class CreateControlBar(QWidget):
 	# Sound Volume Control
 		self.volume_slider = QSlider(Qt.Horizontal)
 		self.volume_slider.setFixedSize(154, 20)
+		self.volume_slider.setMinimum(0)
+		self.volume_slider.setMaximum(100)
+
+		# Test Slider Volume Change
+		self.volume_slider.valueChanged.connect(self.volume_test_run)
 		
 		self.control_layout.addWidget(self.volume_slider)
 		
@@ -158,6 +163,13 @@ class CreateControlBar(QWidget):
 	def set_volume_slider_callback(self, in_func):
 		self.volume_slider.valueChanged.connect(in_func)
 
+	def set_volume_slider_value(self, in_func):
+		self.volume_slider.setValue(in_func)
+
+	# Volume Value Test
+	def volume_test_run(self):
+		print(self.volume_slider.value())
+		
 class MainGuiWindow(QMainWindow):
 	def __init__(self):
 		QMainWindow.__init__(self, None)
