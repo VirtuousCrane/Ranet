@@ -2,6 +2,7 @@ import sys
 from PySide6.QtWidgets import *
 from PySide6.QtGui import *
 from PySide6.QtCore import *
+from radio_channel_list_gui import RadioChannelListGuiWindow
 
 class CreateMenuBar(QMainWindow):
 	def __init__(self):
@@ -22,13 +23,14 @@ class CreateMenuBar(QMainWindow):
 		self.next_action.triggered.connect(self.control_clicked_handler.next_button_click)
 		self.previous_action = QAction("&Previous", self)
 		self.previous_action.triggered.connect(self.control_clicked_handler.previous_button_click)
-		self.favorite_action = QAction("&Favorite", self)
+		self.channel_list_action = QAction("&Channel List", self)
+		self.channel_list_action.triggered.connect(self.open_channel_list_gui)
 
 		file_menu.addAction(self.play_action)
 		file_menu.addAction(self.pause_action)
 		file_menu.addAction(self.next_action)
 		file_menu.addAction(self.previous_action)
-		file_menu.addAction(self.favorite_action)
+		file_menu.addAction(self.channel_list_action)
 
 		self.menu_bar.addMenu(file_menu)
 
@@ -59,7 +61,7 @@ class CreateMenuBar(QMainWindow):
 	# file_menu callback Function
 	def set_play_action_callback(self, in_func):
 		self.play_action.clicked.connect(in_func)
-
+		
 	def set_pause_action_callback(self, in_func):
 		self.pause_action.clicked.connect(in_func)
 		
@@ -68,6 +70,10 @@ class CreateMenuBar(QMainWindow):
 		
 	def set_next_action_callback(self, in_func):
 		self.next_action.clicked.connect(in_func)
+
+	def open_channel_list_gui(self):
+		self.channel_list_gui = RadioChannelListGuiWindow()
+		self.channel_list_gui.show()
 
 class CreateChannelWave(QWidget):
 	def __init__(self):
