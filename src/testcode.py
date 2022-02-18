@@ -29,11 +29,9 @@ class MyRadioPlayer:
 		volume : int
 			The audio's volume
 		"""
-		# Intialize variable
+		# Intialize station and flag
 		self.station = station
-
 		self.is_playing = False
-
 
 		# VLC media instance and player
 		self.instance = vlc.Instance('--input-repeat=-1', '--no-video')
