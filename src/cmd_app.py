@@ -1,9 +1,8 @@
-from radio import Radio
-from testcode import MyRadioPlayer, RadioStation, MyRadio
+from src.radio import Radio
 
 class RadioCMDApp(object):
     def __init__(self):
-        self.radio = MyRadio()
+        self.radio = Radio()
         
     def start(self):
         userInput = -1
