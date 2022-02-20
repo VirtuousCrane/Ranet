@@ -1,6 +1,7 @@
 from radio import *
 import time
 from radio import RadioTracker
+from connection import *
 
 class RadioInterface(object):
 	def __init__(self):
@@ -9,6 +10,9 @@ class RadioInterface(object):
 
 	def switch_on(self):
 		print("Playing radio")
+		if not connection_check_status() == ConnectionStatus.OK:
+			print("Bad connection, bitch")
+			sys.exit(1)
 		self.radio_player.play()
 
 	def switch_off(self):

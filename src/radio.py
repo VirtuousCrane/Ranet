@@ -1,5 +1,8 @@
 from typing import *
 from dataclasses import dataclass
+from src.connection import *
+from src.exceptions import *
+
 import vlc
 import threading
 import xml.etree.ElementTree as ET
@@ -46,6 +49,10 @@ class RadioPlayer:
 		"""Spawns a thread, calls play_stream() to play the radio"""
 
 		assert self.station is not None, "No station specified"
+
+		if connection_check_status() == ConnectionStatus.ERR:
+			print("Bad Connection, bitch")
+			raise ConnectionError("Bad Internet Connection")
 
 		if not self.thread_spawned:
 			self.radio_thread = threading.Thread(target=self.play_stream)

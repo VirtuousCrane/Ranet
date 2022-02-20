@@ -1,8 +1,7 @@
 import sys
-import src.connection as connection
-
 from PySide6.QtWidgets import *
 from PySide6.QtCore import *
+from src.connection import *
 from src.radio import Radio
 from src.gui.gui_design import MainGuiWindow, CSS
 
@@ -23,6 +22,9 @@ class RadioApp(object):
 		self.gui.set_next_button_callback(self.radio.next_channel)
 
 	def start(self):
+		if not connection_check_status() == ConnectionStatus.OK:
+			print("Bad connection, bitch")
+			sys.exit(1)
 		self.gui.show()
 		self.app.exec()
 
