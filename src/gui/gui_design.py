@@ -1,4 +1,5 @@
 import sys
+from typing import *
 from PySide6.QtWidgets import *
 from PySide6.QtGui import *
 from PySide6.QtCore import *
@@ -11,10 +12,10 @@ class CreateMenuBar(QMainWindow):
 
 		self.control_clicked_handler = ControlClickHandler()
 
-	# FileMenu Section
+		# FileMenu Section
 		file_menu = QMenu("&File", self)
 
-		### FileMenu Action List
+		## FileMenu Action List
 		self.play_action = QAction("&Play", self)
 		self.play_action.triggered.connect(self.control_clicked_handler.play_action_button_click)
 		self.pause_action = QAction("&Pause", self)
@@ -34,20 +35,18 @@ class CreateMenuBar(QMainWindow):
 
 		self.menu_bar.addMenu(file_menu)
 
-	# EditMenu Section
+		# EditMenu Section
 		edit_menu = QMenu("&Edit", self)
 
-		### EditMenu Action List
+		## EditMenu Action List
 		self.theme_action = QAction("&Theme", self)
-
 		edit_menu.addAction(self.theme_action)
-
 		self.menu_bar.addMenu(edit_menu)
 
-	# RecordMenu Section
+		# RecordMenu Section
 		record_menu = QMenu("&Record", self)
 
-		### RecordMenu Action List
+		## RecordMenu Action List
 		self.start_recording_action = QAction("&Start Recording", self)
 		self.stop_recording_action = QAction("&Stop Recording", self)
 		self.go_to_folder_action = QAction("&Go To Folder", self)
@@ -80,31 +79,40 @@ class CreateChannelWave(QWidget):
 		QWidget.__init__(self, None)
 		self.channel_wave_layout = QVBoxLayout()
 
-	# Wave Image Container
+		# Wave Image Container
 		wave_container = QLabel()
 		wave_container.setText("Wave Image")
 		wave_container.setStyleSheet("border: 1px solid black;")
 		wave_container.setFixedSize(360,80)
 
-	# Channel Name Container
+		# Channel Name Container
 		self.channel_name = QLabel()
 		self.channel_name.setAlignment(Qt.AlignCenter)
 		self.channel_name.setStyleSheet("border: 1px solid black;")
 		self.channel_name.setFixedSize(360, 24)
-        
-	# Channel Number Container
+		self.channel_name.setText("Channel Name")
+
+		# Channel Number Container
 		self.channel_num = QLineEdit(wave_container)
 		self.channel_num.setAlignment(Qt.AlignCenter)
 		self.channel_num.setFixedSize(116,32)
 		self.channel_num.setStyleSheet("font-size: 24px; background-color: #eee")
-		
+
 		self.channel_wave_layout.addWidget(wave_container)
 		self.channel_wave_layout.addWidget(self.channel_name)
 
 	# Set channel name
-	def set_channel_name(self, in_name):
+	def set_channel_name(self, in_name: str):
+		"""
+		Sets the channel name label in the GUI
+
+		Parameters
+		----------
+		in_name : str
+			The new channel name
+		"""
 		self.channel_name.setText(in_name)
-        
+
 class CreateControlBar(QWidget):
 	def __init__(self):
 		QWidget.__init__(self, None)
@@ -119,7 +127,7 @@ class CreateControlBar(QWidget):
 		
 		self.control_clicked_handler = ControlClickHandler()
 
-	# Buttons Play, Next, Previous
+	  # Buttons Play, Next, Previous
 		# Previous Button
 		self.previous_button = QPushButton(self)
 		self.previous_button.setIcon(QIcon(QPixmap("assets/previous_icon.png")))
@@ -154,7 +162,7 @@ class CreateControlBar(QWidget):
 
 		self.control_layout.addLayout(self.control_button_layout)
 		
-	# Sound Volume Control
+	  # Sound Volume Control
 		self.volume_slider = QSlider(Qt.Horizontal)
 		self.volume_slider.setFixedSize(154, 20)
 		self.volume_slider.setMinimum(0)
@@ -194,13 +202,16 @@ class CreateControlBar(QWidget):
 		print(self.volume_slider.value())
 		
 class MainGuiWindow(QMainWindow):
-	def __init__(self):
+	def __init__(self, radio_player=None):
 		QMainWindow.__init__(self, None)
 		self.setWindowTitle("Ranet")
 		self.setGeometry(0,0,360,220)
 
 		self.create_menu_bar = CreateMenuBar()
 		self.setMenuBar(self.create_menu_bar.menu_bar)
+
+
+		self.radio_player = radio_player
 
 	# QWidget
 		central_widget = QWidget()
@@ -220,7 +231,7 @@ class MainGuiWindow(QMainWindow):
 	# Control
 		self.create_control = CreateControlBar()
 		main_layout.addLayout(self.create_control.control_layout)
-		
+
 	# Show
 		self.setLayout(main_layout)
 		self.show()
@@ -228,7 +239,7 @@ class MainGuiWindow(QMainWindow):
 	# Function for the model to use or hookup callback
 	def set_play_button_callback(self, in_func):
 		self.create_control.set_play_button_callback(in_func)
-		
+
 	def set_previous_button_callback(self, in_func):
 		self.create_control.set_previous_button_callback(in_func)
 
@@ -240,6 +251,12 @@ class MainGuiWindow(QMainWindow):
 
 	def set_channel_name(self, in_name):
 		self.create_channel_wave.set_channel_name(in_name)
+
+	def set_radio_player(self, radio_player):
+		self.radio_player = radio_player
+
+	def closeEvent(self, e):
+		self.radio_player.stop()
 
 class ControlClickHandler(object):
 	_instance = None
@@ -254,9 +271,9 @@ class ControlClickHandler(object):
 		if self.currently_playing:
 			self.currently_playing = False
 			print(self.currently_playing)
-		else: 
+		else:
 			self.currently_playing = True
-			print(self.currently_playing)	
+			print(self.currently_playing)
 
 	def play_action_button_click(self):
 		self.currently_playing = True

@@ -1,10 +1,9 @@
-
 from radio import Radio
 
 class RadioCMDApp(object):
     def __init__(self):
         self.radio = Radio()
-        
+
     def start(self):
         userInput = -1
         while(userInput != 0):
@@ -16,14 +15,14 @@ class RadioCMDApp(object):
             print("5. Display current channel")
             print("6. Clicked exit button")
             print("0. Exit")
-            
+
             try:
                 userInput = input("Select option: ")
                 userInput = int(userInput)
             except:
                 print("Invalid input, exitting program")
                 userInput = 0
-            
+
             if(userInput == 0):
                 print("Exitting program")
                 self.radio.stop()
@@ -39,5 +38,3 @@ class RadioCMDApp(object):
                 self.radio.display_current_channel()
             else:
                 print("Option not available/not implemented")
-
-        
