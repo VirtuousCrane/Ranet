@@ -7,7 +7,7 @@ Welcome to Ranet's documentation!
 =================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 5
    :caption: Contents:
 
 
@@ -29,3 +29,17 @@ connection Module
 .. automodule:: src.connection
 	:members:
 
+gui_design Module
+=================
+.. automodule:: src.gui.gui_design
+	:members:
+
+cmd_app Module
+==============
+.. automodule:: src.cmd_app
+	:members:
+
+radio_interface Module
+======================
+.. automodule:: src.radio_interface
+	:members:

@@ -1,6 +1,6 @@
 from radio import *
 import time
-from radio_track import RadioTracker
+from radio import RadioTracker
 
 class RadioInterface(object):
 	def __init__(self):

@@ -3,7 +3,7 @@ from typing import *
 from PySide6.QtWidgets import *
 from PySide6.QtGui import *
 from PySide6.QtCore import *
-from radio_channel_list_gui import RadioChannelListGuiWindow
+from src.gui.radio_channel_list_gui import RadioChannelListGuiWindow
 
 class CreateMenuBar(QMainWindow):
 	def __init__(self):
@@ -256,7 +256,8 @@ class MainGuiWindow(QMainWindow):
 		self.radio_player = radio_player
 
 	def closeEvent(self, e):
-		self.radio_player.stop()
+		if self.radio_player.is_playing is True:
+			self.radio_player.stop()
 
 class ControlClickHandler(object):
 	_instance = None
