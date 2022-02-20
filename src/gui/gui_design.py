@@ -121,7 +121,9 @@ class CreateControlBar(QWidget):
 
 	# Buttons Play, Next, Previous
 		# Previous Button
-		self.previous_button = QPushButton("Previous", self)
+		self.previous_button = QPushButton(self)
+		self.previous_button.setIcon(QIcon(QPixmap("src/gui/button_image/previous_icon.png")))
+		self.previous_button.setIconSize(QSize(24,24))
 		self.previous_button.setFixedSize(44,44)
 		self.previous_button.setStyleSheet("border-radius: 22; border: 2px solid black")
 		self.previous_button.clicked.connect(self.control_clicked_handler.previous_button_click)
@@ -129,15 +131,21 @@ class CreateControlBar(QWidget):
 		self.control_button_layout.addWidget(self.previous_button)
 
 		# Play Button
-		self.play_button = QPushButton("Play", self)
+		self.play_button = QPushButton(self)
+		self.play_button.setIcon(QIcon(QPixmap("src/gui/button_image/play_icon.png")))
+		self.play_button.setIconSize(QSize(28,28))
 		self.play_button.setFixedSize(50,50)
 		self.play_button.setStyleSheet("border-radius: 25; border: 2px solid black;")
 		self.play_button.clicked.connect(self.control_clicked_handler.play_pause_button_click)
+		self.play_button.clicked.connect(self.toggle_play_pause_icon)
 		
 		self.control_button_layout.addWidget(self.play_button)
     
 		# Next Button
-		self.next_button = QPushButton("Next", self)
+		# self.next_button = QPushButton("Next", self)
+		self.next_button = QPushButton(self)
+		self.next_button.setIcon(QIcon(QPixmap("src/gui/button_image/next_icon.png")))
+		self.next_button.setIconSize(QSize(24,24))
 		self.next_button.setFixedSize(44,44)
 		self.next_button.setStyleSheet("border-radius: 22; border: 2px solid black;")
 		self.next_button.clicked.connect(self.control_clicked_handler.next_button_click)
@@ -145,7 +153,7 @@ class CreateControlBar(QWidget):
 		self.control_button_layout.addWidget(self.next_button)
 
 		self.control_layout.addLayout(self.control_button_layout)
-
+		
 	# Sound Volume Control
 		self.volume_slider = QSlider(Qt.Horizontal)
 		self.volume_slider.setFixedSize(154, 20)
@@ -156,6 +164,15 @@ class CreateControlBar(QWidget):
 		self.volume_slider.valueChanged.connect(self.volume_test_run)
 		
 		self.control_layout.addWidget(self.volume_slider)
+
+		# Toggle Play Pause Icon
+	def toggle_play_pause_icon(self):
+		if (self.control_clicked_handler.currently_playing == True):
+			self.play_button.setIcon(QIcon(QPixmap("src/gui/button_image/pause_icon.png")))
+			self.play_button.setIconSize(QSize(24,24))
+		else: 
+			self.play_button.setIcon(QIcon(QPixmap("src/gui/button_image/play_icon.png")))
+			self.play_button.setIconSize(QSize(28,28))
 		
 	def set_play_button_callback(self, in_func):
 		self.play_button.clicked.connect(in_func)
@@ -229,8 +246,6 @@ class ControlClickHandler(object):
 	def __new__(self):
 		if not self._instance:
 			self._instance = super(ControlClickHandler, self).__new__(self)
-			# QWidget.__init__(self, None)
-			# Set Default Status as True (Currently Playing)
 			self.currently_playing = False
 		return self._instance
 
@@ -241,7 +256,7 @@ class ControlClickHandler(object):
 			print(self.currently_playing)
 		else: 
 			self.currently_playing = True
-			print(self.currently_playing)		
+			print(self.currently_playing)	
 
 	def play_action_button_click(self):
 		self.currently_playing = True
