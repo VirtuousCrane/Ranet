@@ -1,5 +1,6 @@
 import sys
-from src.connection import *
+import src.connection as connection
+
 from PySide6.QtWidgets import *
 from PySide6.QtCore import *
 from src.radio import Radio
