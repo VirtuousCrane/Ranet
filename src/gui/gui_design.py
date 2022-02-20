@@ -122,7 +122,7 @@ class CreateControlBar(QWidget):
 	# Buttons Play, Next, Previous
 		# Previous Button
 		self.previous_button = QPushButton(self)
-		self.previous_button.setIcon(QIcon(QPixmap("src/gui/button_image/previous_icon.png")))
+		self.previous_button.setIcon(QIcon(QPixmap("assets/previous_icon.png")))
 		self.previous_button.setIconSize(QSize(24,24))
 		self.previous_button.setFixedSize(44,44)
 		self.previous_button.setStyleSheet("border-radius: 22; border: 2px solid black")
@@ -132,7 +132,7 @@ class CreateControlBar(QWidget):
 
 		# Play Button
 		self.play_button = QPushButton(self)
-		self.play_button.setIcon(QIcon(QPixmap("src/gui/button_image/play_icon.png")))
+		self.play_button.setIcon(QIcon(QPixmap("assets/play_icon.png")))
 		self.play_button.setIconSize(QSize(28,28))
 		self.play_button.setFixedSize(50,50)
 		self.play_button.setStyleSheet("border-radius: 25; border: 2px solid black;")
@@ -144,7 +144,7 @@ class CreateControlBar(QWidget):
 		# Next Button
 		# self.next_button = QPushButton("Next", self)
 		self.next_button = QPushButton(self)
-		self.next_button.setIcon(QIcon(QPixmap("src/gui/button_image/next_icon.png")))
+		self.next_button.setIcon(QIcon(QPixmap("assets/next_icon.png")))
 		self.next_button.setIconSize(QSize(24,24))
 		self.next_button.setFixedSize(44,44)
 		self.next_button.setStyleSheet("border-radius: 22; border: 2px solid black;")
@@ -168,10 +168,10 @@ class CreateControlBar(QWidget):
 		# Toggle Play Pause Icon
 	def toggle_play_pause_icon(self):
 		if (self.control_clicked_handler.currently_playing == True):
-			self.play_button.setIcon(QIcon(QPixmap("src/gui/button_image/pause_icon.png")))
+			self.play_button.setIcon(QIcon(QPixmap("assets/pause_icon.png")))
 			self.play_button.setIconSize(QSize(24,24))
 		else: 
-			self.play_button.setIcon(QIcon(QPixmap("src/gui/button_image/play_icon.png")))
+			self.play_button.setIcon(QIcon(QPixmap("assets/play_icon.png")))
 			self.play_button.setIconSize(QSize(28,28))
 		
 	def set_play_button_callback(self, in_func):
