@@ -14,7 +14,6 @@ class RadioApp(object):
 
 		# Intiialize the radio
 		self.radio = Radio(self.gui)
-		self.gui.set_radio_player(self.radio.get_radio_player())
 
 		# Linking the radio model with the GUI callbacks
 		self.gui.set_play_button_callback(self.radio.toggle)

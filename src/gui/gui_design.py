@@ -255,10 +255,6 @@ class MainGuiWindow(QMainWindow):
 	def set_radio_player(self, radio_player):
 		self.radio_player = radio_player
 
-	def closeEvent(self, e):
-		if self.radio_player.is_playing is True:
-			self.radio_player.stop()
-
 class ControlClickHandler(object):
 	_instance = None
 	def __new__(self):
