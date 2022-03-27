@@ -75,32 +75,31 @@ class CreateMenuBar(QMainWindow):
 		self.channel_list_gui.show()
 
 class CreateChannelWave(QWidget):
-	def __init__(self):
+	def __init__(self, height, width):
 		QWidget.__init__(self, None)
 		self.channel_wave_layout = QVBoxLayout()
+		self.channel_wave_layout.setStretchFactor(self.channel_wave_layout,1)
 
 		# Wave Image Container
-		wave_container = QLabel()
-		wave_container.setText("Wave Image")
-		wave_container.setStyleSheet("border: 1px solid black;")
-		wave_container.setFixedSize(360,80)
+		self.wave_container = QLabel()
+		self.wave_container.setText("Wave Image")
+		self.wave_container.setStyleSheet("border: 1px solid black; background-color: red;")
+		self.wave_container.setMinimumHeight(height-190)
+
+		# Channel Name Layout
+		
 
 		# Channel Name Container
 		self.channel_name = QLabel()
 		self.channel_name.setAlignment(Qt.AlignCenter)
 		self.channel_name.setStyleSheet("border: 1px solid black;")
-		self.channel_name.setFixedSize(360, 24)
+		self.channel_name.setMinimumHeight(40)
 		self.channel_name.setText("Channel Name")
 
-		# Channel Number Container
-		self.channel_num = QLineEdit(wave_container)
-		self.channel_num.setAlignment(Qt.AlignCenter)
-		self.channel_num.setFixedSize(116,32)
-		self.channel_num.setStyleSheet("font-size: 24px; background-color: #eee")
-
-		self.channel_wave_layout.addWidget(wave_container)
 		self.channel_wave_layout.addWidget(self.channel_name)
-
+		self.channel_wave_layout.addWidget(self.wave_container)
+		
+	
 	# Set channel name
 	def set_channel_name(self, in_name: str):
 		"""
@@ -127,7 +126,7 @@ class CreateControlBar(QWidget):
 		
 		self.control_clicked_handler = ControlClickHandler()
 
-	  # Buttons Play, Next, Previous
+	# Buttons Play, Next, Previous
 		# Previous Button
 		self.previous_button = QPushButton(self)
 		self.previous_button.setIcon(QIcon(QPixmap("assets/previous_icon.png")))
@@ -162,7 +161,7 @@ class CreateControlBar(QWidget):
 
 		self.control_layout.addLayout(self.control_button_layout)
 		
-	  # Sound Volume Control
+	# Sound Volume Control
 		self.volume_slider = QSlider(Qt.Horizontal)
 		self.volume_slider.setFixedSize(154, 20)
 		self.volume_slider.setMinimum(0)
@@ -204,12 +203,16 @@ class CreateControlBar(QWidget):
 class MainGuiWindow(QMainWindow):
 	def __init__(self, radio_player=None):
 		QMainWindow.__init__(self, None)
+		mainWindow = QWidget()
 		self.setWindowTitle("Ranet")
-		self.setGeometry(0,0,360,220)
+		self.default_height = 440
+		self.default_width = 720
+		self.setFixedSize(self.default_width, self.default_height)
+		self.current_height = mainWindow.frameGeometry().height()
+		self.current_width = mainWindow.frameGeometry().width()
 
 		self.create_menu_bar = CreateMenuBar()
 		self.setMenuBar(self.create_menu_bar.menu_bar)
-
 
 		self.radio_player = radio_player
 
@@ -222,11 +225,8 @@ class MainGuiWindow(QMainWindow):
 		main_layout.setAlignment(Qt.AlignTop)
 
 	# Channel and Wave
-		self.create_channel_wave = CreateChannelWave()
+		self.create_channel_wave = CreateChannelWave(self.current_height, self.current_width)
 		main_layout.addLayout(self.create_channel_wave.channel_wave_layout)
-
-		### To be Able to OverLap the channel_num over wave_container we use setGeometry to set the co-ordinate.
-		self.create_channel_wave.channel_num.setGeometry(122, 24, 116, 32)
 
 	# Control
 		self.create_control = CreateControlBar()
@@ -329,6 +329,7 @@ CSS = """
     QPushButton::hover:pressed{
         background: black;
     }
+	
 """
 
 # Temporary // Testing
