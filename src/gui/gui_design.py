@@ -83,8 +83,11 @@ class CreateChannelWave(QWidget):
 		# Wave Image Container
 		self.wave_container = QLabel()
 		self.wave_container.setText("current size (720 x 480)")
-		self.wave_container.setStyleSheet("background-color: red;")
+		# self.wave_container.setStyleSheet("background-color: red;")
 		self.wave_container.setMinimumHeight(480)
+
+		# Control
+		self.create_control = CreateControlBar()
 
 		# Channel Name Layout
 		self.channel_fav_name_layout = QHBoxLayout() 
@@ -98,7 +101,7 @@ class CreateChannelWave(QWidget):
 
 		# Channel Favorite DropDown
 		self.channel_fav = QComboBox()
-		self.channel_fav.setFixedSize(147,30)
+		self.channel_fav.setFixedSize(256,30)
 
 		# ----Test----
 		self.channel_fav.addItem("channel1")
@@ -107,10 +110,14 @@ class CreateChannelWave(QWidget):
 		# ------------
 
 		self.channel_fav_name_layout.addWidget(self.channel_name)
+		self.channel_fav_name_layout.addWidget(self.create_control.favorite_button)
 		self.channel_fav_name_layout.addWidget(self.channel_fav)
+		self.channel_fav_name_layout.addWidget(self.create_control.full_screen_button)
 
 		self.channel_wave_layout.addWidget(self.wave_container)
 		self.channel_wave_layout.addLayout(self.channel_fav_name_layout)
+		self.channel_wave_layout.addLayout(self.create_control.control_layout)
+
 	
 	# Function for adding favorite channel List
 	def add_channel_fav_list(self, in_func):
@@ -153,7 +160,7 @@ class CreateControlBar(QWidget):
 		
 		self.control_button_layout.addWidget(self.previous_button)
 
-		# Play Button
+	# Play Button
 		self.play_button = QPushButton(self)
 		self.play_button.setIcon(QIcon(QPixmap("assets/play_icon.png")))
 		self.play_button.setIconSize(QSize(28,28))
@@ -164,7 +171,7 @@ class CreateControlBar(QWidget):
 		
 		self.control_button_layout.addWidget(self.play_button)
     
-		# Next Button
+	# Next Button
 		# self.next_button = QPushButton("Next", self)
 		self.next_button = QPushButton(self)
 		self.next_button.setIcon(QIcon(QPixmap("assets/next_icon.png")))
@@ -187,6 +194,14 @@ class CreateControlBar(QWidget):
 		self.volume_slider.valueChanged.connect(self.volume_test_run)
 		
 		self.control_layout.addWidget(self.volume_slider)
+
+	# Favorite Button
+		self.favorite_button = QPushButton("Fav")
+		self.favorite_button.setFixedSize(30,30)
+
+	# Full Screen Button
+		self.full_screen_button = QPushButton("Full")
+		self.full_screen_button.setFixedSize(30,30)
 
 		# Toggle Play Pause Icon
 	def toggle_play_pause_icon(self):
@@ -211,6 +226,9 @@ class CreateControlBar(QWidget):
 
 	def set_volume_slider_value(self, in_func):
 		self.volume_slider.setValue(in_func)
+
+	def set_favorite_callback(self, in_func):
+		self.favorite_button.clicked.connect(in_func)
 
 	# Volume Value Test
 	def volume_test_run(self):
@@ -238,13 +256,9 @@ class MainGuiWindow(QMainWindow):
 		main_layout.setSpacing(0)
 		main_layout.setAlignment(Qt.AlignTop)
 
-	# Channel and Wave
+	# Channel and Control
 		self.create_channel_wave = CreateChannelWave()
 		main_layout.addLayout(self.create_channel_wave.channel_wave_layout)
-
-	# Control
-		self.create_control = CreateControlBar()
-		main_layout.addLayout(self.create_control.control_layout)
 
 	# Show
 		self.setLayout(main_layout)
@@ -252,16 +266,19 @@ class MainGuiWindow(QMainWindow):
 
 	# Function for the model to use or hookup callback
 	def set_play_button_callback(self, in_func):
-		self.create_control.set_play_button_callback(in_func)
+		self.create_channel_wave.create_control.set_play_button_callback(in_func)
 
 	def set_previous_button_callback(self, in_func):
-		self.create_control.set_previous_button_callback(in_func)
+		self.create_channel_wave.create_control.set_previous_button_callback(in_func)
 
 	def set_next_button_callback(self, in_func):
-		self.create_control.set_next_button_callback(in_func)
+		self.create_channel_wave.create_control.set_next_button_callback(in_func)
 
 	def set_volume_slider_callback(self, in_func):
-		self.create_control.set_volume_slider_callback(in_func)
+		self.create_channel_wave.create_control.set_volume_slider_callback(in_func)
+	
+	def set_favorite_button_callback(self, in_func):
+		self.create_channel_wave.create_control.set_favorite_callback(in_func)
 
 	def set_channel_name(self, in_name):
 		self.create_channel_wave.set_channel_name(in_name)
