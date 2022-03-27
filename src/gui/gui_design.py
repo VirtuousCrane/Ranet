@@ -75,31 +75,47 @@ class CreateMenuBar(QMainWindow):
 		self.channel_list_gui.show()
 
 class CreateChannelWave(QWidget):
-	def __init__(self, height, width):
+	def __init__(self):
 		QWidget.__init__(self, None)
 		self.channel_wave_layout = QVBoxLayout()
 		self.channel_wave_layout.setStretchFactor(self.channel_wave_layout,1)
 
 		# Wave Image Container
 		self.wave_container = QLabel()
-		self.wave_container.setText("Wave Image")
-		self.wave_container.setStyleSheet("border: 1px solid black; background-color: red;")
-		self.wave_container.setMinimumHeight(height-190)
+		self.wave_container.setText("current size (720 x 480)")
+		self.wave_container.setStyleSheet("background-color: red;")
+		self.wave_container.setMinimumHeight(480)
 
 		# Channel Name Layout
-		
+		self.channel_fav_name_layout = QHBoxLayout() 
 
 		# Channel Name Container
 		self.channel_name = QLabel()
 		self.channel_name.setAlignment(Qt.AlignCenter)
-		self.channel_name.setStyleSheet("border: 1px solid black;")
-		self.channel_name.setMinimumHeight(40)
+		self.channel_name.setStyleSheet("border: 1px solid grey;")
+		self.channel_name.setMinimumHeight(30)
 		self.channel_name.setText("Channel Name")
 
-		self.channel_wave_layout.addWidget(self.channel_name)
+		# Channel Favorite DropDown
+		self.channel_fav = QComboBox()
+		self.channel_fav.setFixedSize(147,30)
+
+		# ----Test----
+		self.channel_fav.addItem("channel1")
+		self.channel_fav.addItem("channel2")
+		self.channel_fav.addItem("channel3")
+		# ------------
+
+		self.channel_fav_name_layout.addWidget(self.channel_name)
+		self.channel_fav_name_layout.addWidget(self.channel_fav)
+
 		self.channel_wave_layout.addWidget(self.wave_container)
-		
+		self.channel_wave_layout.addLayout(self.channel_fav_name_layout)
 	
+	# Function for adding favorite channel List
+	def add_channel_fav_list(self, in_func):
+		self.channel_fav.addItem(QListWidgetItem(in_func))
+
 	# Set channel name
 	def set_channel_name(self, in_name: str):
 		"""
@@ -205,11 +221,9 @@ class MainGuiWindow(QMainWindow):
 		QMainWindow.__init__(self, None)
 		mainWindow = QWidget()
 		self.setWindowTitle("Ranet")
-		self.default_height = 440
+		self.default_height = 620
 		self.default_width = 720
 		self.setFixedSize(self.default_width, self.default_height)
-		self.current_height = mainWindow.frameGeometry().height()
-		self.current_width = mainWindow.frameGeometry().width()
 
 		self.create_menu_bar = CreateMenuBar()
 		self.setMenuBar(self.create_menu_bar.menu_bar)
@@ -225,7 +239,7 @@ class MainGuiWindow(QMainWindow):
 		main_layout.setAlignment(Qt.AlignTop)
 
 	# Channel and Wave
-		self.create_channel_wave = CreateChannelWave(self.current_height, self.current_width)
+		self.create_channel_wave = CreateChannelWave()
 		main_layout.addLayout(self.create_channel_wave.channel_wave_layout)
 
 	# Control
