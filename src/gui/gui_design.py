@@ -170,8 +170,6 @@ class CreateControlBar(QWidget):
 		self.volume_slider.setMaximum(100)
 
 		# Test Slider Volume Change
-		self.volume_slider.valueChanged.connect(self.volume_test_run)
-		
 		self.control_layout.addWidget(self.volume_slider)
 
 		# Toggle Play Pause Icon
@@ -182,6 +180,14 @@ class CreateControlBar(QWidget):
 		else: 
 			self.play_button.setIcon(QIcon(QPixmap("assets/play_icon.png")))
 			self.play_button.setIconSize(QSize(28,28))
+
+	def set_play_button_icon_to_play(self):
+		self.play_button.setIcon(QIcon(QPixmap("assets/play_icon.png")))
+		self.play_button.setIconSize(QSize(28,28))
+
+	def set_play_button_icon_to_pause(self):
+		self.play_button.setIcon(QIcon(QPixmap("assets/pause_icon.png")))
+		self.play_button.setIconSize(QSize(24,24))
 		
 	def set_play_button_callback(self, in_func):
 		self.play_button.clicked.connect(in_func)
@@ -261,6 +267,12 @@ class MainGuiWindow(QMainWindow):
 
 	def get_volume_slider_value(self):
 		return self.create_control.get_volume_slider_value()
+
+	def set_play_button_icon_to_play(self):
+		self.create_control.set_play_button_icon_to_play()
+	
+	def set_play_button_icon_to_pause(self):
+		self.create_control.set_play_button_icon_to_pause()
 
 class ControlClickHandler(object):
 	_instance = None
