@@ -28,7 +28,7 @@ class RadioPlayer:
 
 		# Variable Initialization
 		self.station: RadioStation = station
-		self.volume = volume
+		self.is_playing = False
 
 		# VLC media instance and player
 		self.instance = vlc.Instance('--input-repeat=-1', '--no-video')
@@ -40,16 +40,18 @@ class RadioPlayer:
 
 	def play(self):
 		self.player.play()
+		self.is_playing = True
 
 	def stop(self):	
 		self.player.stop()
+		self.is_playing = False
 
 	def change_station(self, station: RadioStation):
-		self.player.stop()
+		self.stop()
 		self.station = station
 		self.media = self.instance.media_new(self.station.url)
 		self.player.set_media(self.media)
-		self.player.play()
+		self.play()
 
 	def get_station_name(self) -> str:
 		assert self.station is not None, "No station specified"
@@ -64,13 +66,16 @@ class RadioPlayer:
 		return self.station.type
 
 	def set_volume(self, volume: int):
-		self.volume = volume
+		self.player.audio_set_volume(volume)
 
 	def toggle(self):
-		if self.player.is_playing():
+		if self.is_playing:
 			self.stop()
 		else:
 			self.play()
+
+	def get_is_playing(self):
+		return self.is_playing
 
 class RadioTracker(object):
 	"""Loads Radio Stations from and XML file"""
@@ -126,6 +131,15 @@ class Radio(object):
 		self.radio_player = RadioPlayer(self.radio_tracker.get_current_station())
 		self.gui = gui
 
+		# Linking the radio model with the GUI callbacks
+		if gui is not None:
+			self.gui.set_play_button_callback(self.toggle)
+			self.gui.set_previous_button_callback(self.previous_channel)
+			self.gui.set_next_button_callback(self.next_channel)
+			self.gui.set_volume_slider_callback(self.change_volume)
+
+			self.change_volume()
+
 	def play(self):
 		"""Plays the radio"""
 		print("Playing radio")
@@ -163,13 +177,28 @@ class Radio(object):
 		print("Display info of current radio channel")
 		print(f"Name: {self.radio_player.get_station_name()} Url: {self.radio_player.get_station_url()} Media type:{self.radio_player.get_station_media_type()}")
 
+	def change_volume(self):
+		newVolume = self.gui.get_volume_slider_value()
+		self.radio_player.set_volume(newVolume)
+		self.update_gui()
+		print("Change volume to " + str(newVolume))
+
 	def update_gui(self):
 		"""Updates the GUI"""
 		if self.gui is None:
 			print("GUI is none, cannot update GUI")
 		else:
+			# Update channel name
 			self.gui.set_channel_name(self.radio_player.get_station_name())
 
+			# Update the play button
+			if self.radio_player.get_is_playing():
+				print("Setting play button icon to pause")
+				self.gui.set_play_button_icon_to_pause()
+			else:
+				print("Setting play button icon to play")
+				self.gui.set_play_button_icon_to_play()
+		
 	def get_radio_player(self):
 		return self.radio_player
 

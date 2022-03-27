@@ -166,11 +166,10 @@ class CreateControlBar(QWidget):
 		self.volume_slider = QSlider(Qt.Horizontal)
 		self.volume_slider.setFixedSize(154, 20)
 		self.volume_slider.setMinimum(0)
+		self.volume_slider.setValue(50)
 		self.volume_slider.setMaximum(100)
 
 		# Test Slider Volume Change
-		self.volume_slider.valueChanged.connect(self.volume_test_run)
-		
 		self.control_layout.addWidget(self.volume_slider)
 
 		# Toggle Play Pause Icon
@@ -181,6 +180,14 @@ class CreateControlBar(QWidget):
 		else: 
 			self.play_button.setIcon(QIcon(QPixmap("assets/play_icon.png")))
 			self.play_button.setIconSize(QSize(28,28))
+
+	def set_play_button_icon_to_play(self):
+		self.play_button.setIcon(QIcon(QPixmap("assets/play_icon.png")))
+		self.play_button.setIconSize(QSize(28,28))
+
+	def set_play_button_icon_to_pause(self):
+		self.play_button.setIcon(QIcon(QPixmap("assets/pause_icon.png")))
+		self.play_button.setIconSize(QSize(24,24))
 		
 	def set_play_button_callback(self, in_func):
 		self.play_button.clicked.connect(in_func)
@@ -200,6 +207,9 @@ class CreateControlBar(QWidget):
 	# Volume Value Test
 	def volume_test_run(self):
 		print(self.volume_slider.value())
+
+	def get_volume_slider_value(self):
+		return self.volume_slider.value()
 		
 class MainGuiWindow(QMainWindow):
 	def __init__(self, radio_player=None):
@@ -254,6 +264,15 @@ class MainGuiWindow(QMainWindow):
 
 	def set_radio_player(self, radio_player):
 		self.radio_player = radio_player
+
+	def get_volume_slider_value(self):
+		return self.create_control.get_volume_slider_value()
+
+	def set_play_button_icon_to_play(self):
+		self.create_control.set_play_button_icon_to_play()
+	
+	def set_play_button_icon_to_pause(self):
+		self.create_control.set_play_button_icon_to_pause()
 
 class ControlClickHandler(object):
 	_instance = None
