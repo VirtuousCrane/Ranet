@@ -1,4 +1,4 @@
-from radio import Radio
+from src.radio import Radio
 
 class RadioCMDApp(object):
     def __init__(self):
@@ -38,3 +38,7 @@ class RadioCMDApp(object):
                 self.radio.display_current_channel()
             else:
                 print("Option not available/not implemented")
+
+
+radio = RadioCMDApp()
+radio.start()

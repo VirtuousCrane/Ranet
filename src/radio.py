@@ -28,7 +28,6 @@ class RadioPlayer:
 
 		# Variable Initialization
 		self.station: RadioStation = station
-		self.volume = volume
 
 		# VLC media instance and player
 		self.instance = vlc.Instance('--input-repeat=-1', '--no-video')
@@ -64,7 +63,7 @@ class RadioPlayer:
 		return self.station.type
 
 	def set_volume(self, volume: int):
-		self.volume = volume
+		self.player.audio_set_volume(volume)
 
 	def toggle(self):
 		if self.player.is_playing():
@@ -126,6 +125,15 @@ class Radio(object):
 		self.radio_player = RadioPlayer(self.radio_tracker.get_current_station())
 		self.gui = gui
 
+		# Linking the radio model with the GUI callbacks
+		if gui is not None:
+			self.gui.set_play_button_callback(self.toggle)
+			self.gui.set_previous_button_callback(self.previous_channel)
+			self.gui.set_next_button_callback(self.next_channel)
+			self.gui.set_volume_slider_callback(self.change_volume)
+
+			self.change_volume()
+
 	def play(self):
 		"""Plays the radio"""
 		print("Playing radio")
@@ -162,6 +170,12 @@ class Radio(object):
 		"""Displays the current radio station's name"""
 		print("Display info of current radio channel")
 		print(f"Name: {self.radio_player.get_station_name()} Url: {self.radio_player.get_station_url()} Media type:{self.radio_player.get_station_media_type()}")
+
+	def change_volume(self):
+		newVolume = self.gui.get_volume_slider_value()
+		self.radio_player.set_volume(newVolume)
+		self.update_gui()
+		print("Change volume to " + str(newVolume))
 
 	def update_gui(self):
 		"""Updates the GUI"""

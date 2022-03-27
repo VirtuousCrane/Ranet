@@ -166,6 +166,7 @@ class CreateControlBar(QWidget):
 		self.volume_slider = QSlider(Qt.Horizontal)
 		self.volume_slider.setFixedSize(154, 20)
 		self.volume_slider.setMinimum(0)
+		self.volume_slider.setValue(50)
 		self.volume_slider.setMaximum(100)
 
 		# Test Slider Volume Change
@@ -200,6 +201,9 @@ class CreateControlBar(QWidget):
 	# Volume Value Test
 	def volume_test_run(self):
 		print(self.volume_slider.value())
+
+	def get_volume_slider_value(self):
+		return self.volume_slider.value()
 		
 class MainGuiWindow(QMainWindow):
 	def __init__(self, radio_player=None):
@@ -254,6 +258,9 @@ class MainGuiWindow(QMainWindow):
 
 	def set_radio_player(self, radio_player):
 		self.radio_player = radio_player
+
+	def get_volume_slider_value(self):
+		return self.create_control.get_volume_slider_value()
 
 class ControlClickHandler(object):
 	_instance = None
