@@ -3,7 +3,7 @@ from typing import *
 from PySide6.QtWidgets import *
 from PySide6.QtGui import *
 from PySide6.QtCore import *
-from src.gui.radio_channel_list_gui import RadioChannelListGuiWindow
+from radio_channel_list_gui import RadioChannelListGuiWindow
 
 class CreateMenuBar(QMainWindow):
 	def __init__(self):
