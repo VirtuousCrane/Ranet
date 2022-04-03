@@ -118,7 +118,27 @@ class MediaChannelList:
 			return self.main_media_channels[inIndex]
 		except IndexError:
 			print("Error at getChannelByIndex, by IndexError")
+	
+	# Return channels with substring of search_term ordered by substring index position
+	def getChannelsBySearch(self, search_term):
+		output = []
+		temp = []
 
+		# Generate list [media_channel, index_substring] that has substring
+		for channel in self.main_media_channels:
+			sub_str_index = channel.name.lower().find(search_term.lower())
+			if sub_str_index >= 0: # substring search_term is in channel name
+				temp.append([channel,sub_str_index])
+		
+		# Sort the list by substring index
+		temp.sort(key=lambda x: x[1])
+
+		# Prune out the substring index
+		for channel_with_index in temp:
+			output.append(channel_with_index[0])
+
+		return output
+		
 	# get a list of media channels from csv file
 	# private
 	def parseChannelsFromFile(self, file_path):

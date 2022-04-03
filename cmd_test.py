@@ -1,7 +1,12 @@
+"""
+THIS FILE IS FOR TESTING PURPOSES ONLY
+
+"""
+
 
 #from src.video_player import MediaChannelPlaylistParser, MediaChannel, MediaChannelList
 from src.radio import RadioTracker
-from src.video_player import MediaChannelList
+from src.video_player import MediaChannelList, MediaChannel
 import csv
 
 # radioChannels = RadioTracker().radio_stations_list
@@ -21,3 +26,11 @@ import csv
 media_channel_list = MediaChannelList("assets/all_media_channel.csv")
 print(media_channel_list.getCurrentChannel())
 print(media_channel_list.getNextChannel())
+
+channel = MediaChannel("BBC - Sports", "BBC URL")
+print(channel.name.lower().find(''))
+
+search_media_channel = media_channel_list.getChannelsBySearch('spo')
+print("Searched media channels")
+for channel in search_media_channel:
+    print(channel)
