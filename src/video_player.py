@@ -158,6 +158,27 @@ class MediaChannelList:
 			return
 		else:
 			self.main_media_channels = self.parseChannelsFromFile(self.file_path)
+
+class FavoriteMediaChannelList(MediaChannelList):
+	
+	def addMediaChannel(self, in_channel : MediaChannel) -> None:
+		if in_channel in self.main_media_channels: 
+			pass
+		else:
+			self.main_media_channels.append(in_channel)
+	
+	def isMediaChannelInList(self, in_channel : MediaChannel) -> bool:
+		return in_channel in self.main_media_channels
+	
+	def deleteMediaChannel(self, in_channel : MediaChannel) -> None:
+		if in_channel in self.main_media_channels:
+			self.main_media_channels.remove(in_channel)
+		else:
+			pass
+
+
+	
+	
 		
 
 class VideoPlayer(QVideoWidget):
