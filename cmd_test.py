@@ -36,8 +36,9 @@ for channel in search_media_channel:
     print(channel)
 
 favorite_channel_list = FavoriteMediaChannelList("assets/all_media_channel.csv")
-print("Printing all favorite channel")
-for fav_channel in favorite_channel_list.main_media_channels:
-    print(fav_channel)
-
+# print("Printing all favorite channel")
+# for fav_channel in favorite_channel_list.main_media_channels:
+#     print(fav_channel)
+print(favorite_channel_list.getChannelsBySearch("sport"))
 print(favorite_channel_list.isMediaChannelInList(MediaChannel("SomaFM Groove Salad","http://ice6.somafm.com/groovesalad-128-aac")))
+print(favorite_channel_list.getChannelBySearchIndex("sport", 0))

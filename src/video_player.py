@@ -138,6 +138,13 @@ class MediaChannelList:
 			output.append(channel_with_index[0])
 
 		return output
+
+	def getChannelBySearchIndex(self, search_term, index):
+		searched_media_channels = self.getChannelsBySearch(search_term)
+		try:
+			return searched_media_channels[index]
+		except IndexError:
+			return None
 		
 	# get a list of media channels from csv file
 	# private
@@ -162,9 +169,7 @@ class MediaChannelList:
 class FavoriteMediaChannelList(MediaChannelList):
 	
 	def addMediaChannel(self, in_channel : MediaChannel) -> None:
-		if in_channel in self.main_media_channels: 
-			pass
-		else:
+		if not (in_channel in self.main_media_channels): 
 			self.main_media_channels.append(in_channel)
 	
 	def isMediaChannelInList(self, in_channel : MediaChannel) -> bool:
@@ -173,13 +178,7 @@ class FavoriteMediaChannelList(MediaChannelList):
 	def deleteMediaChannel(self, in_channel : MediaChannel) -> None:
 		if in_channel in self.main_media_channels:
 			self.main_media_channels.remove(in_channel)
-		else:
-			pass
 
-
-	
-	
-		
 
 class VideoPlayer(QVideoWidget):
 	def __init__(self):
