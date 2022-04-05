@@ -104,7 +104,7 @@ class VideoPlayer(QFrame):
             # Configuring the Video and Audio output
             self.audio_output = QAudioOutput()
             self.player.setVideoOutput(self.videoWidget)
-            self.player.setAudioOutput(self.videoWidget.audio_output)
+            self.player.setAudioOutput(self.audio_output)
 
         elif self.platform == "win32":            
             self.instance = vlc.Instance()
