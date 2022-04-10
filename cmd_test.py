@@ -6,7 +6,7 @@ THIS FILE IS FOR TESTING PURPOSES ONLY
 
 #from src.video_player import MediaChannelPlaylistParser, MediaChannel, MediaChannelList
 from src.radio import RadioTracker
-from src.video_player import MediaChannelShelf, MediaChannel, FavoriteMediaChannelShelf
+from src.video_player import MediaChannelShelf, HLSStation, FavoriteMediaChannelShelf
 import csv
 
 # radioChannels = RadioTracker().radio_stations_list
@@ -27,7 +27,7 @@ media_channel_list = MediaChannelShelf("assets/all_media_channel.csv")
 print(media_channel_list.getCurrentChannel())
 print(media_channel_list.getNextChannel())
 
-channel = MediaChannel("BBC - Sports", "BBC URL")
+channel = HLSStation("BBC - Sports", "BBC URL")
 print(channel.name.lower().find(''))
 
 search_media_channel = media_channel_list.getChannelsBySearch('spo')
@@ -40,5 +40,5 @@ favorite_channel_list = FavoriteMediaChannelShelf("assets/all_media_channel.csv"
 # for fav_channel in favorite_channel_list.main_media_channels:
 #     print(fav_channel)
 print(favorite_channel_list.getChannelsBySearch("sport"))
-print(favorite_channel_list.isMediaChannelInList(MediaChannel("SomaFM Groove Salad","http://ice6.somafm.com/groovesalad-128-aac")))
+print(favorite_channel_list.isMediaChannelInList(HLSStation("SomaFM Groove Salad","http://ice6.somafm.com/groovesalad-128-aac")))
 print(favorite_channel_list.getChannelBySearchIndex("sport", 0))

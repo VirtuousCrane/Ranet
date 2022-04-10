@@ -15,7 +15,7 @@ from PySide6.QtWidgets import QMainWindow, QFrame, QVBoxLayout, QPushButton, QAp
 import sys
 
 @dataclass
-class MediaChannel:
+class HLSStation:
 	"""
 	A MediaChannel represents an Http Live Stream (HLS) station.
 	The information contained within an MediaChannel object includes:
@@ -28,10 +28,10 @@ class MediaChannel:
 	name : str
 	url : str
 
-class MediaChannelPlaylistParser:
+class HLSPlaylistParser:
 	def __init__(self, path: str = None):
 		self.list_idx = 0
-		self.station_list: list[MediaChannel] = []
+		self.station_list: list[HLSStation] = []
 		
 		if path is not None:
 			self.load(path)
@@ -48,19 +48,19 @@ class MediaChannelPlaylistParser:
 			if "#EXTINF" in line:
 				name = line.split(",")[-1].strip()
 				url = f.readline().strip()
-				self.station_list.append(MediaChannel(name, url))
+				self.station_list.append(HLSStation(name, url))
 			line = f.readline()
 		f.close()
 	
-	def get_list(self) -> list[MediaChannel]:
+	def get_list(self) -> list[HLSStation]:
 		"""Returns a list containing MediaChannel objects"""
 		return self.station_list
 	
-	def get_current(self) -> MediaChannel:
+	def get_current(self) -> HLSStation:
 		"""Returns the current media channel"""
 		return self.station_list[self.list_idx]
 	
-	def get_next(self) -> MediaChannel:
+	def get_next(self) -> HLSStation:
 		"""Returns the next media channel in the list"""
 		self.list_idx += 1
 		if self.list_idx > len(self.station_list) - 1:
@@ -68,14 +68,13 @@ class MediaChannelPlaylistParser:
 		
 		return self.station_list[self.list_idx]
 	
-	def get_prev(self) -> MediaChannel:
+	def get_prev(self) -> HLSStation:
 		"""Returns the previous media channel in the list"""
 		self.list_idx -= 1
 		if self.list_idx < 0:
 			self.list_idx = 0
 		
 		return self.station_list[self.list_idx]
-
 
 class MediaChannelShelf:
 	# Initializes with a csv file containing media channels
@@ -154,7 +153,7 @@ class MediaChannelShelf:
 		with open(file_path,'r') as file:
 			csv_reader = csv.reader(file)
 			for line in csv_reader:
-				temp_channel = MediaChannel(line[0],line[1])
+				temp_channel = HLSStation(line[0],line[1])
 				output.append(temp_channel)
 
 		return output
@@ -168,14 +167,14 @@ class MediaChannelShelf:
 
 class FavoriteMediaChannelShelf(MediaChannelShelf):
 	
-	def addMediaChannel(self, in_channel : MediaChannel) -> None:
+	def addMediaChannel(self, in_channel : HLSStation) -> None:
 		if not (self.isMediaChannelInList(in_channel)): 
 			self.main_media_channels.append(in_channel)
 	
-	def isMediaChannelInList(self, in_channel : MediaChannel) -> bool:
+	def isMediaChannelInList(self, in_channel : HLSStation) -> bool:
 		return in_channel in self.main_media_channels
 	
-	def deleteMediaChannel(self, in_channel : MediaChannel) -> None:
+	def deleteMediaChannel(self, in_channel : HLSStation) -> None:
 		if (self.isMediaChannelInList(in_channel)):
 			self.main_media_channels.remove(in_channel)
 
@@ -198,9 +197,9 @@ class VideoPlayer(QVideoWidget):
 		self.player.setAudioOutput(self.audio_output)
 
 		# Declaring the current station variable
-		self.current_station : MediaChannel = None
+		self.current_station : HLSStation = None
 	
-	def set_media(self, source: MediaChannel) -> None:
+	def set_media(self, source: HLSStation) -> None:
 		"""
 		Sets the station of the Video Player
 		
@@ -302,7 +301,7 @@ class MainWindow(QMainWindow):
 		super().__init__()
 
 		# HOW TO LOAD .m3u FILES
-		self.playlist = MediaChannelPlaylistParser("./assets/iptv/th.m3u")
+		self.playlist = HLSPlaylistParser("./assets/iptv/th.m3u")
 		self.stream = self.playlist.get_current()
 
 		self.build_ui()
