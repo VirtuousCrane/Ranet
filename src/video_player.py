@@ -77,7 +77,7 @@ class MediaChannelPlaylistParser:
 		return self.station_list[self.list_idx]
 
 
-class MediaChannelList:
+class MediaChannelShelf:
 	# Initializes with a csv file containing media channels
 	def __init__(self, file_path):
 		self.main_media_channels = []
@@ -148,7 +148,7 @@ class MediaChannelList:
 		
 	# get a list of media channels from csv file
 	# private
-	def parseChannelsFromFile(self, file_path):
+	def parseChannelsFromFile(self, file_path : str) -> list:
 		output = []
 
 		with open(file_path,'r') as file:
@@ -160,23 +160,23 @@ class MediaChannelList:
 		return output
 	
 	# private
-	def setChannelsFromFile(self):
+	def setChannelsFromFile(self) -> None:
 		if self.file_path is None:
 			return
 		else:
 			self.main_media_channels = self.parseChannelsFromFile(self.file_path)
 
-class FavoriteMediaChannelList(MediaChannelList):
+class FavoriteMediaChannelShelf(MediaChannelShelf):
 	
 	def addMediaChannel(self, in_channel : MediaChannel) -> None:
-		if not (in_channel in self.main_media_channels): 
+		if not (self.isMediaChannelInList(in_channel)): 
 			self.main_media_channels.append(in_channel)
 	
 	def isMediaChannelInList(self, in_channel : MediaChannel) -> bool:
 		return in_channel in self.main_media_channels
 	
 	def deleteMediaChannel(self, in_channel : MediaChannel) -> None:
-		if in_channel in self.main_media_channels:
+		if (self.isMediaChannelInList(in_channel)):
 			self.main_media_channels.remove(in_channel)
 
 

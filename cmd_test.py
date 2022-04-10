@@ -6,7 +6,7 @@ THIS FILE IS FOR TESTING PURPOSES ONLY
 
 #from src.video_player import MediaChannelPlaylistParser, MediaChannel, MediaChannelList
 from src.radio import RadioTracker
-from src.video_player import MediaChannelList, MediaChannel, FavoriteMediaChannelList
+from src.video_player import MediaChannelShelf, MediaChannel, FavoriteMediaChannelShelf
 import csv
 
 # radioChannels = RadioTracker().radio_stations_list
@@ -23,7 +23,7 @@ import csv
 #             print(line)
 #             print("Cannot write to file")
 
-media_channel_list = MediaChannelList("assets/all_media_channel.csv")
+media_channel_list = MediaChannelShelf("assets/all_media_channel.csv")
 print(media_channel_list.getCurrentChannel())
 print(media_channel_list.getNextChannel())
 
@@ -35,7 +35,7 @@ print("Searched media channels")
 for channel in search_media_channel:
     print(channel)
 
-favorite_channel_list = FavoriteMediaChannelList("assets/all_media_channel.csv")
+favorite_channel_list = FavoriteMediaChannelShelf("assets/all_media_channel.csv")
 # print("Printing all favorite channel")
 # for fav_channel in favorite_channel_list.main_media_channels:
 #     print(fav_channel)
