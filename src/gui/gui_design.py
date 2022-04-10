@@ -297,15 +297,6 @@ class MainGuiWindow(QMainWindow):
 		self.radio_player = radio_player
 
 	def get_volume_slider_value(self):
-<<<<<<< HEAD
-		return self.create_channel_wave.create_control.get_volume_slider_value()
-
-	def set_play_button_icon_to_play(self):
-		self.create_channel_wave.create_control.set_play_button_icon_to_play()
-	
-	def set_play_button_icon_to_pause(self):
-		self.create_channel_wave.create_control.set_play_button_icon_to_pause()
-=======
 		return self.create_control.get_volume_slider_value()
 
 	def set_play_button_icon_to_play(self):
@@ -313,7 +304,6 @@ class MainGuiWindow(QMainWindow):
 	
 	def set_play_button_icon_to_pause(self):
 		self.create_control.set_play_button_icon_to_pause()
->>>>>>> d2001e6ad656eefecced029f1180c7709fe54e32
 
 class ControlClickHandler(object):
 	_instance = None
