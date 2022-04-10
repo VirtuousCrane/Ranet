@@ -76,6 +76,107 @@ class HLSPlaylistParser:
         
         return self.station_list[self.list_idx]
 
+class MediaChannelShelf:
+	# Initializes with a csv file containing media channels
+	def __init__(self, file_path):
+		self.main_media_channels = []
+		self.main_current_index = 0
+
+		self.file_path = file_path
+		self.setChannelsFromFile()
+
+	def getNextChannel(self):
+		# Empty list
+		if len(self.main_media_channels) <= 0:
+			return None
+		
+		# Increment index and loopback if reach end of list
+		self.main_current_index += 1
+		self.main_current_index %= len(self.main_media_channels)
+		return self.main_media_channels[self.main_current_index]
+		
+	def getPreviousChannel(self):
+		# Empty list
+		if len(self.main_media_channels) <= 0:
+			return None
+
+		# Decrement index and loopback if reach start of list
+		self.main_current_index -= 1
+		self.main_current_index %= len(self.main_media_channels)
+		return self.main_media_channels[self.main_current_index]
+
+	def getCurrentChannel(self):
+		# Empty list
+		if len(self.main_media_channels) <= 0:
+			return None
+		
+		return self.main_media_channels[self.main_current_index]
+
+	def getChannelByIndex(self, inIndex):
+		try:
+			return self.main_media_channels[inIndex]
+		except IndexError:
+			print("Error at getChannelByIndex, by IndexError")
+	
+	# Return channels with substring of search_term ordered by substring index position
+	def getChannelsBySearch(self, search_term):
+		output = []
+		temp = []
+
+		# Generate list [media_channel, index_substring] that has substring
+		for channel in self.main_media_channels:
+			sub_str_index = channel.name.lower().find(search_term.lower())
+			if sub_str_index >= 0: # substring search_term is in channel name
+				temp.append([channel,sub_str_index])
+		
+		# Sort the list by substring index
+		temp.sort(key=lambda x: x[1])
+
+		# Prune out the substring index
+		for channel_with_index in temp:
+			output.append(channel_with_index[0])
+
+		return output
+
+	def getChannelBySearchIndex(self, search_term, index):
+		searched_media_channels = self.getChannelsBySearch(search_term)
+		try:
+			return searched_media_channels[index]
+		except IndexError:
+			return None
+		
+	# get a list of media channels from csv file
+	# private
+	def parseChannelsFromFile(self, file_path : str) -> list:
+		output = []
+
+		with open(file_path,'r') as file:
+			csv_reader = csv.reader(file)
+			for line in csv_reader:
+				temp_channel = HLSStation(line[0],line[1])
+				output.append(temp_channel)
+
+		return output
+	
+	# private
+	def setChannelsFromFile(self) -> None:
+		if self.file_path is None:
+			return
+		else:
+			self.main_media_channels = self.parseChannelsFromFile(self.file_path)
+
+class FavoriteMediaChannelShelf(MediaChannelShelf):
+	
+	def addMediaChannel(self, in_channel : HLSStation) -> None:
+		if not (self.isMediaChannelInList(in_channel)): 
+			self.main_media_channels.append(in_channel)
+	
+	def isMediaChannelInList(self, in_channel : HLSStation) -> bool:
+		return in_channel in self.main_media_channels
+	
+	def deleteMediaChannel(self, in_channel : HLSStation) -> None:
+		if (self.isMediaChannelInList(in_channel)):
+			self.main_media_channels.remove(in_channel)
 
 class VideoPlayer(QFrame):
     def __init__(self): 
