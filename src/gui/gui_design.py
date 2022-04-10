@@ -3,7 +3,7 @@ from typing import *
 from PySide6.QtWidgets import *
 from PySide6.QtGui import *
 from PySide6.QtCore import *
-from radio_channel_list_gui import RadioChannelListGuiWindow
+from src.gui.radio_channel_list_gui import RadioChannelListGuiWindow
 
 class CreateMenuBar(QMainWindow):
 	def __init__(self):
@@ -296,13 +296,14 @@ class MainGuiWindow(QMainWindow):
 	def set_radio_player(self, radio_player):
 		self.radio_player = radio_player
 
-	def get_volume_slider_value(self):return self.create_control.get_volume_slider_value()
+	def get_volume_slider_value(self):
+		return self.create_channel_wave.create_control.get_volume_slider_value()
 
 	def set_play_button_icon_to_play(self):
-		self.create_control.set_play_button_icon_to_play()
+		self.create_channel_wave.create_control.set_play_button_icon_to_play()
 	
 	def set_play_button_icon_to_pause(self):
-		self.create_control.set_play_button_icon_to_pause()
+		self.create_channel_wave.create_control.set_play_button_icon_to_pause()
 
 class ControlClickHandler(object):
 	_instance = None
