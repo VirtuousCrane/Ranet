@@ -11,6 +11,7 @@ class MainWindow(QMainWindow):
         # HOW TO LOAD .m3u FILES
         self.shelf = MediaChannelShelf("assets/all_tv_channel.csv")
         self.stream = self.shelf
+        self.player 
         print(self.stream)
 
         self.build_ui()
@@ -43,7 +44,13 @@ class MainWindow(QMainWindow):
         self.widget_layout.addWidget(self.video_frame)
         self.show()
         
-    def play()
+class MyRanet:
+    def __init__(self):
+        self.video_player = VideoPlayer()
+        self.media_shelf = MediaChannelShelf("assets/all_tv_channel.csv")
+        self.gui = 
+
+    def
     
 
 if __name__ == "__main__":
