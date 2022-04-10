@@ -3,6 +3,7 @@ import errno
 import vlc
 import sys
 import os
+import csv
 
 from PySide6.QtMultimedia import QMediaPlayer, QAudioOutput
 from PySide6.QtMultimediaWidgets import QVideoWidget
