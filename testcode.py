@@ -1,30 +1,55 @@
-from src.video_player import MediaChannelShelf, FavoriteMediaChannelShelf, HLSPlaylistParser
-import csv
+from msilib.schema import Media
+from src.video_player import MediaChannelShelf, FavoriteMediaChannelShelf, HLSPlaylistParser, VideoPlayer, MediaChannelShelf
+from PySide6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QFrame, QLabel, QApplication
+import sys
 
-shelf = MediaChannelShelf("assets/all_radio_channel.csv")
-for channel in shelf.getChannelsBySearch("sport"):
-    print(channel)
+# DELETE ME. FOR REFERENCE ONLY.
+class MainWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
 
-fav_shelf = FavoriteMediaChannelShelf("assets/all_radio_channel.csv")
-print(fav_shelf.isMediaChannelInList(shelf.getChannelByIndex(1)))
+        # HOW TO LOAD .m3u FILES
+        self.shelf = MediaChannelShelf("assets/all_tv_channel.csv")
+        self.stream = self.shelf
+        print(self.stream)
 
-tv_playlist_parser = HLSPlaylistParser("assets/iptv/th.m3u")
-tv_channels = tv_playlist_parser.get_list()
-# correct_url_channel = []
-# for channel in tv_channels:
-#     correct_url_channel.append(channel)
-#     if channel.name == "TRT World (720p) [Not 24/7]":
-#         break
-
-channels_with_correct_url = []
-with open("assets/all_tv_channel.csv","w",newline="") as csv_file:
-    csv_writer = csv.writer(csv_file)
-    for channel in tv_channels:
-        if not "#EXTVLCOPT" in channel.url:
-            channels_with_correct_url.append(channel)
-            print(channel)
-            csv_writer.writerow([channel.name,channel.url])
-
-
-
+        self.build_ui()
     
+    def build_ui(self):
+        # Setting the UI window size
+        self.resize(1920, 1120)
+        self.widget = QWidget(self)
+        self.widget_layout = QVBoxLayout(self)
+
+        self.setCentralWidget(self.widget)
+        self.widget.setLayout(self.widget_layout)
+
+        # Setting the video frame (screen) size
+        self.video_frame = QFrame(self)
+        self.video_frame.resize(1920, 1080)
+        
+        self.video_frame_vbox = QVBoxLayout(self)
+        self.video_frame.setLayout(self.video_frame_vbox)
+
+        # WORSHIP ME. I MADE THIS BIT CROSS-PLATFORM WITH 2 BACKENDS.
+        self.player = VideoPlayer()
+        self.video_frame_vbox.addWidget(self.player)
+
+        # The Channel Label
+        self.channel_lbl = QLabel("")
+        self.channel_lbl.setFixedHeight(10)
+
+        # Packing
+        self.widget_layout.addWidget(self.video_frame)
+        self.show()
+        
+    def play()
+    
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+
+    win = MainWindow()
+
+
+    sys.exit(app.exec_())
