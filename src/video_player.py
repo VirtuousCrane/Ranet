@@ -1,6 +1,8 @@
 from contextlib import nullcontext
 import PySide6
 import errno
+import vlc
+import sys
 import os
 
 from PySide6.QtMultimedia import QMediaPlayer, QAudioOutput
@@ -11,7 +13,7 @@ from typing import *
 import csv
 
 # For testing purposes
-from PySide6.QtWidgets import QMainWindow, QFrame, QVBoxLayout, QPushButton, QApplication, QLabel
+from PySide6.QtWidgets import QMainWindow, QFrame, QVBoxLayout, QPushButton, QApplication, QLabel, QWidget
 import sys
 
 @dataclass
@@ -179,49 +181,69 @@ class FavoriteMediaChannelShelf(MediaChannelShelf):
 			self.main_media_channels.remove(in_channel)
 
 
-class VideoPlayer(QVideoWidget):
-	def __init__(self):
-		super(VideoPlayer, self).__init__()
+class VideoPlayer(QFrame):
+    def __init__(self): 
+        super(VideoPlayer, self).__init__()
+        
+        # Declaring Instance Variables
+        self.platform = sys.platform
+        self.is_playing = False
+        self.is_fullscreen = False
+        self.volume = 1.0
 
-		# Declaring Instance Variables
-		self.is_playing = False
-		self.is_fullscreen = False
-		self.volume = 1.0
-		
-		# Creating the Media Player
-		self.player = QMediaPlayer()
-		
-		# Configuring the Video and Audio output
-		self.audio_output = QAudioOutput()
-		self.player.setVideoOutput(self)
-		self.player.setAudioOutput(self.audio_output)
+        print(self.platform)
+        
+        # Declaring the current station variable
+        self.current_station : HLSStation = None       
+        
+        # Creating the Media Player according to the platform
+        if self.platform.startswith('linux'):
+            layout = QVBoxLayout(self)
+            self.setLayout(layout)
+            
+            self.videoWidget = QVideoWidget()
+            self.player = QMediaPlayer()
+            layout.addWidget(self.videoWidget)
+        
+            # Configuring the Video and Audio output
+            self.audio_output = QAudioOutput()
+            self.player.setVideoOutput(self.videoWidget)
+            self.player.setAudioOutput(self.audio_output)
 
-		# Declaring the current station variable
-		self.current_station : HLSStation = None
-	
-	def set_media(self, source: HLSStation) -> None:
-		"""
-		Sets the station of the Video Player
-		
-		PARAMETERS
-		----------
-		source : HLSStation
-			An HLSStation object which represents the station
-		"""
-		self.player.setSource(QUrl(source.url))
-		self.current_station = source
-	
-	def play(self) -> bool:
-		"""Plays the Http Live Stream (HLS)"""
-		if self.current_station is None:
-			print("No Media Selected!")
-			return False
-		
-		if self.is_playing:
-			return True
-		
-		self.player.play()
-		self.is_playing = True
+        elif self.platform == "win32":            
+            self.instance = vlc.Instance()
+            self.player = self.instance.media_player_new()
+
+            self.player.set_hwnd(self.winId())
+
+    def set_media(self, source: HLSStation) -> None:
+        """
+        Sets the station of the Video Player
+        
+        PARAMETERS
+        ----------
+        source : HLSStation
+            An HLSStation object which represents the station
+        """
+        if self.platform.startswith("linux"):
+            self.player.setSource(QUrl(source.url))
+        elif self.platform == "win32":
+            self.media = self.instance.media_new(source.url)
+            self.player.set_media(self.media)
+        
+        self.current_station = source
+    
+    def play(self) -> bool:
+        """Plays the Http Live Stream (HLS)"""
+        if self.current_station is None:
+            print("No Media Selected!")
+            return False
+        
+        if self.is_playing:
+            return True
+        
+        self.player.play()
+        self.is_playing = True
 
 		return self.is_playing
 
@@ -243,80 +265,108 @@ class VideoPlayer(QVideoWidget):
 		self.player.stop()
 		self.is_playing = False
 
-		return self.is_playing
-	
-	def toggle(self) -> bool:
-		"""Toggles the player"""
-		if self.is_playing:
-			return self.pause()
-		return self.play()
-	
-	def set_volume(self, volume : float) -> None:
-		"""
-		Sets the volume of the stream
+        return self.is_playing
 
-		PARAMETERS
-		----------
-		volume : float
-			The target volume. The value must be between 0.0 and 1.0
-		"""
-		self.volume = volume
-		self.audio_output.setVolume(self.volume)
-	
-	def increment_volume(self):
-		"""Increments the volume by 0.1"""
-		vol = self.volume + 0.1
-		if vol >= 1.0:
-			self.volume = 1.0
-		
-		self.set_volume(self.volume)
-	
-	def decrement_volume(self):
-		"""Decrements the volume by 0.1"""
-		print("DEC")
-		vol = self.volume - 0.1
-		if vol <= 0.0:
-			self.volume = 0.0
-		
-		self.set_volume(self.volume)
-	
-	def set_fullscreen(self):
-		"""Sets the video to fullscreen"""
-		if self.is_fullscreen:
-			return self.is_fullscreen
-		
-		self.setFullScreen(True)
-		self.is_fullscreen = True
-	
-	def keyPressEvent(self, event: PySide6.QtGui.QKeyEvent) -> None:
-		"""ESC -> Escapes from fullscreen"""
-		key = event.key()
-		if key == Qt.Key_Escape and self.is_fullscreen:
-			self.setFullScreen(False)
-			self.is_fullscreen = False
+    def toggle(self) -> bool:
+        """Toggles the player"""
+        print(self.is_playing)
+        if self.is_playing:
+            return self.stop()
+        return self.play()
+    
+    def set_volume(self, volume : float) -> None:
+        """
+        Sets the volume of the stream
+
+        PARAMETERS
+        ----------
+        volume : float
+            The target volume. The value must be between 0.0 and 1.0
+        """
+        self.volume = volume
+        if self.platform.startswith("linux"):
+            self.audio_output.setVolume(self.volume)
+        elif self.platform == "win32":
+            self.player.audio_set_volume(int(self.volume * 100))
+        print(f"Current Volume: {int(self.volume * 100)}")
+    
+    def increment_volume(self):
+        """Increments the volume by 0.1"""
+        vol = self.volume + 0.1
+        self.volume = vol
+        if vol >= 1.0:
+            self.volume = 1.0
+        
+        self.set_volume(self.volume)
+    
+    def decrement_volume(self):
+        """Decrements the volume by 0.1"""
+        vol = self.volume - 0.1
+        self.volume = vol
+        if vol <= 0.0:
+            self.volume = 0.0
+        
+        self.set_volume(self.volume)
+    
+    def set_fullscreen(self):
+        """Sets the video to fullscreen"""
+        if self.is_fullscreen:
+            return self.is_fullscreen
+        
+        if self.platform.startswith("linux"):
+            self.setFullScreen(True)
+        elif self.platform == "win32":
+            # TODO: FULLSCREEN in windows doesn't work yet
+            self.player.toggle_fullscreen()
+        
+        self.is_fullscreen = True
+    
+    def keyPressEvent(self, event: PySide6.QtGui.QKeyEvent) -> None:
+        """ESC -> Escapes from fullscreen"""
+        key = event.key()
+        if key == Qt.Key_Escape and self.is_fullscreen:
+            if self.platform.startswith("linux"):
+                self.setFullScreen(False)
+            elif self.platform == "win32":
+                self.player.toggle_fullscreen()
+            
+            self.is_fullscreen = False
 
 # DELETE ME. FOR REFERENCE ONLY.
 class MainWindow(QMainWindow):
 	def __init__(self):
 		super().__init__()
 
-		# HOW TO LOAD .m3u FILES
-		self.playlist = HLSPlaylistParser("./assets/iptv/th.m3u")
-		self.stream = self.playlist.get_current()
+        # HOW TO LOAD .m3u FILES
+        self.playlist = HLSPlaylistParser("./assets/iptv/th.m3u")
+        self.stream = self.playlist.get_current()
+        print(self.stream)
 
-		self.build_ui()
-	
-	def build_ui(self):
-		self.setFixedSize(500, 520)
+        self.build_ui()
+    
+    def build_ui(self):
+        # Setting the UI window size
+        self.resize(1920, 1120)
+        self.widget = QWidget(self)
+        self.widget_layout = QVBoxLayout(self)
 
-		self.video_frame = QFrame(self)
-		self.video_frame.setFixedSize(500, 510)
-		self.video_layout = QVBoxLayout(self.video_frame)
+        self.setCentralWidget(self.widget)
+        self.widget.setLayout(self.widget_layout)
 
-		self.player = VideoPlayer()
+        # Setting the video frame (screen) size
+        self.video_frame = QFrame(self)
+        self.video_frame.resize(1920, 1080)
+        
+        self.video_frame_vbox = QVBoxLayout(self)
+        self.video_frame.setLayout(self.video_frame_vbox)
 
-		self.play_btn = QPushButton("Play")
-		self.play_btn.clicked.connect(self.play)
+        # WORSHIP ME. I MADE THIS BIT CROSS-PLATFORM WITH 2 BACKENDS.
+        self.player = VideoPlayer()
+        self.video_frame_vbox.addWidget(self.player)
+
+        # Buttons
+        self.play_btn = QPushButton("Toggle Play")
+        self.play_btn.clicked.connect(self.toggle)
 
 		self.next_channel_btn = QPushButton("Next Channel")
 		self.next_channel_btn.clicked.connect(self.next_channel)
@@ -324,29 +374,43 @@ class MainWindow(QMainWindow):
 		self.fullscreen_btn = QPushButton("Fullscreen")
 		self.fullscreen_btn.clicked.connect(self.player.set_fullscreen)
 
-		self.channel_lbl = QLabel("")
-		self.channel_lbl.setFixedHeight(10)
+        self.increment_volume_btn = QPushButton("Increment Volume")
+        self.increment_volume_btn.clicked.connect(self.player.increment_volume)
 
-		self.video_layout.addWidget(self.player)
-		self.video_layout.addWidget(self.play_btn)
-		self.video_layout.addWidget(self.next_channel_btn)
-		self.video_layout.addWidget(self.fullscreen_btn)
-		self.video_layout.addWidget(self.channel_lbl)
+        self.decrement_volume_btn = QPushButton("Decrement Volume")
+        self.decrement_volume_btn.clicked.connect(self.player.decrement_volume)
 
-		self.show()
-	
-	def play(self):
-		self.player.pause()
-		self.player.set_media(self.stream)
-		self.channel_lbl.setText(self.stream.name)
-		self.player.play()
-	
-	def next_channel(self):
-		self.stream = self.playlist.get_next()
-		self.play()
+        # The Channel Label
+        self.channel_lbl = QLabel("")
+        self.channel_lbl.setFixedHeight(10)
+
+        # Packing
+        self.widget_layout.addWidget(self.video_frame)
+        self.widget_layout.addWidget(self.play_btn)
+        self.widget_layout.addWidget(self.next_channel_btn)
+        self.widget_layout.addWidget(self.fullscreen_btn)
+        self.widget_layout.addWidget(self.increment_volume_btn)
+        self.widget_layout.addWidget(self.decrement_volume_btn)
+        self.widget_layout.addWidget(self.channel_lbl)
+
+        self.play()
+        self.show()
+    
+    def play(self):
+        self.player.pause()
+        self.player.set_media(self.stream)
+        self.channel_lbl.setText(self.stream.name)
+        self.player.play()
+
+    def toggle(self):
+        self.player.toggle()
+    
+    def next_channel(self):
+        self.stream = self.playlist.get_next()
+        self.play()
 
 if __name__ == "__main__":
 	app = QApplication(sys.argv)
 
-	win = MainWindow()
-	sys.exit(app.exec_())
+    win = MainWindow()
+    sys.exit(app.exec_())
