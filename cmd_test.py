@@ -1,44 +1,44 @@
 """
 THIS FILE IS FOR TESTING PURPOSES ONLY
-
 """
+from src.video_player import MediaChannelShelf, FavoriteMediaChannelShelf, HLSPlaylistParser, VideoPlayer, MediaChannelShelf
+from PySide6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QFrame, QLabel, QApplication
+import sys
 
+# DELETE ME. FOR REFERENCE ONLY.
+class MainWindow(QWidget):
+    def __init__(self, video_player):
+        super().__init__()
 
-#from src.video_player import MediaChannelPlaylistParser, MediaChannel, MediaChannelList
-from src.radio import RadioTracker
-from src.video_player import MediaChannelShelf, HLSStation, FavoriteMediaChannelShelf
-import csv
+        self.player = video_player # This is also a QFrame
+        self.vbox = QVBoxLayout(self)
 
-# radioChannels = RadioTracker().radio_stations_list
+        
+        self.vbox.addWidget(self.player)
 
-# with open('assets/all_media_channel.csv', mode='w', newline="") as csv_file:
-#     myfieldnames = ['name','url']
-#     csv_writer = csv.writer(csv_file, delimiter=',')
+        self.setLayout(self.vbox)
+        self.show()
+        
+class MyRanet:
+    def __init__(self):
+        self.app = QApplication()
+        self.video_player = VideoPlayer()
+        self.media_shelf = MediaChannelShelf("assets/all_tv_channel.csv")
+        self.gui = MainWindow(self.video_player)
 
-#     for channel in radioChannels:
-#         try:
-#             line = [channel.name, channel.url]
-#             csv_writer.writerow(line)
-#         except:
-#             print(line)
-#             print("Cannot write to file")
+        # Setting a channel
+        self.video_player.set_media(self.media_shelf.get_current_channel())
+        print(self.media_shelf.get_current_channel())
 
-media_channel_list = MediaChannelShelf("assets/all_media_channel.csv")
-print(media_channel_list.getCurrentChannel())
-print(media_channel_list.getNextChannel())
+    def start(self):
+        self.gui.show()
+        self.app.exec()
 
-channel = HLSStation("BBC - Sports", "BBC URL")
-print(channel.name.lower().find(''))
+    def play(self):
+        self.video_player.play()
+        
 
-search_media_channel = media_channel_list.getChannelsBySearch('spo')
-print("Searched media channels")
-for channel in search_media_channel:
-    print(channel)
+if __name__ == "__main__":
+    my_ranet = MyRanet()
+    my_ranet.start()
 
-favorite_channel_list = FavoriteMediaChannelShelf("assets/all_media_channel.csv")
-# print("Printing all favorite channel")
-# for fav_channel in favorite_channel_list.main_media_channels:
-#     print(fav_channel)
-print(favorite_channel_list.getChannelsBySearch("sport"))
-print(favorite_channel_list.isMediaChannelInList(HLSStation("SomaFM Groove Salad","http://ice6.somafm.com/groovesalad-128-aac")))
-print(favorite_channel_list.getChannelBySearchIndex("sport", 0))
