@@ -87,9 +87,9 @@ class MediaChannelShelf:
 		self.main_current_index = 0
 
 		self.file_path = file_path
-		self.setChannelsFromFile()
+		self.set_channels_from_file()
 
-	def getNextChannel(self):
+	def get_next_channel(self):
 		# Empty list
 		if len(self.main_media_channels) <= 0:
 			return None
@@ -99,7 +99,7 @@ class MediaChannelShelf:
 		self.main_current_index %= len(self.main_media_channels)
 		return self.main_media_channels[self.main_current_index]
 		
-	def getPreviousChannel(self):
+	def get_previous_channel(self):
 		# Empty list
 		if len(self.main_media_channels) <= 0:
 			return None
@@ -109,21 +109,21 @@ class MediaChannelShelf:
 		self.main_current_index %= len(self.main_media_channels)
 		return self.main_media_channels[self.main_current_index]
 
-	def getCurrentChannel(self):
+	def get_current_channel(self):
 		# Empty list
 		if len(self.main_media_channels) <= 0:
 			return None
 		
 		return self.main_media_channels[self.main_current_index]
 
-	def getChannelByIndex(self, inIndex):
+	def get_channel_by_index(self, inIndex):
 		try:
 			return self.main_media_channels[inIndex]
 		except IndexError:
 			print("Error at getChannelByIndex, by IndexError")
 	
 	# Return channels with substring of search_term ordered by substring index position
-	def getChannelsBySearch(self, search_term):
+	def get_channels_by_search(self, search_term):
 		output = []
 		temp = []
 
@@ -142,8 +142,8 @@ class MediaChannelShelf:
 
 		return output
 
-	def getChannelBySearchIndex(self, search_term, index):
-		searched_media_channels = self.getChannelsBySearch(search_term)
+	def get_channel_by_search_index(self, search_term, index):
+		searched_media_channels = self.get_channels_by_search(search_term)
 		try:
 			return searched_media_channels[index]
 		except IndexError:
@@ -151,7 +151,7 @@ class MediaChannelShelf:
 		
 	# get a list of media channels from csv file
 	# private
-	def parseChannelsFromFile(self, file_path : str) -> list:
+	def parse_channels_from_file(self, file_path : str) -> list:
 		output = []
 
 		with open(file_path,'r') as file:
@@ -163,23 +163,23 @@ class MediaChannelShelf:
 		return output
 	
 	# private
-	def setChannelsFromFile(self) -> None:
+	def set_channels_from_file(self) -> None:
 		if self.file_path is None:
 			return
 		else:
-			self.main_media_channels = self.parseChannelsFromFile(self.file_path)
+			self.main_media_channels = self.parse_channels_from_file(self.file_path)
 
 class FavoriteMediaChannelShelf(MediaChannelShelf):
 	
-	def addMediaChannel(self, in_channel : HLSStation) -> None:
-		if not (self.isMediaChannelInList(in_channel)): 
+	def add_media_channel(self, in_channel : HLSStation) -> None:
+		if not (self.is_media_channel_in_list(in_channel)): 
 			self.main_media_channels.append(in_channel)
 	
-	def isMediaChannelInList(self, in_channel : HLSStation) -> bool:
+	def is_media_channel_in_list(self, in_channel : HLSStation) -> bool:
 		return in_channel in self.main_media_channels
 	
-	def deleteMediaChannel(self, in_channel : HLSStation) -> None:
-		if (self.isMediaChannelInList(in_channel)):
+	def delete_media_channel(self, in_channel : HLSStation) -> None:
+		if (self.is_media_channel_in_list(in_channel)):
 			self.main_media_channels.remove(in_channel)
 
 class VideoPlayer(QFrame):
