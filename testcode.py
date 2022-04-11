@@ -4,59 +4,40 @@ from PySide6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QFrame, QLabel,
 import sys
 
 # DELETE ME. FOR REFERENCE ONLY.
-class MainWindow(QMainWindow):
-    def __init__(self):
+class MainWindow(QWidget):
+    def __init__(self, video_player):
         super().__init__()
 
-        # HOW TO LOAD .m3u FILES
-        self.shelf = MediaChannelShelf("assets/all_tv_channel.csv")
-        self.stream = self.shelf
-        self.player 
-        print(self.stream)
+        self.player = video_player # This is also a QFrame
+        self.vbox = QVBoxLayout(self)
 
-        self.build_ui()
-    
-    def build_ui(self):
-        # Setting the UI window size
-        self.resize(1920, 1120)
-        self.widget = QWidget(self)
-        self.widget_layout = QVBoxLayout(self)
-
-        self.setCentralWidget(self.widget)
-        self.widget.setLayout(self.widget_layout)
-
-        # Setting the video frame (screen) size
-        self.video_frame = QFrame(self)
-        self.video_frame.resize(1920, 1080)
         
-        self.video_frame_vbox = QVBoxLayout(self)
-        self.video_frame.setLayout(self.video_frame_vbox)
+        self.vbox.addWidget(self.player)
 
-        # WORSHIP ME. I MADE THIS BIT CROSS-PLATFORM WITH 2 BACKENDS.
-        self.player = VideoPlayer()
-        self.video_frame_vbox.addWidget(self.player)
-
-        # The Channel Label
-        self.channel_lbl = QLabel("")
-        self.channel_lbl.setFixedHeight(10)
-
-        # Packing
-        self.widget_layout.addWidget(self.video_frame)
+        self.setLayout(self.vbox)
         self.show()
         
 class MyRanet:
     def __init__(self):
+        self.app = QApplication()
         self.video_player = VideoPlayer()
         self.media_shelf = MediaChannelShelf("assets/all_tv_channel.csv")
-        self.gui = 
+        self.gui = MainWindow(self.video_player)
 
-    def
-    
+        # Setting a channel
+        self.video_player.set_media(self.media_shelf.get_current_channel())
+        print(self.media_shelf.get_current_channel())
+
+    def start(self):
+        self.gui.show()
+        self.app.exec()
+
+    def play(self):
+        self.video_player.play()
+        
 
 if __name__ == "__main__":
-    app = QApplication(sys.argv)
+    my_ranet = MyRanet()
+    my_ranet.start()
 
-    win = MainWindow()
 
-
-    sys.exit(app.exec_())
