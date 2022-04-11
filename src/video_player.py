@@ -235,8 +235,7 @@ class MainWindow(QMainWindow):
 
         # HOW TO LOAD .m3u FILES
         self.playlist = HLSPlaylistParser("./assets/iptv/th.m3u")
-        self.stream = self.playlist.get_current()
-        print(self.stream)
+        self.stream = HLSStation("TPBS", "https://thaipbs-live.cdn.byteark.com/live/playlist_1080p/index.m3u8")
 
         self.build_ui()
     
