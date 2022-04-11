@@ -73,3 +73,24 @@ def connection_ping(url: str) -> ConnectionStatus:
 	if result == 0:
 		return ConnectionStatus.OK
 	return ConnectionStatus.ERR
+
+def connection_check_hls(url: str) -> ConnectionStatus:
+	"""
+	Checks if an HTTP Live Stream (HLS) can be accessed by
+	sending a HEAD request to the url of the master playlist.
+
+	Parameters
+	----------
+	url : str
+		The url to the Http Live Stream
+
+	Returns
+	-------
+	ConnectionStatus
+		OK if a response is received, otherwise ERR.
+	"""
+	res = requests.head(url)
+
+	if res.status_code != 200:
+		return ConnectionStatus.ERR
+	return ConnectionStatus.OK
