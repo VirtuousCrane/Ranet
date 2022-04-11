@@ -328,7 +328,7 @@ class MainWindow(QMainWindow):
 	def next_channel(self):
 		self.stream = self.playlist.get_next()
 		self.play()
-
+    
 if __name__ == "__main__":
 	app = QApplication(sys.argv)
 

@@ -78,7 +78,8 @@ class CreateChannelWave(QWidget):
 	def __init__(self):
 		QWidget.__init__(self, None)
 		self.channel_wave_layout = QVBoxLayout()
-		self.channel_wave_layout.setStretchFactor(self.channel_wave_layout,1)
+		# self.channel_wave_layout.setStretchFactor(self.channel_wave_layout,1)
+		self.channel_wave_layout.addStretch(1)
 
 		# Wave Image Container
 		self.wave_container = QLabel()
@@ -251,7 +252,7 @@ class MainGuiWindow(QMainWindow):
 		self.setWindowTitle("Ranet")
 		self.default_height = 620
 		self.default_width = 720
-		self.setFixedSize(self.default_width, self.default_height)
+		self.setMinimumSize(self.default_width, self.default_height)
 
 		self.create_menu_bar = CreateMenuBar()
 		self.setMenuBar(self.create_menu_bar.menu_bar)
