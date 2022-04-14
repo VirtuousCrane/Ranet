@@ -12,7 +12,7 @@ from dataclasses import dataclass
 from typing import *
 import csv
 
-from connection import connection_check_hls, ConnectionStatus
+from src.connection import connection_check_hls, ConnectionStatus
 
 # For testing purposes
 from PySide6.QtWidgets import QMainWindow, QFrame, QVBoxLayout, QPushButton, QApplication, QLabel, QWidget
@@ -169,11 +169,16 @@ class MediaChannelShelf:
 		else:
 			self.main_media_channels = self.parse_channels_from_file(self.file_path)
 
+	# private
+	def get_media_channels_list(self) -> list:
+		return self.main_media_channels
+
 class FavoriteMediaChannelShelf(MediaChannelShelf):
 	
 	def add_media_channel(self, in_channel : HLSStation) -> None:
 		if not (self.is_media_channel_in_list(in_channel)): 
 			self.main_media_channels.append(in_channel)
+		self.save_media_channels_to_file()
 	
 	def is_media_channel_in_list(self, in_channel : HLSStation) -> bool:
 		return in_channel in self.main_media_channels
@@ -181,6 +186,14 @@ class FavoriteMediaChannelShelf(MediaChannelShelf):
 	def delete_media_channel(self, in_channel : HLSStation) -> None:
 		if (self.is_media_channel_in_list(in_channel)):
 			self.main_media_channels.remove(in_channel)
+		self.save_media_channels_to_file()
+
+	#private
+	def save_media_channels_to_file(self) -> None:
+		with open(self.file_path, 'w', newline='') as file:
+			csv_writer = csv.writer(file)
+			for media_channel in self.main_media_channels:
+				csv_writer.writerow([media_channel.name, media_channel.url])
 
 class VideoPlayer(QFrame):
 	def __init__(self): 
