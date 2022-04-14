@@ -239,6 +239,7 @@ class VideoPlayer(QFrame):
 		source : HLSStation
 			An HLSStation object which represents the station
 		"""
+		self.stop()
 		self.current_station = source
 		print(self.check_media_availability())
 
@@ -252,6 +253,7 @@ class VideoPlayer(QFrame):
 		elif self.platform == "win32":
 			self.media = self.instance.media_new(source.url)
 			self.player.set_media(self.media)
+		self.play()
 	
 	def play(self) -> bool:
 		"""Plays the Http Live Stream (HLS)"""
