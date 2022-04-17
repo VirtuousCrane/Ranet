@@ -5,7 +5,8 @@ from src.video_player import (MediaChannelShelf, FavoriteMediaChannelShelf,
 								 HLSPlaylistParser, VideoPlayer,
 								MediaChannelShelf)
 
-from PySide6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QFrame, QLabel, QApplication, QPushButton, QListWidget, QListWidgetItem, QLineEdit
+from PySide6.QtWidgets import (QMainWindow, QWidget, QVBoxLayout, QFrame, QLabel, QApplication, 
+QPushButton, QListWidget, QListWidgetItem, QLineEdit, QComboBox)
 import sys
 
 # DELETE ME. FOR REFERENCE ONLY.
@@ -23,10 +24,11 @@ class MainWindow(QWidget):
 		self.favorite_toggle_button = QPushButton("Favorite toggle")
 		self.entry_bar = QLineEdit("")
 		self.channel_list = QListWidget()
+		self.favorite_combo_box = QComboBox()
 
 		# Resizing the window
 		self.player.resize(1000,1000)
-		self.player.setMinimumSize(500,500)
+		self.player.setMinimumSize(400,400)
 
 		# Resizing the label
 		self.channel_name_label.setFixedHeight(15)
@@ -41,6 +43,7 @@ class MainWindow(QWidget):
 		self.vbox.addWidget(self.favorite_toggle_button)
 		self.vbox.addWidget(self.entry_bar)
 		self.vbox.addWidget(self.channel_list)
+		self.vbox.addWidget(self.favorite_combo_box)
 
 		self.setLayout(self.vbox)
 		self.show()
@@ -79,6 +82,18 @@ class MainWindow(QWidget):
 
 	def get_channel_list_selection(self) -> str:
 		return self.channel_list.currentItem().text()
+
+	def set_favorite_list_callback(self, callback):
+		self.favorite_combo_box.activated.connect(callback)
+
+	def get_favorite_list_selection(self) -> str:
+		return self.favorite_combo_box.currentText()
+
+	def set_favorite_list(self, channels_name):
+		self.favorite_combo_box.clear()
+		for channel_name in channels_name:
+			self.favorite_combo_box.addItem(channel_name)
+	
 		
 class MyRanet:
 	def __init__(self):
@@ -100,10 +115,12 @@ class MyRanet:
 		self.gui.set_favorite_toggle_button_callback(self.toggle_current_channel_favorite)
 		self.gui.set_entry_bar_callback(self.update_gui)
 		self.gui.set_channel_list_callback(self.select_current_channel_from_all_list)
+		self.gui.set_favorite_list_callback(self.select_current_channel_from_favorite)
 		
 	def update_gui(self):
 		self.gui.set_channel_name_label(self.video_player.get_current_station().name)
 		self.gui.set_channel_list(self.media_shelf.get_channels_name_by_search(self.gui.get_entry_bar_input()))
+		self.gui.set_favorite_list(self.favorite_shelf.get_channels_name_by_search("")) # The entire list
 		
 	def start(self):
 		self.gui.show()
@@ -145,6 +162,13 @@ class MyRanet:
 
 	def select_current_channel_from_all_list(self):
 		self.video_player.set_media(self.media_shelf.get_channel_by_name(self.gui.get_channel_list_selection()))
+		self.media_shelf.set_main_current_index(self.video_player.get_current_station())
+		self.update_gui()
+
+	def select_current_channel_from_favorite(self):
+		print(self.gui.get_favorite_list_selection())
+		self.video_player.set_media(self.media_shelf.get_channel_by_name(self.gui.get_favorite_list_selection()))
+		self.media_shelf.set_main_current_index(self.video_player.get_current_station())
 		self.update_gui()
 
 if __name__ == "__main__":

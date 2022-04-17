@@ -188,6 +188,13 @@ class MediaChannelShelf:
 	def get_media_channels_list(self) -> list:
 		return self.main_media_channels
 
+	# Set the index according to the media channel
+	def set_main_current_index(self, in_channel: HLSStation):
+		try:
+			self.main_current_index = self.main_media_channels.index(in_channel)
+		except ValueError:
+			print("Media not in list, ignoring setting of index")
+
 class FavoriteMediaChannelShelf(MediaChannelShelf):
 	
 	def add_media_channel(self, in_channel : HLSStation) -> None:
@@ -261,6 +268,10 @@ class VideoPlayer(QFrame):
 		source : HLSStation
 			An HLSStation object which represents the station
 		"""
+		# Checking for none type
+		if source is None:
+			return
+
 		self.stop()
 		self.current_station = source
 		print(self.check_media_availability())
