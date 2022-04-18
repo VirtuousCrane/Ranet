@@ -94,8 +94,19 @@ class MainWindow(QWidget):
 		self.favorite_combo_box.clear()
 		for channel_name in channels_name:
 			self.favorite_combo_box.addItem(channel_name)
-	
-		
+
+	def set_favorite_button_icon_to_favorite(self):
+		self.favorite_toggle_button.setText("<Icon with yellow star>")
+
+	def set_favorite_button_icon_to_unfavorite(self):
+		self.favorite_toggle_button.setText("<Icon with empty star>")
+
+	def set_play_button_icon_to_play(self):
+		self.play_button.setText("<Icon play>")
+
+	def set_play_button_icon_to_stop(self):
+		self.play_button.setText("<Icon pause>")	
+
 class MyRanet:
 	def __init__(self):
 		self.app = QApplication()
@@ -117,17 +128,31 @@ class MyRanet:
 		self.gui.set_entry_bar_callback(self.update_gui)
 		self.gui.set_channel_list_callback(self.select_current_channel_from_all_list)
 		self.gui.set_favorite_list_callback(self.select_current_channel_from_favorite)
+
+		self.update_gui()
 		
 	def update_gui(self):
 		self.gui.set_channel_name_label(self.video_player.get_current_station().name)
 		self.gui.set_channel_list(self.media_shelf.get_channels_name_by_search(self.gui.get_entry_bar_input()))
 		self.gui.set_favorite_list(self.favorite_shelf.get_channels_name_by_search("")) # The entire list
+
+		# Setting favorite button icon
+		if self.is_current_channel_in_favorite():
+			self.gui.set_favorite_button_icon_to_favorite()
+		else:
+			self.gui.set_favorite_button_icon_to_unfavorite()
+
+		# Setting play button icon
+		if self.is_playing():
+			self.gui.set_play_button_icon_to_play()
+		else:
+			self.gui.set_play_button_icon_to_stop()
+
 		
 	def start(self):
 		self.gui.show()
 		self.app.exec()
 		self.play()
-		self.update_gui()
 
 	def play(self):
 		self.video_player.play()
@@ -171,6 +196,13 @@ class MyRanet:
 		self.video_player.set_media(self.media_shelf.get_channel_by_name(self.gui.get_favorite_list_selection()))
 		self.media_shelf.set_main_current_index(self.video_player.get_current_station())
 		self.update_gui()
+
+	def is_current_channel_in_favorite(self):
+		return self.favorite_shelf.is_media_channel_in_list(self.video_player.get_current_station())
+
+	def is_playing(self):
+		return self.video_player.get_is_playing()
+
 
 if __name__ == "__main__":
 	print("cmd test.py")
