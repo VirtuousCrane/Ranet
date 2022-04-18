@@ -105,7 +105,7 @@ class MainWindow(QWidget):
 
 	def set_play_button_icon_to_stop(self):
 		self.play_button.setText("<Icon pause>")	
-		
+
 class MyRanet:
 	def __init__(self):
 		self.app = QApplication()
