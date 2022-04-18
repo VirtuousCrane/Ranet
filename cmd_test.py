@@ -7,6 +7,7 @@ from src.video_player import (MediaChannelShelf, FavoriteMediaChannelShelf,
 
 from PySide6.QtWidgets import (QMainWindow, QWidget, QVBoxLayout, QFrame, QLabel, QApplication, 
 QPushButton, QListWidget, QListWidgetItem, QLineEdit, QComboBox)
+
 import sys
 
 # DELETE ME. FOR REFERENCE ONLY.

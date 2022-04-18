@@ -124,6 +124,7 @@ class MediaChannelShelf:
 	
 	# Return channels with substring of search_term ordered by substring index position
 	def get_channels_by_search(self, search_term) -> list:
+
 		output = []
 		temp = []
 
