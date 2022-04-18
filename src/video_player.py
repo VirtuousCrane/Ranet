@@ -195,11 +195,15 @@ class MediaChannelShelf:
 		except ValueError:
 			print("Media not in list, ignoring setting of index")
 
+	def sort_media_channels_by_name(self):
+		self.main_media_channels.sort(key=lambda x: x.name)
+
 class FavoriteMediaChannelShelf(MediaChannelShelf):
 	
 	def add_media_channel(self, in_channel : HLSStation) -> None:
 		if not (self.is_media_channel_in_list(in_channel)): 
 			self.main_media_channels.append(in_channel)
+		self.sort_media_channels_by_name()
 		self.save_media_channels_to_file()
 	
 	def is_media_channel_in_list(self, in_channel : HLSStation) -> bool:
@@ -208,6 +212,7 @@ class FavoriteMediaChannelShelf(MediaChannelShelf):
 	def delete_media_channel(self, in_channel : HLSStation) -> None:
 		if (self.is_media_channel_in_list(in_channel)):
 			self.main_media_channels.remove(in_channel)
+		self.sort_media_channels_by_name()
 		self.save_media_channels_to_file()
 
 	#private
@@ -405,6 +410,9 @@ class VideoPlayer(QFrame):
 	
 	def get_current_station(self) -> HLSStation:
 		return self.current_station
+
+	def get_is_playing(self):
+		return self.is_playing
 
 # DELETE ME. FOR REFERENCE ONLY.
 class MainWindow(QMainWindow):
