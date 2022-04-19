@@ -3,7 +3,7 @@ from typing import *
 from PySide6.QtWidgets import *
 from PySide6.QtGui import *
 from PySide6.QtCore import *
-from src.gui.radio_channel_list_gui import RadioChannelListGuiWindow
+from radio_channel_list_gui import RadioChannelListGuiWindow
 
 class CreateMenuBar(QMainWindow):
 	def __init__(self):
@@ -102,6 +102,8 @@ class CreateChannelWave(QWidget):
 
 		# Channel Favorite DropDown
 		self.channel_fav = QComboBox()
+		self.channel_fav.setEditable(True)
+		self.channel_fav.setPlaceholderText("Favorite Channel")
 		self.channel_fav.setFixedSize(256,30)
 
 		# ----Test----
