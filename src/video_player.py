@@ -1,3 +1,4 @@
+from contextlib import nullcontext
 import PySide6
 import errno
 import vlc
@@ -9,8 +10,9 @@ from PySide6.QtMultimediaWidgets import QVideoWidget
 from PySide6.QtCore import QUrl, Qt
 from dataclasses import dataclass
 from typing import *
+import csv
 
-from connection import connection_check_hls, ConnectionStatus
+from src.connection import connection_check_hls, ConnectionStatus
 
 # For testing purposes
 from PySide6.QtWidgets import QMainWindow, QFrame, QVBoxLayout, QPushButton, QApplication, QLabel, QWidget
@@ -78,6 +80,155 @@ class HLSPlaylistParser:
 		
 		return self.station_list[self.list_idx]
 
+class MediaChannelShelf:
+	# Initializes with a csv file containing media channels
+	def __init__(self, file_path):
+		self.main_media_channels = []
+		self.main_current_index = 0
+
+		self.file_path = file_path
+		self.set_channels_from_file()
+
+	def get_next_channel(self):
+		# Empty list
+		if len(self.main_media_channels) <= 0:
+			return None
+		
+		# Increment index and loopback if reach end of list
+		self.main_current_index += 1
+		self.main_current_index %= len(self.main_media_channels)
+		return self.main_media_channels[self.main_current_index]
+		
+	def get_previous_channel(self):
+		# Empty list
+		if len(self.main_media_channels) <= 0:
+			return None
+
+		# Decrement index and loopback if reach start of list
+		self.main_current_index -= 1
+		self.main_current_index %= len(self.main_media_channels)
+		return self.main_media_channels[self.main_current_index]
+
+	def get_current_channel(self):
+		# Empty list
+		if len(self.main_media_channels) <= 0:
+			return None
+		
+		return self.main_media_channels[self.main_current_index]
+
+	def get_channel_by_index(self, inIndex):
+		try:
+			return self.main_media_channels[inIndex]
+		except IndexError:
+			print("Error at getChannelByIndex, by IndexError")
+	
+	# Return channels with substring of search_term ordered by substring index position
+	def get_channels_by_search(self, search_term) -> list:
+
+		output = []
+		temp = []
+
+		# Generate list [media_channel, index_substring] that has substring
+		for channel in self.main_media_channels:
+			sub_str_index = channel.name.lower().find(search_term.lower())
+			if sub_str_index >= 0: # substring search_term is in channel name
+				temp.append([channel,sub_str_index])
+		
+		# Sort the list by substring index
+		temp.sort(key=lambda x: x[1])
+
+		# Prune out the substring index
+		for channel_with_index in temp:
+			output.append(channel_with_index[0])
+
+		return output
+
+	# Return list of channels name which match the search term
+	def get_channels_name_by_search(self, search_term) -> list:
+		channels_list = self.get_channels_by_search(search_term)
+		output = [channel.name for channel in channels_list]
+		return output
+
+	def get_channel_by_search_index(self, search_term, index) -> list:
+		searched_media_channels = self.get_channels_by_search(search_term)
+		try:
+			return searched_media_channels[index]
+		except IndexError:
+			return None
+
+	# Sequential search the channel by name
+	def get_channel_by_name(self, in_name) -> HLSStation:
+		output = None
+		for channel in self.main_media_channels:
+			if channel.name == in_name:
+				output = channel
+				break
+		return output
+
+	# get a list of media channels from csv file
+	# private
+	def parse_channels_from_file(self, file_path : str) -> list:
+		output = []
+
+		with open(file_path,'r') as file:
+			csv_reader = csv.reader(file)
+			for line in csv_reader:
+				temp_channel = HLSStation(line[0],line[1])
+				output.append(temp_channel)
+
+		return output
+	
+	# private
+	def set_channels_from_file(self) -> None:
+		if self.file_path is None:
+			return
+		else:
+			self.main_media_channels = self.parse_channels_from_file(self.file_path)
+
+	# private
+	def get_media_channels_list(self) -> list:
+		return self.main_media_channels
+
+	# Set the index according to the media channel
+	def set_main_current_index(self, in_channel: HLSStation):
+		try:
+			self.main_current_index = self.main_media_channels.index(in_channel)
+		except ValueError:
+			print("Media not in list, ignoring setting of index")
+
+	def sort_media_channels_by_name(self):
+		self.main_media_channels.sort(key=lambda x: x.name)
+
+class FavoriteMediaChannelShelf(MediaChannelShelf):
+	
+	def add_media_channel(self, in_channel : HLSStation) -> None:
+		if not (self.is_media_channel_in_list(in_channel)): 
+			self.main_media_channels.append(in_channel)
+		self.sort_media_channels_by_name()
+		self.save_media_channels_to_file()
+	
+	def is_media_channel_in_list(self, in_channel : HLSStation) -> bool:
+		return in_channel in self.main_media_channels
+	
+	def delete_media_channel(self, in_channel : HLSStation) -> None:
+		if (self.is_media_channel_in_list(in_channel)):
+			self.main_media_channels.remove(in_channel)
+		self.sort_media_channels_by_name()
+		self.save_media_channels_to_file()
+
+	#private
+	def save_media_channels_to_file(self) -> None:
+		with open(self.file_path, 'w', newline='') as file:
+			csv_writer = csv.writer(file)
+			for media_channel in self.main_media_channels:
+				csv_writer.writerow([media_channel.name, media_channel.url])
+
+	# Add media channel if not in fav else delete the media channel
+	def toggle_media_channel(self, in_channel):
+		if (self.is_media_channel_in_list(in_channel)):
+			self.delete_media_channel(in_channel)
+		else:
+			self.add_media_channel(in_channel)
 
 class VideoPlayer(QFrame):
 	def __init__(self): 
@@ -123,6 +274,11 @@ class VideoPlayer(QFrame):
 		source : HLSStation
 			An HLSStation object which represents the station
 		"""
+		# Checking for none type
+		if source is None:
+			return
+
+		self.stop()
 		self.current_station = source
 		print(self.check_media_availability())
 
@@ -136,6 +292,7 @@ class VideoPlayer(QFrame):
 		elif self.platform == "win32":
 			self.media = self.instance.media_new(source.url)
 			self.player.set_media(self.media)
+		self.play()
 	
 	def play(self) -> bool:
 		"""Plays the Http Live Stream (HLS)"""
@@ -251,6 +408,12 @@ class VideoPlayer(QFrame):
 				self.player.toggle_fullscreen()
 			
 			self.is_fullscreen = False
+	
+	def get_current_station(self) -> HLSStation:
+		return self.current_station
+
+	def get_is_playing(self):
+		return self.is_playing
 
 # DELETE ME. FOR REFERENCE ONLY.
 class MainWindow(QMainWindow):
@@ -328,7 +491,7 @@ class MainWindow(QMainWindow):
 	def next_channel(self):
 		self.stream = self.playlist.get_next()
 		self.play()
-    
+	
 if __name__ == "__main__":
 	app = QApplication(sys.argv)
 

@@ -3,7 +3,7 @@ from typing import *
 from PySide6.QtWidgets import *
 from PySide6.QtGui import *
 from PySide6.QtCore import *
-from radio_channel_list_gui import RadioChannelListGuiWindow
+from src.gui.radio_channel_list_gui import RadioChannelListGuiWindow
 
 class CreateMenuBar(QMainWindow):
 	def __init__(self):
@@ -171,7 +171,7 @@ class CreateControlBar(QWidget):
 		self.play_button.clicked.connect(self.toggle_play_pause_icon)
 		
 		self.control_button_layout.addWidget(self.play_button)
-    
+	
 	# Next Button
 		# self.next_button = QPushButton("Next", self)
 		self.next_button = QPushButton(self)
@@ -314,7 +314,7 @@ class ControlClickHandler(object):
 			self.currently_playing = False
 		return self._instance
 
-    # Toggle Status When Play or Pause Button is Clicked
+	# Toggle Status When Play or Pause Button is Clicked
 	def play_pause_button_click(self):
 		if self.currently_playing:
 			self.currently_playing = False
@@ -344,42 +344,42 @@ class ControlClickHandler(object):
 		print("Next button Click")
 
 class ControlChannelHandler(QWidget):
-    def __init__(self):
-        QWidget.__init__(self, None)
-        self.create_channel_wave = CreateChannelWave()
+	def __init__(self):
+		QWidget.__init__(self, None)
+		self.create_channel_wave = CreateChannelWave()
 
-    # set channel number
-    def set_current_channel_num(self, new_channel_num):
-        self.channel_num.setText(new_channel_num)
-        self.create_channel_wave.channel_num.setText(self.current_channel_num)
+	# set channel number
+	def set_current_channel_num(self, new_channel_num):
+		self.channel_num.setText(new_channel_num)
+		self.create_channel_wave.channel_num.setText(self.current_channel_num)
 
-    # set channel name
-    def set_current_channel_name(self, new_channel_name):
-        self.channel_name.setText(new_channel_name)
-        self.create_channel_wave.channel_name.setText(self.current_channel_name)
+	# set channel name
+	def set_current_channel_name(self, new_channel_name):
+		self.channel_name.setText(new_channel_name)
+		self.create_channel_wave.channel_name.setText(self.current_channel_name)
 
 # CSS
 CSS = """
-    QSlider::handle:horizontal {
-        background: black;
-        border: 1px solid black;
-        width: 24px;
-        height: 8 px;
-        border-radius: 4px;
-    }
-    QSlider::groove:horizontal {
-        border: 1px solid black;
-        height: 10px;
-        background: #eee;
-        margin: 0px;
-        border-radius: 4px;
-    }
-    QPushButton::hover{
-        background: lightgray;
-    }
-    QPushButton::hover:pressed{
-        background: black;
-    }
+	QSlider::handle:horizontal {
+		background: black;
+		border: 1px solid black;
+		width: 24px;
+		height: 8 px;
+		border-radius: 4px;
+	}
+	QSlider::groove:horizontal {
+		border: 1px solid black;
+		height: 10px;
+		background: #eee;
+		margin: 0px;
+		border-radius: 4px;
+	}
+	QPushButton::hover{
+		background: lightgray;
+	}
+	QPushButton::hover:pressed{
+		background: black;
+	}
 	
 """
 
