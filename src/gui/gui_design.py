@@ -1,4 +1,5 @@
 import sys
+from turtle import width
 from typing import *
 from PySide6.QtWidgets import *
 from PySide6.QtGui import *
@@ -66,17 +67,31 @@ class CreateMenuBar(QMainWindow):
 
 	# All Channel List Animation
 	def all_channel_list_resize_animation(self):
-		self.animation = QPropertyAnimation(self.create_channel_wave.all_channel_list_frame, b"geometry")
-		self.animation.setDuration(500) # 0.5 second
+		mainWindow = QWidget()
+		self.current_height = self.create_channel_wave.channel_wave_frame.height()
+		self.current_width = self.create_channel_wave.channel_wave_frame.width()
+		# self.create_channel_wave.wave_container_frame.resize(self.width, self.height)
+		self.animation_all_channel_list = QPropertyAnimation(self.create_channel_wave.all_channel_list_frame, b"geometry")
+		self.animation_all_channel_list.setDuration(500) # 0.5 second
+		self.animation_video_player = QPropertyAnimation(self.create_channel_wave.wave_container_frame, b"geometry")
+		self.animation_video_player.setDuration(500)
+		
 
-		if self.create_channel_wave.all_channel_list_frame.width() == 0:
-			self.animation.setStartValue(QRect(self.create_channel_wave.all_channel_list_frame.x(), self.create_channel_wave.all_channel_list_frame.y(), 0, self.create_channel_wave.all_channel_list_frame.height()))
-			self.animation.setEndValue(QRect(self.create_channel_wave.all_channel_list_frame.x(), self.create_channel_wave.all_channel_list_frame.y(), 144, self.create_channel_wave.all_channel_list_frame.height()))
-			self.animation.start()
-		else:
-			self.animation.setStartValue(QRect(self.create_channel_wave.all_channel_list_frame.x(), self.create_channel_wave.all_channel_list_frame.y(), 144, self.create_channel_wave.all_channel_list_frame.height()))
-			self.animation.setEndValue(QRect(self.create_channel_wave.all_channel_list_frame.x(), self.create_channel_wave.all_channel_list_frame.y(), 0, self.create_channel_wave.all_channel_list_frame.height()))
-			self.animation.start()
+		if self.create_channel_wave.all_channel_list_frame.width() == 0: # Expand
+			self.animation_all_channel_list.setStartValue(QRect(self.create_channel_wave.all_channel_list_frame.x(), self.create_channel_wave.all_channel_list_frame.y(), 0, self.current_height-150))
+			self.animation_all_channel_list.setEndValue(QRect(self.create_channel_wave.all_channel_list_frame.x(), self.create_channel_wave.all_channel_list_frame.y(), 144, self.current_height-150))
+			self.animation_all_channel_list.start()
+			self.animation_video_player.setStartValue(QRect(self.create_channel_wave.wave_container_frame.x(), self.create_channel_wave.wave_container_frame.y(), self.current_width, self.current_height-150))
+			self.animation_video_player.setEndValue(QRect(self.create_channel_wave.wave_container_frame.x() + 144, self.create_channel_wave.wave_container_frame.y(), self.current_width-144, self.current_height-150))
+			self.animation_video_player.start()
+		else: # Close
+			self.animation_all_channel_list.setStartValue(QRect(self.create_channel_wave.all_channel_list_frame.x(), self.create_channel_wave.all_channel_list_frame.y(), 144, self.current_height-150))
+			self.animation_all_channel_list.setEndValue(QRect(self.create_channel_wave.all_channel_list_frame.x(), self.create_channel_wave.all_channel_list_frame.y(), 0, self.current_height-150))
+			self.animation_all_channel_list.start()
+
+			self.animation_video_player.setStartValue(QRect(self.create_channel_wave.wave_container_frame.x(), self.create_channel_wave.wave_container_frame.y(), self.current_width-144, self.current_height-150))
+			self.animation_video_player.setEndValue(QRect(self.create_channel_wave.wave_container_frame.x() -144, self.create_channel_wave.wave_container_frame.y(), self.current_width, self.current_height-150))
+			self.animation_video_player.start()
 		
 
 	# file_menu callback Function
@@ -100,8 +115,8 @@ class CreateChannelWave(QWidget):
 	def __init__(self):
 		QWidget.__init__(self, None)
 		self.channel_wave_layout = QVBoxLayout()
-		# self.channel_wave_layout.setStretchFactor(self.channel_wave_layout,1)
-		self.channel_wave_layout.addStretch(1)
+		self.channel_wave_layout.setStretch(1, 1)
+		self.channel_wave_frame = QFrame()
 
 		# Control
 		self.create_control = CreateControlBar()
@@ -118,10 +133,13 @@ class CreateChannelWave(QWidget):
 		self.all_channel_list = QListWidget()
 
 		# Wave Image Container
+		self.wave_container_frame = QFrame()
+		self.wave_container_layout = QVBoxLayout()
 		self.wave_container = QLabel()
 		self.wave_container.setText("current size (640 x 360)")
 		self.wave_container.setStyleSheet("background-color: red;")
 		self.wave_container.setMinimumHeight(320)
+
 
 		# Channel Name Layout
 		self.channel_fav_name_layout = QHBoxLayout() 
@@ -149,8 +167,11 @@ class CreateChannelWave(QWidget):
 		self.all_channel_list_layout.addWidget(self.all_channel_list)
 		self.all_channel_list_frame.setLayout(self.all_channel_list_layout)
 
-		self.all_channel_list_and_display_screen_layout.addWidget(self.all_channel_list_frame)
-		self.all_channel_list_and_display_screen_layout.addWidget(self.wave_container)
+		self.wave_container_layout.addWidget(self.wave_container)
+		self.wave_container_frame.setLayout(self.wave_container_layout)
+
+		self.all_channel_list_and_display_screen_layout.addWidget(self.all_channel_list_frame, 5)
+		self.all_channel_list_and_display_screen_layout.addWidget(self.wave_container_frame, 19)
 
 		self.channel_fav_name_layout.addWidget(self.channel_name)
 		self.channel_fav_name_layout.addWidget(self.create_control.favorite_button)
@@ -161,6 +182,8 @@ class CreateChannelWave(QWidget):
 		self.channel_wave_layout.addLayout(self.all_channel_list_and_display_screen_layout)
 		self.channel_wave_layout.addLayout(self.channel_fav_name_layout)
 		self.channel_wave_layout.addLayout(self.create_control.control_layout)
+
+		self.channel_wave_frame.setLayout(self.channel_wave_layout)
 
 	
 	# Function for adding favorite channel List
@@ -314,7 +337,7 @@ class MainGuiWindow(QMainWindow):
 
 	# Channel and Control
 		# self.create_channel_wave = CreateChannelWave()
-		main_layout.addLayout(self.create_menu_bar.create_channel_wave.channel_wave_layout)
+		main_layout.addWidget(self.create_menu_bar.create_channel_wave.channel_wave_frame)
 
 	# Show
 		self.setLayout(main_layout)
