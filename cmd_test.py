@@ -147,6 +147,7 @@ class MyRanet:
 			self.gui.set_play_button_icon_to_play()
 		else:
 			self.gui.set_play_button_icon_to_stop()
+
 		
 	def start(self):
 		self.gui.show()
@@ -201,6 +202,7 @@ class MyRanet:
 
 	def is_playing(self):
 		return self.video_player.get_is_playing()
+
 
 if __name__ == "__main__":
 	print("cmd test.py")
