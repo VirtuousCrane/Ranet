@@ -137,6 +137,7 @@ class Radio(object):
 			self.gui.set_previous_button_callback(self.previous_channel)
 			self.gui.set_next_button_callback(self.next_channel)
 			self.gui.set_volume_slider_callback(self.change_volume)
+			self.gui.set_radio_player(self)
 
 			self.change_volume()
 
@@ -182,6 +183,10 @@ class Radio(object):
 		self.radio_player.set_volume(newVolume)
 		self.update_gui()
 		print("Change volume to " + str(newVolume))
+	
+	def set_station(self, station: RadioStation):
+		self.radio_player.change_station(station)
+		self.update_gui()
 
 	def update_gui(self):
 		"""Updates the GUI"""
