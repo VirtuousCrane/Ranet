@@ -185,7 +185,7 @@ class MediaChannelShelf:
 		else:
 			self.main_media_channels = self.parse_channels_from_file(self.file_path)
 
-	# private
+	# public
 	def get_media_channels_list(self) -> list:
 		return self.main_media_channels
 
@@ -414,6 +414,22 @@ class VideoPlayer(QFrame):
 
 	def get_is_playing(self):
 		return self.is_playing
+	
+	def update_gui(self, gui):
+		"""
+		Updates the channel label and play button of the gui
+
+		PARAMETERS
+		----------
+		gui : MainGuiWindow
+			The gui that we want to update
+		"""
+		gui.set_channel_name(self.current_station.name)
+
+		if self.get_is_playing():
+			gui.set_play_button_icon_to_pause()
+		else:
+			gui.set_play_button_icon_to_play()
 
 # DELETE ME. FOR REFERENCE ONLY.
 class MainWindow(QMainWindow):
