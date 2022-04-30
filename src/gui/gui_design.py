@@ -1,18 +1,23 @@
 import sys
+from turtle import width
 from typing import *
 from PySide6.QtWidgets import *
 from PySide6.QtGui import *
 from PySide6.QtCore import *
+
 from src.gui.radio_channel_list_gui import RadioChannelListGuiWindow
+from src.video_player import MediaChannelShelf, VideoPlayer
+from src.radio import RadioStation
 
 class CreateMenuBar(QMainWindow):
 	def __init__(self):
 		QMainWindow.__init__(self, None)
 		self.menu_bar = self.menuBar()
 
+		self.create_channel_wave = CreateChannelWave()
 		self.control_clicked_handler = ControlClickHandler()
 
-		# FileMenu Section
+	# FileMenu Section
 		file_menu = QMenu("&File", self)
 
 		## FileMenu Action List
@@ -35,7 +40,7 @@ class CreateMenuBar(QMainWindow):
 
 		self.menu_bar.addMenu(file_menu)
 
-		# EditMenu Section
+	# EditMenu Section
 		edit_menu = QMenu("&Edit", self)
 
 		## EditMenu Action List
@@ -43,7 +48,7 @@ class CreateMenuBar(QMainWindow):
 		edit_menu.addAction(self.theme_action)
 		self.menu_bar.addMenu(edit_menu)
 
-		# RecordMenu Section
+	# RecordMenu Section
 		record_menu = QMenu("&Record", self)
 
 		## RecordMenu Action List
@@ -56,6 +61,41 @@ class CreateMenuBar(QMainWindow):
 		record_menu.addAction(self.go_to_folder_action)
 
 		self.menu_bar.addMenu(record_menu)
+
+	# All Channel List Action
+		self.all_channel_list_action = QAction("&All Channel List", self)
+		self.all_channel_list_action.triggered.connect(self.all_channel_list_resize_animation)
+
+		self.menu_bar.addAction(self.all_channel_list_action)
+
+	# All Channel List Animation
+	def all_channel_list_resize_animation(self):
+		mainWindow = QWidget()
+		self.current_height = self.create_channel_wave.channel_wave_frame.height()
+		self.current_width = self.create_channel_wave.channel_wave_frame.width()
+		# self.create_channel_wave.wave_container_frame.resize(self.width, self.height)
+		self.animation_all_channel_list = QPropertyAnimation(self.create_channel_wave.all_channel_list_frame, b"geometry")
+		self.animation_all_channel_list.setDuration(500) # 0.5 second
+		self.animation_video_player = QPropertyAnimation(self.create_channel_wave.wave_container_frame, b"geometry")
+		self.animation_video_player.setDuration(500)
+		
+
+		if self.create_channel_wave.all_channel_list_frame.width() == 0: # Expand
+			self.animation_all_channel_list.setStartValue(QRect(self.create_channel_wave.all_channel_list_frame.x(), self.create_channel_wave.all_channel_list_frame.y(), 0, self.current_height-150))
+			self.animation_all_channel_list.setEndValue(QRect(self.create_channel_wave.all_channel_list_frame.x(), self.create_channel_wave.all_channel_list_frame.y(), 144, self.current_height-150))
+			self.animation_all_channel_list.start()
+			self.animation_video_player.setStartValue(QRect(self.create_channel_wave.wave_container_frame.x(), self.create_channel_wave.wave_container_frame.y(), self.current_width, self.current_height-150))
+			self.animation_video_player.setEndValue(QRect(self.create_channel_wave.wave_container_frame.x() + 144, self.create_channel_wave.wave_container_frame.y(), self.current_width-144, self.current_height-150))
+			self.animation_video_player.start()
+		else: # Close
+			self.animation_all_channel_list.setStartValue(QRect(self.create_channel_wave.all_channel_list_frame.x(), self.create_channel_wave.all_channel_list_frame.y(), 144, self.current_height-150))
+			self.animation_all_channel_list.setEndValue(QRect(self.create_channel_wave.all_channel_list_frame.x(), self.create_channel_wave.all_channel_list_frame.y(), 0, self.current_height-150))
+			self.animation_all_channel_list.start()
+
+			self.animation_video_player.setStartValue(QRect(self.create_channel_wave.wave_container_frame.x(), self.create_channel_wave.wave_container_frame.y(), self.current_width-144, self.current_height-150))
+			self.animation_video_player.setEndValue(QRect(self.create_channel_wave.wave_container_frame.x() -144, self.create_channel_wave.wave_container_frame.y(), self.current_width, self.current_height-150))
+			self.animation_video_player.start()
+		
 
 	# file_menu callback Function
 	def set_play_action_callback(self, in_func):
@@ -73,22 +113,35 @@ class CreateMenuBar(QMainWindow):
 	def open_channel_list_gui(self):
 		self.channel_list_gui = RadioChannelListGuiWindow()
 		self.channel_list_gui.show()
+	
+	def get_channel_wave(self):
+		return self.create_channel_wave
 
 class CreateChannelWave(QWidget):
 	def __init__(self):
 		QWidget.__init__(self, None)
 		self.channel_wave_layout = QVBoxLayout()
-		# self.channel_wave_layout.setStretchFactor(self.channel_wave_layout,1)
-		self.channel_wave_layout.addStretch(1)
-
-		# Wave Image Container
-		self.wave_container = QLabel()
-		self.wave_container.setText("current size (720 x 480)")
-		# self.wave_container.setStyleSheet("background-color: red;")
-		self.wave_container.setMinimumHeight(480)
+		self.channel_wave_layout.setStretch(1, 1)
+		self.channel_wave_frame = QFrame()
 
 		# Control
 		self.create_control = CreateControlBar()
+
+		# Center Layout
+		self.all_channel_list_and_display_screen_layout = QHBoxLayout()
+
+		# All Channel Layout and Frame
+		self.all_channel_list_layout = QVBoxLayout()
+		self.all_channel_list_frame = QFrame()
+		self.all_channel_list_frame.setMaximumWidth(144)
+
+		self.all_channel_list_search_bar = QLineEdit()
+		self.all_channel_list = QListWidget()
+
+		# Wave Image Container
+		#self.wave_container_frame = QFrame()
+		self.wave_container_frame = VideoPlayer()
+		self.wave_container_layout = QVBoxLayout()
 
 		# Channel Name Layout
 		self.channel_fav_name_layout = QHBoxLayout() 
@@ -102,6 +155,8 @@ class CreateChannelWave(QWidget):
 
 		# Channel Favorite DropDown
 		self.channel_fav = QComboBox()
+		self.channel_fav.setEditable(True)
+		self.channel_fav.setPlaceholderText("Favorite Channel")
 		self.channel_fav.setFixedSize(256,30)
 
 		# ----Test----
@@ -110,14 +165,30 @@ class CreateChannelWave(QWidget):
 		self.channel_fav.addItem("channel3")
 		# ------------
 
+		# Channel List Test
+		self.all_channel_list_add_item("God Kill Me")
+
+		self.all_channel_list_layout.addWidget(self.all_channel_list_search_bar)
+		self.all_channel_list_layout.addWidget(self.all_channel_list)
+		self.all_channel_list_frame.setLayout(self.all_channel_list_layout)
+
+		self.wave_container_frame.setLayout(self.wave_container_layout)
+
+		self.all_channel_list_and_display_screen_layout.addWidget(self.all_channel_list_frame, 5)
+		self.all_channel_list_and_display_screen_layout.addWidget(self.wave_container_frame, 19)
+
 		self.channel_fav_name_layout.addWidget(self.channel_name)
 		self.channel_fav_name_layout.addWidget(self.create_control.favorite_button)
 		self.channel_fav_name_layout.addWidget(self.channel_fav)
 		self.channel_fav_name_layout.addWidget(self.create_control.full_screen_button)
+		self.channel_fav_name_layout.addWidget(self.create_control.change_mode_button)
 
-		self.channel_wave_layout.addWidget(self.wave_container)
+
+		self.channel_wave_layout.addLayout(self.all_channel_list_and_display_screen_layout)
 		self.channel_wave_layout.addLayout(self.channel_fav_name_layout)
 		self.channel_wave_layout.addLayout(self.create_control.control_layout)
+
+		self.channel_wave_frame.setLayout(self.channel_wave_layout)
 
 	
 	# Function for adding favorite channel List
@@ -135,6 +206,33 @@ class CreateChannelWave(QWidget):
 			The new channel name
 		"""
 		self.channel_name.setText(in_name)
+	
+	def all_channel_list_add_item(self, channel_name: str):
+		self.all_channel_list.addItem(channel_name)
+	
+	def get_all_channel_list(self) -> QListWidget:
+		return self.all_channel_list
+	
+	def clear_all_channel_list(self):
+		self.all_channel_list.clear()
+
+	def set_search_bar_callback(self, callback):
+		self.all_channel_list_search_bar.textEdited.connect(callback)
+	
+	def get_search_bar(self):
+		return self.all_channel_list_search_bar
+	
+	def set_channel_list_callback(self, callback):
+		self.all_channel_list.itemClicked.connect(callback)
+	
+	def get_channel_list(self):
+		return self.all_channel_list
+	
+	def get_video_player(self) -> VideoPlayer:
+		return self.wave_container_frame
+	
+	def set_change_mode_callback(self, callback):
+		self.create_control.set_change_mode_callback(callback)
 
 class CreateControlBar(QWidget):
 	def __init__(self):
@@ -202,6 +300,10 @@ class CreateControlBar(QWidget):
 	# Full Screen Button
 		self.full_screen_button = QPushButton("Full")
 		self.full_screen_button.setFixedSize(30,30)
+	
+	# Change Mode Button
+		self.change_mode_button = QPushButton("M")
+		self.change_mode_button.setFixedSize(30, 30)
 
 		# Toggle Play Pause Icon
 	def toggle_play_pause_icon(self):
@@ -237,6 +339,9 @@ class CreateControlBar(QWidget):
 
 	def set_favorite_callback(self, in_func):
 		self.favorite_button.clicked.connect(in_func)
+	
+	def set_change_mode_callback(self, callback):
+		self.change_mode_button.clicked.connect(callback)
 
 	# Volume Value Test
 	def volume_test_run(self):
@@ -250,14 +355,17 @@ class MainGuiWindow(QMainWindow):
 		QMainWindow.__init__(self, None)
 		mainWindow = QWidget()
 		self.setWindowTitle("Ranet")
-		self.default_height = 620
-		self.default_width = 720
+		# self.default_height = 620
+		# self.default_width = 720
+		self.default_height = 360
+		self.default_width = 640
 		self.setMinimumSize(self.default_width, self.default_height)
 
 		self.create_menu_bar = CreateMenuBar()
 		self.setMenuBar(self.create_menu_bar.menu_bar)
 
 		self.radio_player = radio_player
+		self.video_player = self.create_menu_bar.create_channel_wave.get_video_player()
 
 	# QWidget
 		central_widget = QWidget()
@@ -268,8 +376,25 @@ class MainGuiWindow(QMainWindow):
 		main_layout.setAlignment(Qt.AlignTop)
 
 	# Channel and Control
-		self.create_channel_wave = CreateChannelWave()
-		main_layout.addLayout(self.create_channel_wave.channel_wave_layout)
+		# self.create_channel_wave = CreateChannelWave()
+		main_layout.addWidget(self.create_menu_bar.create_channel_wave.channel_wave_frame)
+	
+	# Current Player mode
+		self.mode = "radio"
+
+	# Load channels into channel list
+		self.channel_wave = self.create_menu_bar.get_channel_wave()
+		self.channel_list = self.create_menu_bar.get_channel_wave().get_all_channel_list()
+		self.radio_media_shelf = MediaChannelShelf("assets/all_radio.csv")
+		self.tv_media_shelf    = MediaChannelShelf("assets/all_tv.csv")
+
+		self.update_search_bar()
+	
+	# Setting the callback of the search bar, channel list, and change mode button
+		self.channel_wave.set_search_bar_callback(self.update_search_bar)
+		self.channel_wave.set_channel_list_callback(self.select_channel)
+		self.channel_wave.set_change_mode_callback(self.change_mode)
+
 
 	# Show
 		self.setLayout(main_layout)
@@ -277,34 +402,79 @@ class MainGuiWindow(QMainWindow):
 
 	# Function for the model to use or hookup callback
 	def set_play_button_callback(self, in_func):
-		self.create_channel_wave.create_control.set_play_button_callback(in_func)
+		self.create_menu_bar.create_channel_wave.create_control.set_play_button_callback(in_func)
 
 	def set_previous_button_callback(self, in_func):
-		self.create_channel_wave.create_control.set_previous_button_callback(in_func)
+		self.create_menu_bar.create_channel_wave.create_control.set_previous_button_callback(in_func)
 
 	def set_next_button_callback(self, in_func):
-		self.create_channel_wave.create_control.set_next_button_callback(in_func)
+		self.create_menu_bar.create_channel_wave.create_control.set_next_button_callback(in_func)
 
 	def set_volume_slider_callback(self, in_func):
-		self.create_channel_wave.create_control.set_volume_slider_callback(in_func)
+		self.create_menu_bar.create_channel_wave.create_control.set_volume_slider_callback(in_func)
 	
 	def set_favorite_button_callback(self, in_func):
-		self.create_channel_wave.create_control.set_favorite_callback(in_func)
+		self.create_menu_bar.create_channel_wave.create_control.set_favorite_callback(in_func)
 
 	def set_channel_name(self, in_name):
-		self.create_channel_wave.set_channel_name(in_name)
+		self.create_menu_bar.create_channel_wave.set_channel_name(in_name)
 
 	def set_radio_player(self, radio_player):
 		self.radio_player = radio_player
-
+	
 	def get_volume_slider_value(self):
-		return self.create_channel_wave.create_control.get_volume_slider_value()
+		return self.create_menu_bar.create_channel_wave.create_control.get_volume_slider_value()
 
 	def set_play_button_icon_to_play(self):
-		self.create_channel_wave.create_control.set_play_button_icon_to_play()
+		self.create_menu_bar.create_channel_wave.create_control.set_play_button_icon_to_play()
 	
 	def set_play_button_icon_to_pause(self):
-		self.create_channel_wave.create_control.set_play_button_icon_to_pause()
+		self.create_menu_bar.create_channel_wave.create_control.set_play_button_icon_to_pause()
+	
+	def load_channels_from_array(self, arr: list[str]):
+		self.channel_wave.clear_all_channel_list()
+		for channel in arr:
+			self.channel_wave.all_channel_list_add_item(channel)
+	
+	def update_search_bar(self):
+		"""
+		Once text has been typed into the search bar, this function will
+		update the channel list with the relevant search result.
+		"""
+		search_bar = self.channel_wave.get_search_bar()
+		search_input = search_bar.text()
+		query_result : list[str] = []
+		
+		if self.mode == "radio":
+			query_result = self.radio_media_shelf.get_channels_name_by_search(search_input)
+		else:
+			query_result = self.tv_media_shelf.get_channels_name_by_search(search_input)
+		query_result.sort()
+		
+		self.load_channels_from_array(query_result)
+	
+	def select_channel(self):
+		selected_channel = self.channel_list.currentItem().text()
+		if self.mode == "radio":
+			media = self.radio_media_shelf.get_channel_by_name(selected_channel)
+			media = RadioStation(media.name, media.url, "unk")
+			self.radio_player.set_station(media)
+		else:
+			media = self.tv_media_shelf.get_channel_by_name(selected_channel)
+			self.video_player.set_media(media)
+			self.video_player.update_gui(self)
+	
+	def change_mode(self):
+		if self.mode == "radio":
+			self.radio_player.stop()
+			self.mode = "tv"
+		else:
+			self.video_player.stop()
+			self.mode = "radio"
+		self.update_search_bar()
+		
+
+		
 
 class ControlClickHandler(object):
 	_instance = None
