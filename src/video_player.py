@@ -187,7 +187,7 @@ class MediaChannelShelf:
 			self.main_media_channels = self.parse_channels_from_file(self.file_path)
 
 	# public
-	def get_media_channels_list(self) -> list:
+	def get_media_channels_list(self) -> list[HLSStation]:
 		return self.main_media_channels
 
 	# Set the index according to the media channel

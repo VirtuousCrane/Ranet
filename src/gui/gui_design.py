@@ -6,7 +6,7 @@ from PySide6.QtGui import *
 from PySide6.QtCore import *
 
 from src.gui.radio_channel_list_gui import RadioChannelListGuiWindow
-from src.video_player import FavoriteMediaChannelShelf, MediaChannelShelf, VideoPlayer
+from src.video_player import FavoriteMediaChannelShelf, HLSStation, MediaChannelShelf, VideoPlayer
 from src.radio import RadioStation, RadioPlayer
 
 class CreateMenuBar(QMainWindow):
@@ -160,14 +160,12 @@ class CreateChannelWave(QWidget):
 		self.channel_fav.setFixedSize(256,30)
 
 		# ----Test----
-		self.channel_fav.addItem("channel1")
-		self.channel_fav.addItem("channel2")
-		self.channel_fav.addItem("channel3")
+		#self.channel_fav.addItem("channel1")
+		#self.channel_fav.addItem("channel2")
+		#self.channel_fav.addItem("channel3")
 		# ------------
 
 		# Channel List Test
-		self.all_channel_list_add_item("God Kill Me")
-
 		self.all_channel_list_layout.addWidget(self.all_channel_list_search_bar)
 		self.all_channel_list_layout.addWidget(self.all_channel_list)
 		self.all_channel_list_frame.setLayout(self.all_channel_list_layout)
@@ -233,7 +231,24 @@ class CreateChannelWave(QWidget):
 	
 	def set_change_mode_callback(self, callback):
 		self.create_control.set_change_mode_callback(callback)
+	
+	def load_favorite_list(self, fav_list: FavoriteMediaChannelShelf):
+		"""
+		Load items into the favorite list
 
+		PARAMETERS
+		----------
+		fav_list : FavoriteMediaChannelShelf
+			The list to load media from
+		"""
+		#self.channel_fav.addItem("I love lolis")
+		self.channel_fav.clear()
+		for channel in fav_list.get_media_channels_list():
+			self.channel_fav.addItem(channel.name)
+	
+	def set_channel_fav_callback(self, fn):
+		self.channel_fav.activated.connect(fn)
+	
 class CreateControlBar(QWidget):
 	def __init__(self):
 		QWidget.__init__(self, None)
@@ -393,6 +408,9 @@ class MainGuiWindow(QMainWindow):
 	# Load channels for favorite list
 		self.favorite_radio = FavoriteMediaChannelShelf("assets/favorite_radio.csv")
 		self.favorite_tv = FavoriteMediaChannelShelf("assets/favorite_tv.csv")
+
+		self.load_favorite_list()
+		self.channel_wave.set_channel_fav_callback(self.play_fav)
 	
 	# Setting the callback of the search bar, channel list, and change mode button
 		self.channel_wave.set_search_bar_callback(self.update_search_bar)
@@ -518,9 +536,19 @@ class MainGuiWindow(QMainWindow):
 			self.video_player.update_gui(self)
 
 	def favorite_button_callback(self):
-
 		if self.mode == "radio":
-			pass
+			current_station = self.radio_player.get_station()
+			if self.favorite_radio.is_media_channel_in_list(current_station):
+				self.favorite_radio.delete_media_channel(current_station)
+			else:
+				self.favorite_radio.add_media_channel(current_station)
+		else:
+			current_station = self.video_player.get_current_station()
+			if self.favorite_tv.is_media_channel_in_list(current_station):
+				self.favorite_tv.delete_media_channel(current_station)
+			else:
+				self.favorite_tv.add_media_channel(current_station)
+		self.load_favorite_list()
 		
 	def change_mode(self):
 		if self.mode == "radio":
@@ -532,6 +560,24 @@ class MainGuiWindow(QMainWindow):
 			self.mode = "radio"
 			self.video_player.update_gui(self)
 		self.update_search_bar()
+		self.load_favorite_list()
+	
+	def load_favorite_list(self):
+		if self.mode == "radio":
+			self.channel_wave.load_favorite_list(self.favorite_radio)
+		else:
+			self.channel_wave.load_favorite_list(self.favorite_tv)
+	
+	def play_fav(self, i):
+		selected_channel = self.channel_wave.channel_fav.itemText(i)
+		if self.mode == "radio":
+			media = self.radio_media_shelf.get_channel_by_name(selected_channel)
+			self.radio_player.set_media(media)
+			self.radio_player.update_gui(self)
+		else:
+			media = self.tv_media_shelf.get_channel_by_name(selected_channel)
+			self.video_player.set_media(media)
+			self.video_player.update_gui(self)
 
 
 			
