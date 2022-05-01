@@ -6,7 +6,7 @@ from PySide6.QtGui import *
 from PySide6.QtCore import *
 
 from src.gui.radio_channel_list_gui import RadioChannelListGuiWindow
-from src.video_player import MediaChannelShelf, VideoPlayer
+from src.video_player import FavoriteMediaChannelShelf, MediaChannelShelf, VideoPlayer
 from src.radio import RadioStation, RadioPlayer
 
 class CreateMenuBar(QMainWindow):
@@ -337,7 +337,7 @@ class CreateControlBar(QWidget):
 	def set_volume_slider_value(self, in_func):
 		self.volume_slider.setValue(in_func)
 
-	def set_favorite_callback(self, in_func):
+	def set_favorite_button_callback(self, in_func):
 		self.favorite_button.clicked.connect(in_func)
 	
 	def set_change_mode_callback(self, callback):
@@ -389,19 +389,24 @@ class MainGuiWindow(QMainWindow):
 		self.tv_media_shelf    = MediaChannelShelf("assets/all_tv.csv")
 
 		self.update_search_bar()
+
+	# Load channels for favorite list
+		self.favorite_radio = FavoriteMediaChannelShelf("assets/favorite_radio.csv")
+		self.favorite_tv = FavoriteMediaChannelShelf("assets/favorite_tv.csv")
 	
 	# Setting the callback of the search bar, channel list, and change mode button
 		self.channel_wave.set_search_bar_callback(self.update_search_bar)
 		self.channel_wave.set_channel_list_callback(self.select_channel)
 		self.channel_wave.set_change_mode_callback(self.change_mode)
 
-	# Setting the callback for the play, next, previous, slider
+	# Setting the callback for the play, next, previous, slider volume, favorite
 		self.channel_wave.create_control.set_play_button_callback(self.play_button_callback)
 		self.channel_wave.create_control.set_next_button_callback(self.next_button_callback)
-		self.channel_wave.create_control.set_previous_button_callback(self.set_previous_button_callback)
+		self.channel_wave.create_control.set_previous_button_callback(self.previous_button_callback)
+		self.channel_wave.create_control.set_favorite_button_callback(self.favorite_button_callback)
 		self.channel_wave.create_control.set_volume_slider_callback(self.volume_slider_callback)
 		
-
+	# Setting favorite list callback
 
 	# Show
 		self.setLayout(main_layout)
@@ -421,7 +426,7 @@ class MainGuiWindow(QMainWindow):
 		self.create_menu_bar.create_channel_wave.create_control.set_volume_slider_callback(in_func)
 	
 	def set_favorite_button_callback(self, in_func):
-		self.create_menu_bar.create_channel_wave.create_control.set_favorite_callback(in_func)
+		self.create_menu_bar.create_channel_wave.create_control.set_favorite_button_callback(in_func)
 
 	def set_channel_name(self, in_name):
 		self.create_menu_bar.create_channel_wave.set_channel_name(in_name)
@@ -461,11 +466,11 @@ class MainGuiWindow(QMainWindow):
 		self.load_channels_from_array(query_result)
 	
 	def select_channel(self):
+
 		selected_channel = self.channel_list.currentItem().text()
 		if self.mode == "radio":
 			media = self.radio_media_shelf.get_channel_by_name(selected_channel)
 			self.radio_media_shelf.set_main_current_index(media)
-			media = RadioStation(media.name, media.url)
 			self.radio_player.set_media(media)
 			self.radio_player.update_gui(self)
 		else:
@@ -511,6 +516,11 @@ class MainGuiWindow(QMainWindow):
 			media = self.tv_media_shelf.get_previous_channel()
 			self.video_player.set_media(media)
 			self.video_player.update_gui(self)
+
+	def favorite_button_callback(self):
+
+		if self.mode == "radio":
+			pass
 		
 	def change_mode(self):
 		if self.mode == "radio":
