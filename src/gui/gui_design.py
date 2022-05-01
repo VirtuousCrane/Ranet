@@ -472,9 +472,6 @@ class MainGuiWindow(QMainWindow):
 			self.video_player.stop()
 			self.mode = "radio"
 		self.update_search_bar()
-		
-
-		
 
 class ControlClickHandler(object):
 	_instance = None
