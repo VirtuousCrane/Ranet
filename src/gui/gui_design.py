@@ -7,7 +7,7 @@ from PySide6.QtCore import *
 
 from src.gui.radio_channel_list_gui import RadioChannelListGuiWindow
 from src.video_player import MediaChannelShelf, VideoPlayer
-from src.radio import RadioStation
+from src.radio import RadioStation, RadioPlayer
 
 class CreateMenuBar(QMainWindow):
 	def __init__(self):
@@ -364,7 +364,7 @@ class MainGuiWindow(QMainWindow):
 		self.create_menu_bar = CreateMenuBar()
 		self.setMenuBar(self.create_menu_bar.menu_bar)
 
-		self.radio_player = radio_player
+		self.radio_player = RadioPlayer()
 		self.video_player = self.create_menu_bar.create_channel_wave.get_video_player()
 
 	# QWidget
@@ -394,6 +394,13 @@ class MainGuiWindow(QMainWindow):
 		self.channel_wave.set_search_bar_callback(self.update_search_bar)
 		self.channel_wave.set_channel_list_callback(self.select_channel)
 		self.channel_wave.set_change_mode_callback(self.change_mode)
+
+	# Setting the callback for the play, next, previous, slider
+		self.channel_wave.create_control.set_play_button_callback(self.play_button_callback)
+		self.channel_wave.create_control.set_next_button_callback(self.next_button_callback)
+		self.channel_wave.create_control.set_previous_button_callback(self.set_previous_button_callback)
+		self.channel_wave.create_control.set_volume_slider_callback(self.volume_slider_callback)
+		
 
 
 	# Show
@@ -457,21 +464,70 @@ class MainGuiWindow(QMainWindow):
 		selected_channel = self.channel_list.currentItem().text()
 		if self.mode == "radio":
 			media = self.radio_media_shelf.get_channel_by_name(selected_channel)
-			media = RadioStation(media.name, media.url, "unk")
-			self.radio_player.set_station(media)
+			self.radio_media_shelf.set_main_current_index(media)
+			media = RadioStation(media.name, media.url)
+			self.radio_player.set_media(media)
+			self.radio_player.update_gui(self)
 		else:
 			media = self.tv_media_shelf.get_channel_by_name(selected_channel)
+			self.tv_media_shelf.set_main_current_index(media)
 			self.video_player.set_media(media)
 			self.video_player.update_gui(self)
-	
+
+	def volume_slider_callback(self):
+		slider_value = self.get_volume_slider_value()
+		if self.mode == "radio":
+			self.radio_player.set_volume(slider_value)
+		else:
+			self.video_player.set_volume(slider_value/100)
+
+	def play_button_callback(self):
+		
+		if self.mode == "radio":
+			self.radio_player.toggle()
+			self.radio_player.update_gui(self)
+		else:
+			self.video_player.toggle()
+			self.video_player.update_gui(self)
+
+	def next_button_callback(self):
+
+		if self.mode == "radio":
+			media = self.radio_media_shelf.get_next_channel()
+			self.radio_player.set_media(media)
+			self.radio_player.update_gui(self)
+		else:
+			media = self.tv_media_shelf.get_next_channel()
+			self.video_player.set_media(media)
+			self.video_player.update_gui(self)
+
+	def previous_button_callback(self):
+		
+		if self.mode == "radio":
+			media = self.radio_media_shelf.get_previous_channel()
+			self.radio_player.set_media(media)
+			self.radio_player.update_gui(self)
+		else:
+			media = self.tv_media_shelf.get_previous_channel()
+			self.video_player.set_media(media)
+			self.video_player.update_gui(self)
+		
 	def change_mode(self):
 		if self.mode == "radio":
 			self.radio_player.stop()
 			self.mode = "tv"
+			self.radio_player.update_gui(self)
 		else:
 			self.video_player.stop()
 			self.mode = "radio"
+			self.video_player.update_gui(self)
 		self.update_search_bar()
+
+
+			
+		
+
+		
 
 class ControlClickHandler(object):
 	_instance = None

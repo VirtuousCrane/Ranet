@@ -11,7 +11,6 @@ class RadioStation:
 	"""A dataclass to store information about a radio station"""
 	name: str
 	url: str
-	type: str
 
 class RadioPlayer:
 	"""	A class used to play the internet radio	"""
@@ -46,7 +45,7 @@ class RadioPlayer:
 		self.player.stop()
 		self.is_playing = False
 
-	def change_station(self, station: RadioStation):
+	def set_media(self, station: RadioStation):
 		self.stop()
 		self.station = station
 		self.media = self.instance.media_new(self.station.url)
@@ -77,6 +76,23 @@ class RadioPlayer:
 	def get_is_playing(self):
 		return self.is_playing
 
+	def update_gui(self, in_gui):
+		"""
+		Update the channel name and play button
+
+		PARAMETERS
+		----------
+		in_gui: MainGuiWindow 
+		- The window to update
+		"""
+		if self.station is not None:
+			in_gui.set_channel_name(self.station.name)
+
+		if self.get_is_playing():
+			in_gui.set_play_button_icon_to_pause()
+		else:
+			in_gui.set_play_button_icon_to_play()
+
 class RadioTracker(object):
 	"""Loads Radio Stations from and XML file"""
 	RADIO_STATIONS_XML_FILE_PATH = "assets/gnome-internet-radio-locator.xml"
@@ -95,10 +111,9 @@ class RadioTracker(object):
 		for station in tree.findall('station'):
 			station_name = station.get("name")
 			station_url = station.find("stream").get("uri")  # IDK why but the "url" is listed as "uri"
-			station_type = station.find("stream").get("codec") # The "codec" seems to be the station type
 
 			# Creates a new RadioStation object and append it to the radio station list
-			radio_station = RadioStation(station_name, station_url, station_type)
+			radio_station = RadioStation(station_name, station_url)
 			self.radio_stations_list.append(radio_station)
 
 	def increment_index(self):
@@ -163,35 +178,35 @@ class Radio(object):
 		"""Switches to the next radio station"""
 		print("Switching to next possible radio channel")
 		self.radio_tracker.increment_index()
-		self.radio_player.change_station(self.radio_tracker.get_current_station())
+		self.radio_player.set_media(self.radio_tracker.get_current_station())
 		self.update_gui()
 
 	def previous_channel(self):
 		"""Switches to the previous radio station"""
 		print("Switching to previous possible radio channel")
 		self.radio_tracker.decrement_index()
-		self.radio_player.change_station(self.radio_tracker.get_current_station())
+		self.radio_player.set_media(self.radio_tracker.get_current_station())
 		self.update_gui()
 
 	def display_current_channel(self):
 		"""Displays the current radio station's name"""
 		print("Display info of current radio channel")
-		print(f"Name: {self.radio_player.get_station_name()} Url: {self.radio_player.get_station_url()} Media type:{self.radio_player.get_station_media_type()}")
+		print(f"Name: {self.radio_player.get_station_name()} Url: {self.radio_player.get_station_url()}")
 
 	def change_volume(self):
 		newVolume = self.gui.get_volume_slider_value()
 		self.radio_player.set_volume(newVolume)
 		self.update_gui()
 		print("Change volume to " + str(newVolume))
-	
+
 	def set_station(self, station: RadioStation):
-		self.radio_player.change_station(station)
+		self.radio_player.set_media(station)
 		self.update_gui()
 
 	def update_gui(self):
 		"""Updates the GUI"""
 		if self.gui is None:
-			print("GUI is none, cannot update GUI")
+			print("GUI is none in Radio(), cannot update GUI")
 		else:
 			# Update channel name
 			self.gui.set_channel_name(self.radio_player.get_station_name())
