@@ -88,6 +88,7 @@ class MediaChannelShelf:
 
 		self.file_path = file_path
 		self.set_channels_from_file()
+		self.sort_media_channels_by_name()
 
 	def get_next_channel(self):
 		# Empty list
@@ -424,7 +425,8 @@ class VideoPlayer(QFrame):
 		gui : MainGuiWindow
 			The gui that we want to update
 		"""
-		gui.set_channel_name(self.current_station.name)
+		if self.current_station is not None:
+			gui.set_channel_name(self.current_station.name)
 
 		if self.get_is_playing():
 			gui.set_play_button_icon_to_pause()
