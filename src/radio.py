@@ -63,6 +63,9 @@ class RadioPlayer:
 	def get_station_media_type(self) -> str:
 		assert self.station is not None, "No station specified"
 		return self.station.type
+	
+	def get_station(self) -> RadioStation:
+		return self.station
 
 	def set_volume(self, volume: int):
 		self.player.audio_set_volume(volume)
