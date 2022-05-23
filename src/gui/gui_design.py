@@ -322,17 +322,20 @@ class CreateControlBar(QWidget):
 	# Favorite Button
 		self.favorite_button = QPushButton()
 		self.favorite_button.setFixedSize(30,30)
+
 		self.update_favorite_icon()
 
 	# Full Screen Button
-		self.full_screen_button = QPushButton("Full")
+		self.full_screen_button = QPushButton()
 		self.full_screen_button.setFixedSize(30,30)
 		self.full_screen_button.setIcon(QIcon(QPixmap("assets/full_screen_icon.png")))
 		self.full_screen_button.setIconSize(QSize(24,24))
 	
 	# Change Mode Button
-		self.change_mode_button = QPushButton("M")
+		self.change_mode_button = QPushButton()
 		self.change_mode_button.setFixedSize(30, 30)
+		self.change_mode_button.setIcon(QIcon(QPixmap("assets/mode_icon.png")))
+		self.change_mode_button.setIconSize(QSize(24,24))
 
 		# Toggle Play Pause Icon
 	def toggle_play_pause_icon(self):
