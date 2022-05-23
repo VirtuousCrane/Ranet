@@ -89,12 +89,14 @@ class RadioPlayer:
 		- The window to update
 		"""
 		if self.station is not None:
-			in_gui.set_channel_name(self.station.name)
+			in_gui.set_channel_name(self.station)
 
 		if self.get_is_playing():
 			in_gui.set_play_button_icon_to_pause()
 		else:
 			in_gui.set_play_button_icon_to_play()
+		
+		in_gui.update_favorite_btn()
 
 class RadioTracker(object):
 	"""Loads Radio Stations from and XML file"""

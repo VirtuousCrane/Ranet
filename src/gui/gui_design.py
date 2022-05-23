@@ -198,16 +198,17 @@ class CreateChannelWave(QWidget):
 		self.channel_fav.addItem(QListWidgetItem(in_func))
 
 	# Set channel name
-	def set_channel_name(self, in_name: str):
+	def set_channel_name(self, station: HLSStation):
 		"""
 		Sets the channel name label in the GUI
 
 		Parameters
 		----------
-		in_name : str
-			The new channel name
+		station : str
+			The new channel
 		"""
-		self.channel_name.setText(in_name)
+		self.channel_name.setText(station.name)
+		self.create_control.update_current(station)
 	
 	def all_channel_list_add_item(self, channel_name: str):
 		self.all_channel_list.addItem(channel_name)
@@ -247,11 +248,15 @@ class CreateChannelWave(QWidget):
 		"""
 		#self.channel_fav.addItem("I love lolis")
 		self.channel_fav.clear()
+		self.create_control.set_favorite_list(fav_list)
 		for channel in fav_list.get_media_channels_list():
 			self.channel_fav.addItem(channel.name)
 	
 	def set_channel_fav_callback(self, fn):
 		self.channel_fav.activated.connect(fn)
+	
+	def update_current(self, channel: HLSStation):
+		self.create_control.update_current(channel)
 	
 class CreateControlBar(QWidget):
 	def __init__(self):
@@ -259,6 +264,8 @@ class CreateControlBar(QWidget):
 		self.control_layout = QVBoxLayout()
 		self.control_layout.setAlignment(Qt.AlignCenter)
 		self.control_layout.setSpacing(8)
+		self.current_channel = None
+		self.fav_list = None
 
 		self.control_button_layout = QHBoxLayout()
 		self.control_button_layout.setAlignment(Qt.AlignCenter)
@@ -315,12 +322,7 @@ class CreateControlBar(QWidget):
 	# Favorite Button
 		self.favorite_button = QPushButton()
 		self.favorite_button.setFixedSize(30,30)
-		if(self.is_in_favorite_list == True):
-			self.favorite_button.setIcon(QIcon(QPixmap("assets/favoriteicon.png")))
-			self.favorite_button.setIconSize(QSize(24,24))
-		else:
-			self.favorite_button.setIcon(QIcon(QPixmap("assets/unfavorite_icon.png")))
-			self.favorite_button.setIconSize(QSize(24,24))
+		self.update_favorite_icon()
 
 	# Full Screen Button
 		self.full_screen_button = QPushButton("Full")
@@ -371,14 +373,29 @@ class CreateControlBar(QWidget):
 		self.change_mode_button.clicked.connect(callback)
 
 	def is_in_favorite_list(self):
-		return FavoriteMediaChannelShelf.is_media_channel_in_list
+		if self.fav_list is not None:
+			return self.fav_list.is_media_channel_in_list(self.current_channel)
+	
+	def update_favorite_icon(self):
+		if(self.is_in_favorite_list()):
+			self.favorite_button.setIcon(QIcon(QPixmap("assets/favorite_icon.png")))
+			self.favorite_button.setIconSize(QSize(24,24))
+		else:
+			self.favorite_button.setIcon(QIcon(QPixmap("assets/unfavorite_icon.png")))
+			self.favorite_button.setIconSize(QSize(24,24))
 
 	# Volume Value Test
 	def volume_test_run(self):
 		print(self.volume_slider.value())
+	
+	def set_favorite_list(self, fav: FavoriteMediaChannelShelf):
+		self.fav_list = fav
 
 	def get_volume_slider_value(self):
 		return self.volume_slider.value()
+	
+	def update_current(self, station: HLSStation):
+		self.current_channel = station
 		
 class MainGuiWindow(QMainWindow):
 	def __init__(self, radio_player=None):
@@ -501,6 +518,9 @@ class MainGuiWindow(QMainWindow):
 		query_result.sort()
 		
 		self.load_channels_from_array(query_result)
+	
+	def update_favorite_btn(self):
+		self.channel_wave.create_control.update_favorite_icon()
 	
 	def select_channel(self):
 
