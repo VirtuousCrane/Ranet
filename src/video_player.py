@@ -90,6 +90,9 @@ class MediaChannelShelf:
 		self.file_path = file_path
 		self.set_channels_from_file()
 		self.sort_media_channels_by_name()
+	
+	def __del__(self):
+		self.pickle()
 
 	def get_next_channel(self):
 		# Empty list
@@ -203,6 +206,7 @@ class MediaChannelShelf:
 	
 	def pickle(self):
 		file_name = self.file_path.replace(".csv", ".pickle")
+		print("Pickled!")
 		with open(file_name, "wb") as f:
 			pickle.dump(self, f)
 	
@@ -226,7 +230,7 @@ class FavoriteMediaChannelShelf(MediaChannelShelf):
 		if (self.is_media_channel_in_list(in_channel)):
 			self.main_media_channels.remove(in_channel)
 		self.sort_media_channels_by_name()
-		self.save_media_channels_to_file()
+		#self.save_media_channels_to_file()
 
 	#private
 	def save_media_channels_to_file(self) -> None:
