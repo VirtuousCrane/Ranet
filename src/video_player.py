@@ -1,6 +1,7 @@
 from contextlib import nullcontext
 import PySide6
 import errno
+import pickle
 import vlc
 import sys
 import os
@@ -199,6 +200,16 @@ class MediaChannelShelf:
 
 	def sort_media_channels_by_name(self):
 		self.main_media_channels.sort(key=lambda x: x.name)
+	
+	def pickle(self):
+		file_name = self.file_path.replace(".csv", ".pickle")
+		with open(file_name, "wb") as f:
+			pickle.dump(self, f)
+	
+	@classmethod
+	def load_from_pickle(cls, file_path):
+		with open(file_path, "rb") as f:
+			return pickle.load(f)
 
 class FavoriteMediaChannelShelf(MediaChannelShelf):
 	
@@ -230,6 +241,11 @@ class FavoriteMediaChannelShelf(MediaChannelShelf):
 			self.delete_media_channel(in_channel)
 		else:
 			self.add_media_channel(in_channel)
+	
+	@classmethod
+	def load_from_pickle(cls, file_path):
+		with open(file_path, "rb") as f:
+			return pickle.load(f)
 
 class VideoPlayer(QFrame):
 	def __init__(self): 

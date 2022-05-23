@@ -400,14 +400,18 @@ class MainGuiWindow(QMainWindow):
 	# Load channels into channel list
 		self.channel_wave = self.create_menu_bar.get_channel_wave()
 		self.channel_list = self.create_menu_bar.get_channel_wave().get_all_channel_list()
-		self.radio_media_shelf = MediaChannelShelf("assets/all_radio.csv")
-		self.tv_media_shelf    = MediaChannelShelf("assets/all_tv.csv")
+		#self.radio_media_shelf = MediaChannelShelf("assets/all_radio.csv")
+		#self.tv_media_shelf    = MediaChannelShelf("assets/all_tv.csv")
+		self.radio_media_shelf = MediaChannelShelf.load_from_pickle("assets/all_radio.pickle")
+		self.tv_media_shelf = MediaChannelShelf.load_from_pickle("assets/all_tv.pickle")
 
 		self.update_search_bar()
 
 	# Load channels for favorite list
-		self.favorite_radio = FavoriteMediaChannelShelf("assets/favorite_radio.csv")
-		self.favorite_tv = FavoriteMediaChannelShelf("assets/favorite_tv.csv")
+		#self.favorite_radio = FavoriteMediaChannelShelf("assets/favorite_radio.csv")
+		#self.favorite_tv = FavoriteMediaChannelShelf("assets/favorite_tv.csv")
+		self.favorite_radio = FavoriteMediaChannelShelf.load_from_pickle("assets/favorite_radio.pickle")
+		self.favorite_tv = FavoriteMediaChannelShelf.load_from_pickle("assets/favorite_tv.pickle")
 
 		self.load_favorite_list()
 		self.channel_wave.set_channel_fav_callback(self.play_fav)
