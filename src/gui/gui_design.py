@@ -9,6 +9,10 @@ from src.gui.radio_channel_list_gui import RadioChannelListGuiWindow
 from src.video_player import FavoriteMediaChannelShelf, HLSStation, MediaChannelShelf, VideoPlayer
 from src.radio import RadioStation, RadioPlayer
 
+# from radio_channel_list_gui import RadioChannelListGuiWindow
+# from video_player import FavoriteMediaChannelShelf, MediaChannelShelf, VideoPlayer
+# from radio import RadioPlayer
+
 class CreateMenuBar(QMainWindow):
 	def __init__(self):
 		QMainWindow.__init__(self, None)
@@ -309,12 +313,20 @@ class CreateControlBar(QWidget):
 		self.control_layout.addWidget(self.volume_slider)
 
 	# Favorite Button
-		self.favorite_button = QPushButton("Fav")
+		self.favorite_button = QPushButton()
 		self.favorite_button.setFixedSize(30,30)
+		if(self.is_in_favorite_list == True):
+			self.favorite_button.setIcon(QIcon(QPixmap("assets/favoriteicon.png")))
+			self.favorite_button.setIconSize(QSize(24,24))
+		else:
+			self.favorite_button.setIcon(QIcon(QPixmap("assets/unfavorite_icon.png")))
+			self.favorite_button.setIconSize(QSize(24,24))
 
 	# Full Screen Button
 		self.full_screen_button = QPushButton("Full")
 		self.full_screen_button.setFixedSize(30,30)
+		self.full_screen_button.setIcon(QIcon(QPixmap("assets/full_screen_icon.png")))
+		self.full_screen_button.setIconSize(QSize(24,24))
 	
 	# Change Mode Button
 		self.change_mode_button = QPushButton("M")
@@ -357,6 +369,9 @@ class CreateControlBar(QWidget):
 	
 	def set_change_mode_callback(self, callback):
 		self.change_mode_button.clicked.connect(callback)
+
+	def is_in_favorite_list(self):
+		return FavoriteMediaChannelShelf.is_media_channel_in_list
 
 	# Volume Value Test
 	def volume_test_run(self):
