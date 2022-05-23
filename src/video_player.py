@@ -221,7 +221,7 @@ class FavoriteMediaChannelShelf(MediaChannelShelf):
 		if not (self.is_media_channel_in_list(in_channel)): 
 			self.main_media_channels.append(in_channel)
 		self.sort_media_channels_by_name()
-		self.save_media_channels_to_file()
+		#self.save_media_channels_to_file()
 	
 	def is_media_channel_in_list(self, in_channel : HLSStation) -> bool:
 		return in_channel in self.main_media_channels
