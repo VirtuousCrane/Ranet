@@ -1,6 +1,7 @@
 from contextlib import nullcontext
 import PySide6
 import errno
+import pickle
 import vlc
 import sys
 import os
@@ -89,6 +90,9 @@ class MediaChannelShelf:
 		self.file_path = file_path
 		self.set_channels_from_file()
 		self.sort_media_channels_by_name()
+	
+	def __del__(self):
+		self.pickle()
 
 	def get_next_channel(self):
 		# Empty list
@@ -199,6 +203,17 @@ class MediaChannelShelf:
 
 	def sort_media_channels_by_name(self):
 		self.main_media_channels.sort(key=lambda x: x.name)
+	
+	def pickle(self):
+		file_name = self.file_path.replace(".csv", ".pickle")
+		print("Pickled!")
+		with open(file_name, "wb") as f:
+			pickle.dump(self, f)
+	
+	@classmethod
+	def load_from_pickle(cls, file_path):
+		with open(file_path, "rb") as f:
+			return pickle.load(f)
 
 class FavoriteMediaChannelShelf(MediaChannelShelf):
 	
@@ -206,7 +221,7 @@ class FavoriteMediaChannelShelf(MediaChannelShelf):
 		if not (self.is_media_channel_in_list(in_channel)): 
 			self.main_media_channels.append(in_channel)
 		self.sort_media_channels_by_name()
-		self.save_media_channels_to_file()
+		#self.save_media_channels_to_file()
 	
 	def is_media_channel_in_list(self, in_channel : HLSStation) -> bool:
 		return in_channel in self.main_media_channels
@@ -215,7 +230,7 @@ class FavoriteMediaChannelShelf(MediaChannelShelf):
 		if (self.is_media_channel_in_list(in_channel)):
 			self.main_media_channels.remove(in_channel)
 		self.sort_media_channels_by_name()
-		self.save_media_channels_to_file()
+		#self.save_media_channels_to_file()
 
 	#private
 	def save_media_channels_to_file(self) -> None:
@@ -230,6 +245,11 @@ class FavoriteMediaChannelShelf(MediaChannelShelf):
 			self.delete_media_channel(in_channel)
 		else:
 			self.add_media_channel(in_channel)
+	
+	@classmethod
+	def load_from_pickle(cls, file_path):
+		with open(file_path, "rb") as f:
+			return pickle.load(f)
 
 class VideoPlayer(QFrame):
 	def __init__(self): 
