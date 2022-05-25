@@ -446,12 +446,14 @@ class VideoPlayer(QFrame):
 			The gui that we want to update
 		"""
 		if self.current_station is not None:
-			gui.set_channel_name(self.current_station.name)
+			gui.set_channel_name(self.current_station)
 
 		if self.get_is_playing():
 			gui.set_play_button_icon_to_pause()
 		else:
 			gui.set_play_button_icon_to_play()
+		
+		gui.update_favorite_btn()
 
 # DELETE ME. FOR REFERENCE ONLY.
 class MainWindow(QMainWindow):

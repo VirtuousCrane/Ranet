@@ -523,6 +523,7 @@ class MainGuiWindow(QMainWindow):
 			else:
 				self.favorite_tv.add_media_channel(current_station)
 		self.load_favorite_list()
+		self.update_favorite_btn()
 		
 	def change_mode(self):
 		if self.mode == "radio":
