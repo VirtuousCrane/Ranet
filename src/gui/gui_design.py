@@ -120,7 +120,7 @@ class CreateChannelWave(QWidget):
 		self.channel_fav_name_layout.addWidget(self.channel_name)
 		self.channel_fav_name_layout.addWidget(self.create_control.favorite_button)
 		self.channel_fav_name_layout.addWidget(self.channel_fav)
-		self.channel_fav_name_layout.addWidget(self.create_control.full_screen_button)
+
 		self.channel_fav_name_layout.addWidget(self.create_control.change_mode_button)
 
 
@@ -262,12 +262,6 @@ class CreateControlBar(QWidget):
 		self.favorite_button.setFixedSize(30,30)
 
 		self.update_favorite_icon()
-
-	# Full Screen Button
-		self.full_screen_button = QPushButton()
-		self.full_screen_button.setFixedSize(30,30)
-		self.full_screen_button.setIcon(QIcon(QPixmap("assets/full_screen_icon.png")))
-		self.full_screen_button.setIconSize(QSize(24,24))
 	
 	# Change Mode Button
 		self.change_mode_button = QPushButton()
