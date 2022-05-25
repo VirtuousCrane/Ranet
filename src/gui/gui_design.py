@@ -21,51 +21,6 @@ class CreateMenuBar(QMainWindow):
 		self.create_channel_wave = CreateChannelWave()
 		self.control_clicked_handler = ControlClickHandler()
 
-	# FileMenu Section
-		file_menu = QMenu("&File", self)
-
-		## FileMenu Action List
-		self.play_action = QAction("&Play", self)
-		self.play_action.triggered.connect(self.control_clicked_handler.play_action_button_click)
-		self.pause_action = QAction("&Pause", self)
-		self.pause_action.triggered.connect(self.control_clicked_handler.pause_action_button_click)
-		self.next_action = QAction("&Next", self)
-		self.next_action.triggered.connect(self.control_clicked_handler.next_button_click)
-		self.previous_action = QAction("&Previous", self)
-		self.previous_action.triggered.connect(self.control_clicked_handler.previous_button_click)
-		self.channel_list_action = QAction("&Channel List", self)
-		self.channel_list_action.triggered.connect(self.open_channel_list_gui)
-
-		file_menu.addAction(self.play_action)
-		file_menu.addAction(self.pause_action)
-		file_menu.addAction(self.next_action)
-		file_menu.addAction(self.previous_action)
-		file_menu.addAction(self.channel_list_action)
-
-		self.menu_bar.addMenu(file_menu)
-
-	# EditMenu Section
-		edit_menu = QMenu("&Edit", self)
-
-		## EditMenu Action List
-		self.theme_action = QAction("&Theme", self)
-		edit_menu.addAction(self.theme_action)
-		self.menu_bar.addMenu(edit_menu)
-
-	# RecordMenu Section
-		record_menu = QMenu("&Record", self)
-
-		## RecordMenu Action List
-		self.start_recording_action = QAction("&Start Recording", self)
-		self.stop_recording_action = QAction("&Stop Recording", self)
-		self.go_to_folder_action = QAction("&Go To Folder", self)
-
-		record_menu.addAction(self.start_recording_action)
-		record_menu.addAction(self.stop_recording_action)
-		record_menu.addAction(self.go_to_folder_action)
-
-		self.menu_bar.addMenu(record_menu)
-
 	# All Channel List Action
 		self.all_channel_list_action = QAction("&All Channel List", self)
 		self.all_channel_list_action.triggered.connect(self.all_channel_list_resize_animation)
@@ -100,26 +55,9 @@ class CreateMenuBar(QMainWindow):
 			self.animation_video_player.setEndValue(QRect(self.create_channel_wave.wave_container_frame.x() -144, self.create_channel_wave.wave_container_frame.y(), self.current_width, self.current_height-150))
 			self.animation_video_player.start()
 		
-
-	# file_menu callback Function
-	def set_play_action_callback(self, in_func):
-		self.play_action.clicked.connect(in_func)
-		
-	def set_pause_action_callback(self, in_func):
-		self.pause_action.clicked.connect(in_func)
-		
-	def set_previous_action_callback(self, in_func):
-		self.previous_action.clicked.connect(in_func)
-		
-	def set_next_action_callback(self, in_func):
-		self.next_action.clicked.connect(in_func)
-
-	def open_channel_list_gui(self):
-		self.channel_list_gui = RadioChannelListGuiWindow()
-		self.channel_list_gui.show()
-	
 	def get_channel_wave(self):
 		return self.create_channel_wave
+
 
 class CreateChannelWave(QWidget):
 	def __init__(self):
@@ -182,7 +120,7 @@ class CreateChannelWave(QWidget):
 		self.channel_fav_name_layout.addWidget(self.channel_name)
 		self.channel_fav_name_layout.addWidget(self.create_control.favorite_button)
 		self.channel_fav_name_layout.addWidget(self.channel_fav)
-		self.channel_fav_name_layout.addWidget(self.create_control.full_screen_button)
+
 		self.channel_fav_name_layout.addWidget(self.create_control.change_mode_button)
 
 
@@ -324,12 +262,6 @@ class CreateControlBar(QWidget):
 		self.favorite_button.setFixedSize(30,30)
 
 		self.update_favorite_icon()
-
-	# Full Screen Button
-		self.full_screen_button = QPushButton()
-		self.full_screen_button.setFixedSize(30,30)
-		self.full_screen_button.setIcon(QIcon(QPixmap("assets/full_screen_icon.png")))
-		self.full_screen_button.setIconSize(QSize(24,24))
 	
 	# Change Mode Button
 		self.change_mode_button = QPushButton()
