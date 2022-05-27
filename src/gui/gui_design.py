@@ -511,7 +511,7 @@ class MainGuiWindow(QMainWindow):
 
 	def favorite_button_callback(self):
 		if self.mode == "radio":
-			current_station = self.radio_player.get_station()
+			current_station = self.radio_player.get_current_station()
 			if self.favorite_radio.is_media_channel_in_list(current_station):
 				self.favorite_radio.delete_media_channel(current_station)
 			else:

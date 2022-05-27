@@ -2,17 +2,19 @@ from typing import *
 from dataclasses import dataclass
 from src.connection import *
 from src.exceptions import *
+from src.abstract_classes import MediaPlayer, MediaStation
 
 import vlc
 import xml.etree.ElementTree as ET
 
 @dataclass
-class RadioStation:
+class RadioStation(MediaStation):
 	"""A dataclass to store information about a radio station"""
-	name: str
-	url: str
+	pass
+#	name: str
+#	url: str
 
-class RadioPlayer:
+class RadioPlayer(MediaPlayer):
 	"""	A class used to play the internet radio	"""
 
 	def __init__(self, station: RadioStation = None, volume: int = 100):
@@ -45,9 +47,9 @@ class RadioPlayer:
 		self.player.stop()
 		self.is_playing = False
 
-	def set_media(self, station: RadioStation):
+	def set_media(self, media: RadioStation):
 		self.stop()
-		self.station = station
+		self.station = media
 		self.media = self.instance.media_new(self.station.url)
 		self.player.set_media(self.media)
 		self.play()
@@ -64,7 +66,7 @@ class RadioPlayer:
 		assert self.station is not None, "No station specified"
 		return self.station.type
 	
-	def get_station(self) -> RadioStation:
+	def get_current_station(self) -> RadioStation:
 		return self.station
 
 	def set_volume(self, volume: int):

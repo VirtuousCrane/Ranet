@@ -14,13 +14,14 @@ from typing import *
 import csv
 
 from src.connection import connection_check_hls, ConnectionStatus
+from src.abstract_classes import MediaPlayer, MediaStation
 
 # For testing purposes
 from PySide6.QtWidgets import QMainWindow, QFrame, QVBoxLayout, QPushButton, QApplication, QLabel, QWidget
 import sys
 
 @dataclass
-class HLSStation:
+class HLSStation(MediaStation):
 	"""
 	A HLSStation represents an Http Live Stream (HLS) station.
 	The information contained within an HLSStation object includes:
@@ -30,8 +31,9 @@ class HLSStation:
 	url : str
 		The URL to the HLS
 	"""
-	name : str
-	url : str
+	pass
+#	name : str
+#	url : str
 
 class HLSPlaylistParser:
 	def __init__(self, path: str = None):
@@ -251,7 +253,7 @@ class FavoriteMediaChannelShelf(MediaChannelShelf):
 		with open(file_path, "rb") as f:
 			return pickle.load(f)
 
-class VideoPlayer(QFrame):
+class VideoPlayer(QFrame, MediaPlayer):
 	def __init__(self): 
 		super(VideoPlayer, self).__init__()
 		
@@ -286,7 +288,7 @@ class VideoPlayer(QFrame):
 
 			self.player.set_hwnd(self.winId())
 
-	def set_media(self, source: HLSStation) -> None:
+	def set_media(self, media: HLSStation):
 		"""
 		Sets the station of the Video Player
 		
@@ -296,11 +298,11 @@ class VideoPlayer(QFrame):
 			An HLSStation object which represents the station
 		"""
 		# Checking for none type
-		if source is None:
+		if media is None:
 			return
 
 		self.stop()
-		self.current_station = source
+		self.current_station = media
 		print(self.check_media_availability())
 
 		# Example code: (To be decided if this should be implemented)
@@ -309,52 +311,47 @@ class VideoPlayer(QFrame):
 		#	return None
 
 		if self.platform.startswith("linux"):
-			self.player.setSource(QUrl(source.url))
+			self.player.setSource(QUrl(media.url))
 		elif self.platform == "win32":
-			self.media = self.instance.media_new(source.url)
+			self.media = self.instance.media_new(media.url)
 			self.player.set_media(self.media)
 		self.play()
 	
-	def play(self) -> bool:
+	def play(self):
 		"""Plays the Http Live Stream (HLS)"""
 		if self.current_station is None:
 			print("No Media Selected!")
-			return False
+			return
 		
 		if self.is_playing:
-			return True
+			return
 		
 		self.player.play()
 		self.is_playing = True
 
-		return self.is_playing
-
-	def pause(self) -> bool:
+	def pause(self):
 		"""Pauses the stream"""
 		if not self.is_playing:
-			return False
+			return
 		
 		self.player.pause()
 		self.is_playing = False
 
-		return self.is_playing
-
-	def stop(self) -> bool:
+	def stop(self):
 		"""Stops the stream"""
 		if not self.is_playing:
-			return False
+			return
 		
 		self.player.stop()
 		self.is_playing = False
 
-		return self.is_playing
-	
-	def toggle(self) -> bool:
+	def toggle(self):
 		"""Toggles the player"""
 		print(self.is_playing)
 		if self.is_playing:
-			return self.stop()
-		return self.play()
+			self.stop()
+			return
+		self.play()
 	
 	def set_volume(self, volume : float) -> None:
 		"""
