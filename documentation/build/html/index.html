@@ -1,0 +1,341 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Welcome to Ranet’s documentation! &#8212; Ranet 0.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">Ranet 0.0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Welcome to Ranet’s documentation!</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="welcome-to-ranet-s-documentation">
+<h1>Welcome to Ranet’s documentation!<a class="headerlink" href="#welcome-to-ranet-s-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</div>
+<div class="section" id="module-src.radio">
+<span id="radio-module"></span><h1>radio Module<a class="headerlink" href="#module-src.radio" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.radio.Radio">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.radio.</span></span><span class="sig-name descname"><span class="pre">Radio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gui</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.radio.Radio" title="Permalink to this definition">¶</a></dt>
+<dd><p>A high level abstraction that handles the operation of the radio</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.radio.Radio.display_current_channel">
+<span class="sig-name descname"><span class="pre">display_current_channel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.radio.Radio.display_current_channel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Displays the current radio station’s name</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.radio.Radio.next_channel">
+<span class="sig-name descname"><span class="pre">next_channel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.radio.Radio.next_channel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Switches to the next radio station</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.radio.Radio.play">
+<span class="sig-name descname"><span class="pre">play</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.radio.Radio.play" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plays the radio</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.radio.Radio.previous_channel">
+<span class="sig-name descname"><span class="pre">previous_channel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.radio.Radio.previous_channel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Switches to the previous radio station</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.radio.Radio.stop">
+<span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.radio.Radio.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stops the radio</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.radio.Radio.toggle">
+<span class="sig-name descname"><span class="pre">toggle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.radio.Radio.toggle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Toggles the operation of the radio. If it’s playing, stop, and vice versa</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.radio.Radio.update_gui">
+<span class="sig-name descname"><span class="pre">update_gui</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.radio.Radio.update_gui" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the GUI</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.radio.RadioPlayer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.radio.</span></span><span class="sig-name descname"><span class="pre">RadioPlayer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">station</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#src.radio.RadioStation" title="src.radio.RadioStation"><span class="pre">src.radio.RadioStation</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.radio.RadioPlayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class used to play the internet radio</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.radio.RadioPlayer.change_station">
+<span class="sig-name descname"><span class="pre">change_station</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">station</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#src.radio.RadioStation" title="src.radio.RadioStation"><span class="pre">src.radio.RadioStation</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.radio.RadioPlayer.change_station" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stops the current stream and switch to a new station</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>station</strong> (<a class="reference internal" href="#src.radio.RadioStation" title="src.radio.RadioStation"><em>RadioStation</em></a>) – The station to change to</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.radio.RadioPlayer.get_station_media_type">
+<span class="sig-name descname"><span class="pre">get_station_media_type</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#src.radio.RadioPlayer.get_station_media_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the current station stream’s media type</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.radio.RadioPlayer.get_station_name">
+<span class="sig-name descname"><span class="pre">get_station_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#src.radio.RadioPlayer.get_station_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the current station’s name</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.radio.RadioPlayer.get_station_url">
+<span class="sig-name descname"><span class="pre">get_station_url</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#src.radio.RadioPlayer.get_station_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the current station’s stream url</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.radio.RadioPlayer.play">
+<span class="sig-name descname"><span class="pre">play</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.radio.RadioPlayer.play" title="Permalink to this definition">¶</a></dt>
+<dd><p>Spawns a thread, calls play_stream() to play the radio</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.radio.RadioPlayer.play_stream">
+<span class="sig-name descname"><span class="pre">play_stream</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.radio.RadioPlayer.play_stream" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plays the radio</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.radio.RadioPlayer.set_station">
+<span class="sig-name descname"><span class="pre">set_station</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">station</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#src.radio.RadioStation" title="src.radio.RadioStation"><span class="pre">src.radio.RadioStation</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.radio.RadioPlayer.set_station" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stops the current stream and sets a new station</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>station</strong> (<a class="reference internal" href="#src.radio.RadioStation" title="src.radio.RadioStation"><em>RadioStation</em></a>) – The new station to set to</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.radio.RadioPlayer.set_volume">
+<span class="sig-name descname"><span class="pre">set_volume</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">volume</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.radio.RadioPlayer.set_volume" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the volume of the player</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>volume</strong> (<em>int</em>) – The volume of the audio</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.radio.RadioPlayer.stop">
+<span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.radio.RadioPlayer.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pauses the radio stream and kills the thread</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.radio.RadioPlayer.toggle">
+<span class="sig-name descname"><span class="pre">toggle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.radio.RadioPlayer.toggle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Toggles the player. If it’s playing, stop, and vice versa.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.radio.RadioStation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.radio.</span></span><span class="sig-name descname"><span class="pre">RadioStation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.radio.RadioStation" title="Permalink to this definition">¶</a></dt>
+<dd><p>A dataclass to store information about a radio station</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.radio.RadioTracker">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.radio.</span></span><span class="sig-name descname"><span class="pre">RadioTracker</span></span><a class="headerlink" href="#src.radio.RadioTracker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads Radio Stations from and XML file</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.radio.RadioTracker.decrement_index">
+<span class="sig-name descname"><span class="pre">decrement_index</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.radio.RadioTracker.decrement_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Changes the current index to point to the previous radio station in the list</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.radio.RadioTracker.get_current_station">
+<span class="sig-name descname"><span class="pre">get_current_station</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#src.radio.RadioStation" title="src.radio.RadioStation"><span class="pre">src.radio.RadioStation</span></a></span></span><a class="headerlink" href="#src.radio.RadioTracker.get_current_station" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a RadioStation object of the station currently being played</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The station being currently played</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#src.radio.RadioStation" title="src.radio.RadioStation">RadioStation</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.radio.RadioTracker.increment_index">
+<span class="sig-name descname"><span class="pre">increment_index</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.radio.RadioTracker.increment_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Changes the current index to point to the next radio station in the list</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.connection">
+<span id="connection-module"></span><h1>connection Module<a class="headerlink" href="#module-src.connection" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.connection.ConnectionStatus">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.connection.</span></span><span class="sig-name descname"><span class="pre">ConnectionStatus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.connection.ConnectionStatus" title="Permalink to this definition">¶</a></dt>
+<dd><p>An Enum representing each state of connection status</p>
+<p>ConnectionStatus.OK  = The Connection connected successfully</p>
+<p>ConnectionStatus.ERR = There was an error with the connection</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.connection.connection_check_status">
+<span class="sig-prename descclassname"><span class="pre">src.connection.</span></span><span class="sig-name descname"><span class="pre">connection_check_status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'https://www.google.com'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#src.connection.ConnectionStatus" title="src.connection.ConnectionStatus"><span class="pre">src.connection.ConnectionStatus</span></a></span></span><a class="headerlink" href="#src.connection.connection_check_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function to check the internet connectivity status</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>url</strong> (<em>str</em>) – The url we want to check the connection against.
+DEFAULT: <a class="reference external" href="https://www.google.com">https://www.google.com</a></p></li>
+<li><p><strong>timeout</strong> (<em>int</em>) – How long to wait until we report an error
+DEFAULT: 5</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The status of the connection. OK if fine, ERR if error.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#src.connection.ConnectionStatus" title="src.connection.ConnectionStatus">ConnectionStatus</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.connection.connection_ping">
+<span class="sig-prename descclassname"><span class="pre">src.connection.</span></span><span class="sig-name descname"><span class="pre">connection_ping</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#src.connection.ConnectionStatus" title="src.connection.ConnectionStatus"><span class="pre">src.connection.ConnectionStatus</span></a></span></span><a class="headerlink" href="#src.connection.connection_ping" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pings a given URL</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>url</strong> (<em>str</em>) – The URL to ping</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>OK if a response is received, otherwise ERR.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#src.connection.ConnectionStatus" title="src.connection.ConnectionStatus">ConnectionStatus</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.gui.gui_design">
+<span id="gui-design-module"></span><h1>gui_design Module<a class="headerlink" href="#module-src.gui.gui_design" title="Permalink to this headline">¶</a></h1>
+</div>
+<div class="section" id="module-src.cmd_app">
+<span id="cmd-app-module"></span><h1>cmd_app Module<a class="headerlink" href="#module-src.cmd_app" title="Permalink to this headline">¶</a></h1>
+</div>
+<div class="section" id="module-src.radio_interface">
+<span id="radio-interface-module"></span><h1>radio_interface Module<a class="headerlink" href="#module-src.radio_interface" title="Permalink to this headline">¶</a></h1>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="#">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Welcome to Ranet’s documentation!</a></li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+<li><a class="reference internal" href="#module-src.radio">radio Module</a></li>
+<li><a class="reference internal" href="#module-src.connection">connection Module</a></li>
+<li><a class="reference internal" href="#module-src.gui.gui_design">gui_design Module</a></li>
+<li><a class="reference internal" href="#module-src.cmd_app">cmd_app Module</a></li>
+<li><a class="reference internal" href="#module-src.radio_interface">radio_interface Module</a></li>
+</ul>
+
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">Ranet 0.0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Welcome to Ranet’s documentation!</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Beam, Ray, Tae.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    </div>
+  </body>
+</html>
